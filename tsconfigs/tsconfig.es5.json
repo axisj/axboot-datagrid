@@ -1,0 +1,21 @@
+{
+  "extends": "../tsconfig.build.json",
+  "compilerOptions": {
+    "outDir": "../dist/commonjs",
+    "module": "commonjs",
+    "target": "es5",
+    "allowJs": false,
+    "declaration": true,
+    "sourceMap": false,
+    "noEmit": false,
+    "jsx": "react",
+    "jsxImportSource": ""
+  },
+  "include": [
+    "../react-frame-contextmenu/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/tree.ts"
+  ]
+}
