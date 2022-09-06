@@ -4,6 +4,10 @@ import {Container} from '../styles/Layouts';
 import dynamic from 'next/dynamic';
 import styled from '@emotion/styled';
 
+const DBasicExample = dynamic(() => import('../examples/BasicExample'), {
+  ssr: false,
+});
+
 const Home: NextPage = () => {
   return (
     <PageContainer>
@@ -15,7 +19,7 @@ const Home: NextPage = () => {
 
       <Container>
         <h1>Sample</h1>
-
+        <DBasicExample/>
       </Container>
     </PageContainer>
   );
