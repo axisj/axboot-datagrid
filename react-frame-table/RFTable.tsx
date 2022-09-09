@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppStoreProvider, AppStore } from './store';
+import { AppStoreProvider, AppStore, getAppStoreActions } from './store';
 import Table from './components/Table';
 import { RFTableProps } from './types';
 import create from 'zustand';
@@ -12,6 +12,9 @@ export function RFTable({
   columns,
   columnsGroup = [],
   trHeight = 24,
+  scrollTop = 0,
+  scrollLeft = 0,
+  className,
 }: RFTableProps) {
   const containerBorderWidth = 1;
   const contentBodyHeight = height - headerHeight - containerBorderWidth * 2;
@@ -20,7 +23,7 @@ export function RFTable({
   return (
     <AppStoreProvider
       createStore={() =>
-        create<AppStore>(set => ({
+        create<AppStore>((set, get) => ({
           containerBorderWidth: 1,
           width,
           height,
@@ -29,6 +32,12 @@ export function RFTable({
           columns,
           columnsGroup,
           trHeight,
+          scrollTop,
+          scrollLeft,
+          contentBodyHeight,
+          displayItemCount,
+          className,
+          ...getAppStoreActions(set, get),
         }))
       }
     >

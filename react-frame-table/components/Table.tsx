@@ -7,10 +7,19 @@ import { useAppStore } from '../store';
 interface Props {}
 
 function Table(props: Props) {
-  const [width, height, containerBorderWidth] = useAppStore(s => [s.width, s.height, s.containerBorderWidth]);
+  const [width, height, containerBorderWidth, className] = useAppStore(s => [
+    s.width,
+    s.height,
+    s.containerBorderWidth,
+    s.className,
+  ]);
 
   return (
-    <Container style={{ width, height, borderWidth: `${containerBorderWidth}px` }}>
+    <Container
+      role={'react-frame-table'}
+      style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
+      className={className}
+    >
       <TableHead />
       <TableBody />
     </Container>
@@ -18,7 +27,7 @@ function Table(props: Props) {
 }
 
 const Container = styled.div`
-  border-color: #ccc;
+  border-color: var(--rft-border-color-base);
   border-style: solid;
   box-sizing: border-box;
   position: relative;
