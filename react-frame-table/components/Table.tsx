@@ -1,29 +1,27 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import {useStore} from '../store';
-import TableHead from "./TableHead";
+import TableHead from './TableHead';
+import TableBody from './TableBody';
+import { useAppStore } from '../store';
 
-interface Props {
-}
+interface Props {}
 
 function Table(props: Props) {
-  const state = useStore();
-  return (
-    <Container>
-      {state.bears}
-      <button
-        onClick={() => {
-          state.increasePopulation();
-        }}
-      >
-        +
-      </button>
+  const [width, height, containerBorderWidth] = useAppStore(s => [s.width, s.height, s.containerBorderWidth]);
 
-      <TableHead/>
+  return (
+    <Container style={{ width, height, borderWidth: `${containerBorderWidth}px` }}>
+      <TableHead />
+      <TableBody />
     </Container>
   );
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+  border-color: #ccc;
+  border-style: solid;
+  box-sizing: border-box;
+  position: relative;
+`;
 
 export default Table;
