@@ -10,15 +10,29 @@ function TableHead(props: Props) {
 
   return (
     <Container style={{ height: headerHeight }}>
-      {columns.map((column, index) => (
-        <span key={index}>{column.label}</span>
-      ))}
+      <HeaderTable>
+        <tr>
+          {columns.map((column, index) => (
+            <td key={index}>{column.label}</td>
+          ))}
+        </tr>
+      </HeaderTable>
     </Container>
   );
 }
 
 const Container = styled.div`
-  background: #eee;
+  background: var(--rft-header-bg);
+  position: relative;
+  min-width: 100%;
+  left: 0;
+  border-bottom: 1px solid var(--rft-border-color-base);
+`;
+const HeaderTable = styled.table`
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
 `;
 
 export default TableHead;

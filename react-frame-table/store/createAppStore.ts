@@ -1,4 +1,4 @@
-import { State, StoreApi } from 'zustand';
+import { StoreApi } from 'zustand';
 import createContext from 'zustand/context';
 import { RFTableColumnGroup, RFTableDataItem, RFTableProps } from '../types';
 

@@ -28,8 +28,14 @@ function TableBody(props: Props) {
     }
   }, [setScrollLeft, setScrollTop]);
 
+  React.useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+    }
+  }, [handleScroll]);
+
   return (
-    <ScrollContainer style={{ height: contentBodyHeight }} ref={scrollContainerRef} onScroll={handleScroll}>
+    <ScrollContainer style={{ height: contentBodyHeight }} ref={scrollContainerRef}>
       <ScrollContent
         trHeight={trHeight}
         borderWidth={1}
@@ -70,6 +76,8 @@ const ScrollContent = styled.div<{ trHeight: number; borderWidth: number }>`
 const BodyTable = styled.table`
   table-layout: fixed;
   width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
 `;
 
 export default TableBody;

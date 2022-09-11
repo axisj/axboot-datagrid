@@ -1,3 +1,4 @@
 [role="react-frame-table"] {
-    --rft-border-color-base: #ccc;
+    --rft-header-bg: #F3F4F5;
+    --rft-border-color-base: #D2D5D9;
 }
