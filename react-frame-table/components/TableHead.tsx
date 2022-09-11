@@ -1,20 +1,21 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { useAppStore } from '../store';
+import TableColGroup from './TableColGroup';
 
-interface Props {}
-
-function TableHead(props: Props) {
+function TableHead() {
   const columns = useAppStore(s => s.columns);
   const headerHeight = useAppStore(s => s.headerHeight);
 
   return (
     <Container style={{ height: headerHeight }}>
       <HeaderTable>
+        <TableColGroup />
         <tr>
           {columns.map((column, index) => (
             <td key={index}>{column.label}</td>
           ))}
+          <td />
         </tr>
       </HeaderTable>
     </Container>

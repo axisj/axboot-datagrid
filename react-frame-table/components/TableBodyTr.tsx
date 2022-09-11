@@ -12,6 +12,7 @@ function TableBodyTr(props: Props) {
       {columns.map((column, idx) => (
         <td key={idx}>{column.key}</td>
       ))}
+      <td />
     </Container>
   );
 }

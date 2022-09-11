@@ -2,10 +2,9 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { useAppStore } from '../store';
 import TableBodyTr from './TableBodyTr';
+import TableColGroup from './TableColGroup';
 
-interface Props {}
-
-function TableBody(props: Props) {
+function TableBody() {
   const contentBodyHeight = useAppStore(s => s.contentBodyHeight);
   const scrollTop = useAppStore(s => s.scrollTop);
   const trHeight = useAppStore(s => s.trHeight);
@@ -45,6 +44,7 @@ function TableBody(props: Props) {
         }}
       >
         <BodyTable>
+          <TableColGroup />
           {Array.from({ length: endNumber - startIdx }, (_, i) => {
             const ri = startIdx + i;
             const item = data[ri];

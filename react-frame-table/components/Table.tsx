@@ -4,9 +4,7 @@ import TableHead from './TableHead';
 import TableBody from './TableBody';
 import { useAppStore } from '../store';
 
-interface Props {}
-
-function Table(props: Props) {
+function Table() {
   const [width, height, containerBorderWidth, className] = useAppStore(s => [
     s.width,
     s.height,
