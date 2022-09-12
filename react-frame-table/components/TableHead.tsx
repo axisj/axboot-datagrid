@@ -2,16 +2,23 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
+import RowSelector from './RowSelector';
 
 function TableHead() {
   const columns = useAppStore(s => s.columns);
   const headerHeight = useAppStore(s => s.headerHeight);
+  const hasRowSelection = useAppStore(s => !!s.rowSelection);
 
   return (
     <Container style={{ height: headerHeight }}>
-      <HeaderTable>
+      <HeaderTable style={{ height: headerHeight - 1 }}>
         <TableColGroup />
         <tr>
+          {hasRowSelection && (
+            <td>
+              <RowSelector />
+            </td>
+          )}
           {columns.map((column, index) => (
             <td key={index}>{column.label}</td>
           ))}

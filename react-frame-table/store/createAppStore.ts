@@ -9,6 +9,7 @@ export interface AppModel extends RFTableProps {
   contentBodyHeight: number;
   displayItemCount: number;
   trHeight: number;
+  checkboxHeight: number;
   scrollTop: number;
   scrollLeft: number;
 }

@@ -7,14 +7,16 @@ import create from 'zustand';
 export function RFTable({
   width,
   height,
-  headerHeight = 24,
+  headerHeight = 28,
   data,
   columns,
   columnsGroup = [],
-  trHeight = 24,
+  trHeight = 28,
+  checkboxHeight = 15,
   scrollTop = 0,
   scrollLeft = 0,
   className,
+  rowSelection,
 }: RFTableProps) {
   const containerBorderWidth = 1;
   const contentBodyHeight = height - headerHeight - containerBorderWidth * 2;
@@ -32,11 +34,13 @@ export function RFTable({
           columns,
           columnsGroup,
           trHeight,
+          checkboxHeight,
           scrollTop,
           scrollLeft,
           contentBodyHeight,
           displayItemCount,
           className,
+          rowSelection,
           ...getAppStoreActions(set, get),
         }))
       }

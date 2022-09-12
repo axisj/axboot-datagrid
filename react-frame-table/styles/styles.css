@@ -1,4 +1,6 @@
 [role="react-frame-table"] {
+    --rft-primary-color: #3B82F6;
     --rft-header-bg: #F3F4F5;
     --rft-border-color-base: #D2D5D9;
+    --rft-row-selector-color: #ffffff;
 }

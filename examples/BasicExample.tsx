@@ -38,11 +38,17 @@ function BasicExample(props: Props) {
             label: '작성일',
           },
         ]}
+        rowSelection={{
+          selectedKeys: [],
+          onChange: () => {},
+        }}
       />
     </Container>
   );
 }
 
-const Container = styled.div``;
+const Container = styled.div`
+  font-size: 13px;
+`;
 
 export default BasicExample;

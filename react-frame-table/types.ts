@@ -31,6 +31,11 @@ export interface RFTablePage {
   onChange?: (currentPage: number, pageSize?: number) => void;
 }
 
+export interface RFTableRowSelection {
+  selectedKeys: string[];
+  onChange: (selectedKeys: string[]) => void;
+}
+
 export interface RFTableProps {
   width: number;
   height: number;
@@ -39,6 +44,7 @@ export interface RFTableProps {
   columns: RFTableColumn[];
   columnsGroup?: RFTableColumnGroup[];
   trHeight?: number;
+  checkboxHeight?: number;
 
   page?: RFTablePage;
   enableLoadMore?: boolean;
@@ -53,6 +59,7 @@ export interface RFTableProps {
   scrollTop?: number;
   scrollLeft?: number;
 
+  rowSelection?: RFTableRowSelection;
   msg?: {
     emptyList?: string;
   };
