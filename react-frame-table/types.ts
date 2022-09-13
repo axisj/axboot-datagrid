@@ -3,11 +3,12 @@ import React from 'react';
 type Direction = 'left' | 'center' | 'right';
 type Size = 'small' | 'medium' | 'large';
 
-export interface RFTableColumn {
+export interface RFTableColumn<T> {
   key: string | string[];
   label: string;
   width?: number;
   align?: Direction;
+  itemRender?: (item: T) => React.ReactNode;
 }
 
 export interface RFTableColumnGroup {
@@ -36,12 +37,12 @@ export interface RFTableRowSelection {
   onChange: (selectedKeys: string[]) => void;
 }
 
-export interface RFTableProps {
+export interface RFTableProps<T> {
   width: number;
   height: number;
   headerHeight?: number;
   data: RFTableDataItem[];
-  columns: RFTableColumn[];
+  columns: RFTableColumn<T>[];
   columnsGroup?: RFTableColumnGroup[];
   trHeight?: number;
   checkboxHeight?: number;

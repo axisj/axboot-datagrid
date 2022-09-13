@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import TableBody from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
-import TableHeadTr from './TableHeadTr';
+import TableHead from './TableHead';
 
 function Table() {
   const width = useAppStore(s => s.width);
@@ -43,10 +43,9 @@ function Table() {
       className={className}
     >
       <HeaderContainer style={{ height: headerHeight }}>
-        <HeaderTable style={{ height: headerHeight - 1, marginLeft: -scrollLeft }}>
-          <TableColGroup />
-          <TableHeadTr />
-        </HeaderTable>
+        <Header style={{ marginLeft: -scrollLeft }}>
+          <TableHead />
+        </Header>
       </HeaderContainer>
       <ScrollContainer style={{ height: contentBodyHeight }} ref={scrollContainerRef}>
         <ScrollContent
@@ -79,11 +78,10 @@ const HeaderContainer = styled.div`
   border-bottom: 1px solid var(--rft-border-color-base);
   overflow: hidden;
 `;
-const HeaderTable = styled.table`
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
+const Header = styled.div`
+  table {
+    height: 100%;
+  }
 `;
 const ScrollContainer = styled.div`
   position: relative;
@@ -92,11 +90,6 @@ const ScrollContainer = styled.div`
 const ScrollContent = styled.div<{ trHeight: number; borderWidth: number }>`
   position: absolute;
   min-width: 100%;
-
-  ${({ trHeight, borderWidth }) =>
-    `background: repeating-linear-gradient(to bottom, transparent 0 ${
-      trHeight - borderWidth
-    }px, var(--rft-border-color-base) ${trHeight - borderWidth}px ${trHeight}px);`}
 `;
 
 export default Table;

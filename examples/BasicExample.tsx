@@ -4,7 +4,14 @@ import { RFTable } from '../react-frame-table';
 
 interface Props {}
 
-const list = Array.from(Array(100)).map(i => ({
+interface IListItem {
+  id: string;
+  title: string;
+  writer: string;
+  createAt: string;
+}
+
+const list = Array.from(Array(500000)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
     title: `title_${i}`,
@@ -16,14 +23,14 @@ const list = Array.from(Array(100)).map(i => ({
 function BasicExample(props: Props) {
   return (
     <Container>
-      <RFTable
+      <RFTable<IListItem>
         width={500}
         height={400}
         data={list}
         columns={[
           {
             key: 'id',
-            label: '아이디',
+            label: '아이디 IS LONG !',
             width: 50,
           },
           {
@@ -35,29 +42,32 @@ function BasicExample(props: Props) {
             key: 'writer',
             label: '작성자',
             width: 100,
+            itemRender: item => {
+              return `${item.writer}//A`;
+            },
           },
           {
-            key: 'createdAt',
+            key: 'createAt',
             label: '작성일A',
             width: 100,
           },
           {
-            key: 'createdAt',
+            key: 'createAt',
             label: '작성일B',
             width: 100,
           },
           {
-            key: 'createdAt',
+            key: 'createAt',
             label: '작성일C',
             width: 100,
           },
           {
-            key: 'createdAt',
+            key: 'createAt',
             label: '작성일D',
             width: 100,
           },
           {
-            key: 'createdAt',
+            key: 'createAt',
             label: '작성일E',
             width: 100,
           },

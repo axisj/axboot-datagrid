@@ -1,8 +1,8 @@
-import { StoreApi } from 'zustand';
 import createContext from 'zustand/context';
-import { RFTableColumnGroup, RFTableDataItem, RFTableProps } from '../types';
+import { RFTableColumnGroup, RFTableProps } from '../types';
+import { StoreApi } from 'zustand';
 
-export interface AppModel extends RFTableProps {
+export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   headerHeight: number;
   columnsGroup: RFTableColumnGroup[];
   containerBorderWidth: number;
@@ -19,14 +19,14 @@ export interface AppActions {
   setScrollLeft: (scrollTop: number) => void;
 }
 
-export interface AppStore extends AppModel, AppActions {}
+export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions {}
 
-const { Provider: AppStoreProvider, useStore: useAppStore } = createContext<StoreApi<AppStore>>();
+const { Provider: AppStoreProvider, useStore: useAppStore } = createContext<StoreApi<AppStore<any>>>();
 export { AppStoreProvider, useAppStore };
 
 export type ZustandSetter<T> = (partial: Partial<T>, replace?: boolean | undefined) => void;
 export type ZustandGetter<T> = () => T;
-export type StoreActions = (set: ZustandSetter<AppModel>, get: ZustandGetter<AppModel>) => AppActions;
+export type StoreActions = <T>(set: ZustandSetter<AppModel<T>>, get: ZustandGetter<AppModel<T>>) => AppActions;
 
 export const getAppStoreActions: StoreActions = (set, get) => ({
   setScrollTop: scrollTop => set({ scrollTop }),
