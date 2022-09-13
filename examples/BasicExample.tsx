@@ -17,25 +17,49 @@ function BasicExample(props: Props) {
   return (
     <Container>
       <RFTable
-        width={600}
+        width={500}
         height={400}
         data={list}
         columns={[
           {
             key: 'id',
             label: '아이디',
+            width: 50,
           },
           {
             key: 'title',
             label: '제목',
+            width: 300,
           },
           {
             key: 'writer',
             label: '작성자',
+            width: 100,
           },
           {
             key: 'createdAt',
-            label: '작성일',
+            label: '작성일A',
+            width: 100,
+          },
+          {
+            key: 'createdAt',
+            label: '작성일B',
+            width: 100,
+          },
+          {
+            key: 'createdAt',
+            label: '작성일C',
+            width: 100,
+          },
+          {
+            key: 'createdAt',
+            label: '작성일D',
+            width: 100,
+          },
+          {
+            key: 'createdAt',
+            label: '작성일E',
+            width: 100,
           },
         ]}
         rowSelection={{
