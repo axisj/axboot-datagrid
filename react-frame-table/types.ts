@@ -19,7 +19,6 @@ export interface RFTableColumnGroup {
 export type RFTableDataItem = {
   values: Record<string, any>;
   status?: string;
-  selected?: boolean;
   parentItemIndex?: number;
 };
 

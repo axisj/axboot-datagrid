@@ -41,6 +41,8 @@ export function RFTable<T = Record<string, any>>({
           displayItemCount,
           className,
           rowSelection,
+          selectedKeyMap: new Map(),
+          selectedAll: false,
           ...getAppStoreActions(set, get),
         }))
       }

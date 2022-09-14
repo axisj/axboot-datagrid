@@ -5,14 +5,16 @@ import { css } from '@emotion/react';
 
 interface Props {
   checked?: boolean;
+  indeterminate?: boolean;
+  disabled?: boolean;
   size?: number;
-  onChecked?: (checked: boolean) => void;
+  handleChange?: (checked: boolean) => void;
 }
 
-function RowSelector({ checked = false, onChecked }: Props) {
+function RowSelector({ checked = false, handleChange }: Props) {
   const checkboxHeight = useAppStore(s => s.itemHeight);
 
-  return <Container checked={checked} size={checkboxHeight} onClick={() => onChecked?.(!checked)} />;
+  return <Container checked={checked} size={checkboxHeight} onClick={() => handleChange?.(!checked)} />;
 }
 
 const Container = styled.div<Props>`

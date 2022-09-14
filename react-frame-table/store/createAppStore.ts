@@ -1,6 +1,8 @@
 import createContext from 'zustand/context';
-import { RFTableColumnGroup, RFTableProps } from '../types';
+import { RFTableColumnGroup, RFTableDataItem, RFTableProps } from '../types';
 import { StoreApi } from 'zustand';
+
+type SelectedAll = true | false | 'indeterminate';
 
 export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   headerHeight: number;
@@ -12,11 +14,16 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   itemPadding: number;
   scrollTop: number;
   scrollLeft: number;
+  selectedKeyMap: Map<string, any>;
+  selectedAll: SelectedAll;
 }
 
 export interface AppActions {
   setScrollTop: (scrollTop: number) => void;
   setScrollLeft: (scrollTop: number) => void;
+  setData: (data: RFTableDataItem[]) => void;
+  setSelectedKeys: (keys: string[]) => void;
+  setSelectedAll: (selectedAll: SelectedAll) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions {}
@@ -31,4 +38,12 @@ export type StoreActions = <T>(set: ZustandSetter<AppModel<T>>, get: ZustandGett
 export const getAppStoreActions: StoreActions = (set, get) => ({
   setScrollTop: scrollTop => set({ scrollTop }),
   setScrollLeft: scrollLeft => set({ scrollLeft }),
+  setData: data => set({ data }),
+  setSelectedKeys: keys => {
+    const selectedKeyMap = get().selectedKeyMap;
+    selectedKeyMap.clear();
+    keys.forEach(key => selectedKeyMap.set(key, true));
+    set({ selectedKeyMap: new Map([...selectedKeyMap]) });
+  },
+  setSelectedAll: selectedAll => set({ selectedAll }),
 });
