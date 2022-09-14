@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import TableBody from './TableBody';
 import { useAppStore } from '../store';
-import TableColGroup from './TableColGroup';
 import TableHead from './TableHead';
 
 function Table() {
@@ -10,7 +9,9 @@ function Table() {
   const height = useAppStore(s => s.height);
   const containerBorderWidth = useAppStore(s => s.containerBorderWidth);
   const className = useAppStore(s => s.className);
-  const trHeight = useAppStore(s => s.trHeight);
+  const itemHeight = useAppStore(s => s.itemHeight);
+  const itemPadding = useAppStore(s => s.itemPadding);
+
   const headerHeight = useAppStore(s => s.headerHeight);
   const scrollLeft = useAppStore(s => s.scrollLeft);
   const scrollTop = useAppStore(s => s.scrollTop);
@@ -18,6 +19,7 @@ function Table() {
   const data = useAppStore(s => s.data);
   const setScrollTop = useAppStore(s => s.setScrollTop);
   const setScrollLeft = useAppStore(s => s.setScrollLeft);
+  const trHeight = itemHeight + itemPadding * 2;
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
 
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -52,7 +54,7 @@ function Table() {
           trHeight={trHeight}
           borderWidth={1}
           style={{
-            paddingTop,
+            paddingTop: paddingTop,
             height: data.length * trHeight,
           }}
         >

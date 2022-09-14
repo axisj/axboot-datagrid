@@ -44,8 +44,8 @@ export interface RFTableProps<T> {
   data: RFTableDataItem[];
   columns: RFTableColumn<T>[];
   columnsGroup?: RFTableColumnGroup[];
-  trHeight?: number;
-  checkboxHeight?: number;
+  itemHeight?: number;
+  itemPadding?: number;
 
   page?: RFTablePage;
   enableLoadMore?: boolean;

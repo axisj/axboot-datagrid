@@ -8,8 +8,8 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   containerBorderWidth: number;
   contentBodyHeight: number;
   displayItemCount: number;
-  trHeight: number;
-  checkboxHeight: number;
+  itemHeight: number;
+  itemPadding: number;
   scrollTop: number;
   scrollLeft: number;
 }

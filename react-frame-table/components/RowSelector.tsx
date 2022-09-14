@@ -10,17 +10,9 @@ interface Props {
 }
 
 function RowSelector({ checked = false, onChecked }: Props) {
-  const checkboxHeight = useAppStore(s => s.checkboxHeight);
-  const trHeight = useAppStore(s => s.trHeight);
+  const checkboxHeight = useAppStore(s => s.itemHeight);
 
-  return (
-    <Container
-      checked={checked}
-      size={checkboxHeight}
-      style={{ marginLeft: (trHeight - checkboxHeight) / 3 }}
-      onClick={() => onChecked?.(!checked)}
-    />
-  );
+  return <Container checked={checked} size={checkboxHeight} onClick={() => onChecked?.(!checked)} />;
 }
 
 const Container = styled.div<Props>`
@@ -41,6 +33,7 @@ const Container = styled.div<Props>`
 
   ${({ size = 0 }) => {
     return css`
+      margin-left: 5px;
       width: ${size}px;
       height: ${size}px;
 

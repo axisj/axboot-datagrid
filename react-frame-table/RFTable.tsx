@@ -7,12 +7,12 @@ import create from 'zustand';
 export function RFTable<T = Record<string, any>>({
   width,
   height,
-  headerHeight = 28,
+  headerHeight = 30,
   data,
   columns,
   columnsGroup = [],
-  trHeight = 28,
-  checkboxHeight = 15,
+  itemHeight = 15,
+  itemPadding = 7,
   scrollTop = 0,
   scrollLeft = 0,
   className,
@@ -20,7 +20,7 @@ export function RFTable<T = Record<string, any>>({
 }: RFTableProps<T>) {
   const containerBorderWidth = 1;
   const contentBodyHeight = height - headerHeight - containerBorderWidth * 2;
-  const displayItemCount = Math.ceil(contentBodyHeight / trHeight);
+  const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
 
   return (
     <AppStoreProvider
@@ -33,8 +33,8 @@ export function RFTable<T = Record<string, any>>({
           data,
           columns,
           columnsGroup,
-          trHeight,
-          checkboxHeight,
+          itemHeight,
+          itemPadding,
           scrollTop,
           scrollLeft,
           contentBodyHeight,

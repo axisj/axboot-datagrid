@@ -6,7 +6,9 @@ import RowSelector from './RowSelector';
 
 function TableBody() {
   const scrollTop = useAppStore(s => s.scrollTop);
-  const trHeight = useAppStore(s => s.trHeight);
+  const itemHeight = useAppStore(s => s.itemHeight);
+  const itemPadding = useAppStore(s => s.itemPadding);
+  const trHeight = itemHeight + itemPadding * 2;
   const displayItemCount = useAppStore(s => s.displayItemCount);
   const data = useAppStore(s => s.data);
   const columns = useAppStore(s => s.columns);
@@ -16,7 +18,7 @@ function TableBody() {
   const endNumber = startIdx + displayItemCount > data.length ? data.length : startIdx + displayItemCount;
 
   return (
-    <BodyTable trHeight={trHeight}>
+    <BodyTable>
       <TableColGroup />
       <tbody>
         {Array.from({ length: endNumber - startIdx }, (_, i) => {
@@ -27,11 +29,11 @@ function TableBody() {
           }
 
           return (
-            <TableBodyTr key={ri}>
+            <TableBodyTr key={ri} itemHeight={itemHeight} itemPadding={itemPadding}>
               {hasRowSelection && (
-                <td>
+                <SelectorTd>
                   <RowSelector />
-                </td>
+                </SelectorTd>
               )}
               {columns.map((column, idx) => {
                 let cellValue: any;
@@ -57,7 +59,7 @@ function TableBody() {
   );
 }
 
-const BodyTable = styled.table<{ trHeight: number }>`
+const BodyTable = styled.table`
   position: absolute;
   table-layout: fixed;
   width: 100%;
@@ -65,19 +67,28 @@ const BodyTable = styled.table<{ trHeight: number }>`
   border-spacing: 0;
 
   > tbody > tr {
-    height: ${p => p.trHeight}px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--rft-border-color-base);
+    border-top: 0 none;
+    border-left: 0 none;
+    border-right: 0 none;
 
     > td {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      border-bottom-style: solid;
-      border-bottom-width: 1px;
-      border-color: var(--rft-border-color-base);
     }
   }
 `;
 
-const TableBodyTr = styled.tr``;
+const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number }>`
+  > td {
+    line-height: ${p => p.itemHeight}px;
+    padding-top: ${p => p.itemPadding}px;
+    padding-bottom: ${p => p.itemPadding}px;
+  }
+`;
+const SelectorTd = styled.td``;
 
 export default TableBody;

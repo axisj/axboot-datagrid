@@ -37,6 +37,9 @@ function BasicExample(props: Props) {
             key: 'title',
             label: '제목',
             width: 300,
+            itemRender: item => {
+              return `${item.writer}//${item.title}`;
+            },
           },
           {
             key: 'writer',

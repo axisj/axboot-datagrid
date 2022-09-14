@@ -15,9 +15,9 @@ function TableHead() {
       <tbody>
         <tr>
           {hasRowSelection && (
-            <td>
+            <SelectorTd>
               <RowSelector />
-            </td>
+            </SelectorTd>
           )}
           {columns.map((column, index) => (
             <td key={index}>{column.label}</td>
@@ -45,5 +45,7 @@ const Table = styled.table<{ height: number }>`
     }
   }
 `;
+
+const SelectorTd = styled.td``;
 
 export default TableHead;
