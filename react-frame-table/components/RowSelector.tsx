@@ -41,7 +41,6 @@ const Container = styled.div<Props>`
 
   ${({ size = 0 }) => {
     return css`
-      margin-left: 5px;
       width: ${size}px;
       height: ${size}px;
 

@@ -36,6 +36,7 @@ export const HeadTable = styled.table<{ height: number }>`
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+      padding: 0 7px;
     }
   }
 `;

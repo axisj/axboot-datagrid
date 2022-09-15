@@ -4,6 +4,7 @@ import { getCellValue } from '../utils';
 import { BodyTable, TableBodyTr } from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
+import styled from '@emotion/styled';
 
 interface Props {}
 
@@ -11,7 +12,7 @@ function TableBodyFrozen(props: Props) {
   const scrollTop = useAppStore(s => s.scrollTop);
   const itemHeight = useAppStore(s => s.itemHeight);
   const itemPadding = useAppStore(s => s.itemPadding);
-  const trHeight = itemHeight + itemPadding * 2;
+  const trHeight = itemHeight + itemPadding * 2 + 1;
   const displayItemCount = useAppStore(s => s.displayItemCount);
   const data = useAppStore(s => s.data);
   const selectedKeyMap = useAppStore(s => s.selectedIdsMap);
