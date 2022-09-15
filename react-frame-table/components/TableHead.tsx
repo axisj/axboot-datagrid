@@ -1,43 +1,29 @@
 import * as React from 'react';
-import RowSelector from './RowSelector';
 import { useAppStore } from '../store';
 import styled from '@emotion/styled';
 import TableColGroup from './TableColGroup';
 
 function TableHead() {
-  const hasRowSelection = useAppStore(s => !!s.rowSelection);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
-  const selectedAll = useAppStore(s => s.selectedAll);
-  const setSelectedAll = useAppStore(s => s.setSelectedAll);
+  const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
 
   return (
-    <Table height={headerHeight - 1}>
+    <HeadTable height={headerHeight - 1}>
       <TableColGroup />
       <tbody>
         <tr>
-          {hasRowSelection && (
-            <SelectorTd>
-              <RowSelector
-                checked={selectedAll === true}
-                indeterminate={selectedAll === 'indeterminate'}
-                handleChange={checked => {
-                  setSelectedAll(checked);
-                }}
-              />
-            </SelectorTd>
-          )}
-          {columns.map((column, index) => (
+          {columns.slice(frozenColumnIndex).map((column, index) => (
             <td key={index}>{column.label}</td>
           ))}
           <td />
         </tr>
       </tbody>
-    </Table>
+    </HeadTable>
   );
 }
 
-const Table = styled.table<{ height: number }>`
+export const HeadTable = styled.table<{ height: number }>`
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
@@ -53,7 +39,5 @@ const Table = styled.table<{ height: number }>`
     }
   }
 `;
-
-const SelectorTd = styled.td``;
 
 export default TableHead;

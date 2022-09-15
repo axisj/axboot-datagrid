@@ -35,4 +35,5 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
 
     get().rowSelection?.onChange([...selectedIdsMap.keys()], selectedAll);
   },
+  setFrozenColumnsWidth: frozenColumnsWidth => set({ frozenColumnsWidth }),
 });

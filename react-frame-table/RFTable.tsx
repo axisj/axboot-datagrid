@@ -3,6 +3,7 @@ import { AppStoreProvider, AppStore, getAppStoreActions } from './store';
 import Table from './components/Table';
 import { RFTableProps } from './types';
 import create from 'zustand';
+import { getFrozenColumnsWidth } from './utils/getFrozenColumnsWidth';
 
 export function RFTable<T = Record<string, any>>({
   width,
@@ -28,6 +29,18 @@ export function RFTable<T = Record<string, any>>({
     [rowSelection?.selectedIds],
   );
 
+  const frozenColumnsWidth = React.useMemo(
+    () =>
+      getFrozenColumnsWidth({
+        rowSelection,
+        itemHeight,
+        itemPadding,
+        frozenColumnIndex,
+        columns,
+      }),
+    [columns, frozenColumnIndex, itemHeight, itemPadding, rowSelection],
+  );
+
   return (
     <AppStoreProvider
       createStore={() =>
@@ -50,6 +63,7 @@ export function RFTable<T = Record<string, any>>({
           rowSelection,
           selectedIdsMap,
           selectedAll: false,
+          frozenColumnsWidth,
           ...getAppStoreActions(set, get),
         }))
       }
