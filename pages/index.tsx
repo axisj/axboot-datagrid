@@ -1,25 +1,21 @@
-import type {NextPage} from 'next';
+import type { NextPage } from 'next';
 import Head from 'next/head';
-import {Container} from '../styles/Layouts';
-import dynamic from 'next/dynamic';
+import { Container } from '../styles/Layouts';
 import styled from '@emotion/styled';
-
-const DBasicExample = dynamic(() => import('../examples/BasicExample'), {
-  ssr: false,
-});
+import BasicExample from '../examples/BasicExample';
 
 const Home: NextPage = () => {
   return (
     <PageContainer>
       <Head>
         <title>react-frame-table</title>
-        <meta name='description' content='Index'/>
-        <link rel='icon' href='/favicon.ico'/>
+        <meta name='description' content='Index' />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
 
       <Container>
         <h1>Sample</h1>
-        <DBasicExample/>
+        <BasicExample />
       </Container>
     </PageContainer>
   );

@@ -11,8 +11,9 @@ function TableBody() {
   const trHeight = itemHeight + itemPadding * 2;
   const displayItemCount = useAppStore(s => s.displayItemCount);
   const data = useAppStore(s => s.data);
-  const selectedKeyMap = useAppStore(s => s.selectedKeyMap);
-  const setSelectedKeys = useAppStore(s => s.setSelectedKeys);
+  const selectedKeyMap = useAppStore(s => s.selectedIdsMap);
+  const setSelectedKeys = useAppStore(s => s.setSelectedIds);
+  const selectedAll = useAppStore(s => s.selectedAll);
   const columns = useAppStore(s => s.columns);
   const hasRowSelection = useAppStore(s => !!s.rowSelection);
 
@@ -22,9 +23,9 @@ function TableBody() {
   const handleChangeChecked = React.useCallback(
     (itemIndex: number, checked: boolean) => {
       if (checked) {
-        selectedKeyMap.set(`${itemIndex}`, true);
+        selectedKeyMap.set(itemIndex, true);
       } else {
-        selectedKeyMap.delete(`${itemIndex}`);
+        selectedKeyMap.delete(itemIndex);
       }
       setSelectedKeys([...selectedKeyMap.keys()]);
     },
@@ -47,7 +48,7 @@ function TableBody() {
               {hasRowSelection && (
                 <SelectorTd>
                   <RowSelector
-                    checked={selectedKeyMap.get(`${ri}`)}
+                    checked={selectedAll === true || selectedKeyMap.get(ri)}
                     handleChange={checked => handleChangeChecked(ri, checked)}
                   />
                 </SelectorTd>

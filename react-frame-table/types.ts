@@ -32,8 +32,8 @@ export interface RFTablePage {
 }
 
 export interface RFTableRowSelection {
-  selectedKeys: string[];
-  onChange: (selectedKeys: string[]) => void;
+  selectedIds: number[];
+  onChange: (selectedKeys: number[], selectedAll?: SelectedAll) => void;
 }
 
 export interface RFTableProps<T> {
@@ -43,6 +43,7 @@ export interface RFTableProps<T> {
   data: RFTableDataItem[];
   columns: RFTableColumn<T>[];
   columnsGroup?: RFTableColumnGroup[];
+  frozenColumnIndex?: number;
   itemHeight?: number;
   itemPadding?: number;
 
@@ -63,4 +64,29 @@ export interface RFTableProps<T> {
   msg?: {
     emptyList?: string;
   };
+}
+
+export type SelectedAll = true | false | 'indeterminate';
+
+export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
+  headerHeight: number;
+  frozenColumnIndex: number;
+  columnsGroup: RFTableColumnGroup[];
+  containerBorderWidth: number;
+  contentBodyHeight: number;
+  displayItemCount: number;
+  itemHeight: number;
+  itemPadding: number;
+  scrollTop: number;
+  scrollLeft: number;
+  selectedIdsMap: Map<number, any>;
+  selectedAll: SelectedAll;
+}
+
+export interface AppActions {
+  setScrollTop: (scrollTop: number) => void;
+  setScrollLeft: (scrollTop: number) => void;
+  setData: (data: RFTableDataItem[]) => void;
+  setSelectedIds: (ids: number[]) => void;
+  setSelectedAll: (selectedAll: SelectedAll) => void;
 }

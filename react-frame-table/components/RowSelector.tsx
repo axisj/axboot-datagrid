@@ -11,10 +11,16 @@ interface Props {
   handleChange?: (checked: boolean) => void;
 }
 
-function RowSelector({ checked = false, handleChange }: Props) {
+function RowSelector({ checked = false, indeterminate, handleChange }: Props) {
   const checkboxHeight = useAppStore(s => s.itemHeight);
-
-  return <Container checked={checked} size={checkboxHeight} onClick={() => handleChange?.(!checked)} />;
+  return (
+    <Container
+      checked={checked}
+      indeterminate={indeterminate}
+      size={checkboxHeight}
+      onClick={() => handleChange?.(!checked)}
+    />
+  );
 }
 
 const Container = styled.div<Props>`
@@ -49,7 +55,21 @@ const Container = styled.div<Props>`
     `;
   }};
 
-  ${({ checked }) => {
+  ${({ checked, indeterminate, size = 0 }) => {
+    if (indeterminate) {
+      return css`
+        &:after {
+          display: table;
+          opacity: 1;
+          content: ' ';
+          background-color: var(--rft-primary-color);
+          width: ${size - 8}px;
+          height: ${size - 8}px;
+          left: 3px;
+          top: 3px;
+        }
+      `;
+    }
     if (checked) {
       return css`
         background-color: var(--rft-primary-color);

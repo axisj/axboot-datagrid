@@ -8,6 +8,8 @@ function TableHead() {
   const hasRowSelection = useAppStore(s => !!s.rowSelection);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
+  const selectedAll = useAppStore(s => s.selectedAll);
+  const setSelectedAll = useAppStore(s => s.setSelectedAll);
 
   return (
     <Table height={headerHeight - 1}>
@@ -16,7 +18,13 @@ function TableHead() {
         <tr>
           {hasRowSelection && (
             <SelectorTd>
-              <RowSelector />
+              <RowSelector
+                checked={selectedAll === true}
+                indeterminate={selectedAll === 'indeterminate'}
+                handleChange={checked => {
+                  setSelectedAll(checked);
+                }}
+              />
             </SelectorTd>
           )}
           {columns.map((column, index) => (

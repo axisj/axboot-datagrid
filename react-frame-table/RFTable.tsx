@@ -11,6 +11,7 @@ export function RFTable<T = Record<string, any>>({
   data,
   columns,
   columnsGroup = [],
+  frozenColumnIndex = 0,
   itemHeight = 15,
   itemPadding = 7,
   scrollTop = 0,
@@ -21,6 +22,11 @@ export function RFTable<T = Record<string, any>>({
   const containerBorderWidth = 1;
   const contentBodyHeight = height - headerHeight - containerBorderWidth * 2;
   const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
+
+  const selectedIdsMap: Map<number, any> = React.useMemo(
+    () => new Map(rowSelection?.selectedIds.map(id => [id, true])),
+    [rowSelection?.selectedIds],
+  );
 
   return (
     <AppStoreProvider
@@ -33,6 +39,7 @@ export function RFTable<T = Record<string, any>>({
           data,
           columns,
           columnsGroup,
+          frozenColumnIndex,
           itemHeight,
           itemPadding,
           scrollTop,
@@ -41,7 +48,7 @@ export function RFTable<T = Record<string, any>>({
           displayItemCount,
           className,
           rowSelection,
-          selectedKeyMap: new Map(),
+          selectedIdsMap,
           selectedAll: false,
           ...getAppStoreActions(set, get),
         }))

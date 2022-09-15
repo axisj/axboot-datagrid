@@ -11,7 +11,7 @@ interface IListItem {
   createAt: string;
 }
 
-const list = Array.from(Array(500000)).map((v, i) => ({
+const list = Array.from(Array(50)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
     title: `title_${i}`,
@@ -24,7 +24,7 @@ function BasicExample(props: Props) {
   return (
     <Container>
       <RFTable<IListItem>
-        width={500}
+        width={600}
         height={400}
         data={list}
         columns={[
@@ -76,8 +76,10 @@ function BasicExample(props: Props) {
           },
         ]}
         rowSelection={{
-          selectedKeys: [],
-          onChange: () => {},
+          selectedIds: [],
+          onChange: (ids, selectedAll) => {
+            console.log('onChange rowSelection', ids, selectedAll);
+          },
         }}
       />
     </Container>

@@ -1,30 +1,6 @@
 import createContext from 'zustand/context';
-import { RFTableColumnGroup, RFTableDataItem, RFTableProps } from '../types';
+import { AppActions, AppModel, SelectedAll } from '../types';
 import { StoreApi } from 'zustand';
-
-type SelectedAll = true | false | 'indeterminate';
-
-export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
-  headerHeight: number;
-  columnsGroup: RFTableColumnGroup[];
-  containerBorderWidth: number;
-  contentBodyHeight: number;
-  displayItemCount: number;
-  itemHeight: number;
-  itemPadding: number;
-  scrollTop: number;
-  scrollLeft: number;
-  selectedKeyMap: Map<string, any>;
-  selectedAll: SelectedAll;
-}
-
-export interface AppActions {
-  setScrollTop: (scrollTop: number) => void;
-  setScrollLeft: (scrollTop: number) => void;
-  setData: (data: RFTableDataItem[]) => void;
-  setSelectedKeys: (keys: string[]) => void;
-  setSelectedAll: (selectedAll: SelectedAll) => void;
-}
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions {}
 
@@ -39,11 +15,24 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setScrollTop: scrollTop => set({ scrollTop }),
   setScrollLeft: scrollLeft => set({ scrollLeft }),
   setData: data => set({ data }),
-  setSelectedKeys: keys => {
-    const selectedKeyMap = get().selectedKeyMap;
-    selectedKeyMap.clear();
-    keys.forEach(key => selectedKeyMap.set(key, true));
-    set({ selectedKeyMap: new Map([...selectedKeyMap]) });
+  setSelectedIds: keys => {
+    const selectedIdsMap = get().selectedIdsMap;
+    selectedIdsMap.clear();
+    keys.forEach(key => selectedIdsMap.set(key, true));
+
+    const selectedAll: SelectedAll =
+      selectedIdsMap.size > 0 && selectedIdsMap.size !== get().data.length
+        ? 'indeterminate'
+        : selectedIdsMap.size !== 0;
+
+    set({ selectedIdsMap: new Map([...selectedIdsMap]), selectedAll });
+    get().rowSelection?.onChange([...get().selectedIdsMap.keys()].sort(), selectedAll);
   },
-  setSelectedAll: selectedAll => set({ selectedAll }),
+  setSelectedAll: selectedAll => {
+    const selectedIdsMap: Map<number, any> =
+      selectedAll === true ? new Map(get().data.map((v, i) => [i, true])) : new Map();
+    set({ selectedIdsMap, selectedAll });
+
+    get().rowSelection?.onChange([...selectedIdsMap.keys()], selectedAll);
+  },
 });

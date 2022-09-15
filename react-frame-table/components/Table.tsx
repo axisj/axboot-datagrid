@@ -35,7 +35,10 @@ function Table() {
   React.useEffect(() => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.addEventListener('scroll', handleScroll, { passive: true, capture: true });
+      scrollContainerRef.current.scrollLeft = scrollLeft;
+      scrollContainerRef.current.scrollTop = scrollTop;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleScroll]);
 
   return (
