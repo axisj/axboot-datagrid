@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import TableBody from './TableBody';
 import { useAppStore } from '../store';
 import TableHead from './TableHead';
+import TableHeadFrozen from './TableHeadFrozen';
+import TableBodyFrozen from './TableBodyFrozen';
 
 function Table() {
   const width = useAppStore(s => s.width);
@@ -19,14 +21,21 @@ function Table() {
   const data = useAppStore(s => s.data);
   const setScrollTop = useAppStore(s => s.setScrollTop);
   const setScrollLeft = useAppStore(s => s.setScrollLeft);
-  const trHeight = itemHeight + itemPadding * 2;
+  const trHeight = itemHeight + itemPadding * 2 + 1;
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
+  const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
 
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const frozenContentRef = React.useRef<HTMLDivElement>(null);
 
   const handleScroll = React.useCallback(() => {
     if (scrollContainerRef.current) {
       const ref = scrollContainerRef.current;
+
+      if (frozenContentRef.current) {
+        frozenContentRef.current.style.left = `${ref.scrollLeft}px`;
+      }
+
       setScrollTop(ref.scrollTop);
       setScrollLeft(ref.scrollLeft);
     }
@@ -37,6 +46,10 @@ function Table() {
       scrollContainerRef.current.addEventListener('scroll', handleScroll, { passive: true, capture: true });
       scrollContainerRef.current.scrollLeft = scrollLeft;
       scrollContainerRef.current.scrollTop = scrollTop;
+
+      if (frozenContentRef.current) {
+        frozenContentRef.current.style.left = `${scrollLeft}px`;
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleScroll]);
@@ -48,15 +61,36 @@ function Table() {
       className={className}
     >
       <HeaderContainer style={{ height: headerHeight }}>
-        <Header style={{ marginLeft: -scrollLeft }}>
+        {frozenColumnsWidth > 0 && (
+          <FrozenHeader
+            style={{
+              width: frozenColumnsWidth,
+            }}
+          >
+            <TableHeadFrozen />
+          </FrozenHeader>
+        )}
+        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }}>
           <TableHead />
         </Header>
       </HeaderContainer>
+
       <ScrollContainer style={{ height: contentBodyHeight }} ref={scrollContainerRef}>
+        {frozenColumnsWidth > 0 && (
+          <FrozenScrollContent
+            ref={frozenContentRef}
+            style={{
+              width: frozenColumnsWidth,
+              paddingTop: paddingTop,
+              height: data.length * trHeight,
+            }}
+          >
+            <TableBodyFrozen />
+          </FrozenScrollContent>
+        )}
         <ScrollContent
-          trHeight={trHeight}
-          borderWidth={1}
           style={{
+            paddingLeft: frozenColumnsWidth,
             paddingTop: paddingTop,
             height: data.length * trHeight,
           }}
@@ -79,22 +113,45 @@ const HeaderContainer = styled.div`
   background: var(--rft-header-bg);
   position: relative;
   min-width: 100%;
-  left: 0;
   border-bottom: 1px solid var(--rft-border-color-base);
   overflow: hidden;
 `;
+
 const Header = styled.div`
+  z-index: 1;
+
   table {
     height: 100%;
   }
 `;
+
+const FrozenHeader = styled.div`
+  position: absolute;
+  background-color: var(--rft-header-bg);
+  border-right: 1px solid var(--rft-border-color-base);
+  z-index: 2;
+
+  table {
+    height: 100%;
+  }
+`;
+
 const ScrollContainer = styled.div`
   position: relative;
   overflow: auto;
 `;
-const ScrollContent = styled.div<{ trHeight: number; borderWidth: number }>`
+
+const ScrollContent = styled.div`
   position: absolute;
   min-width: 100%;
+  z-index: 1;
+`;
+
+const FrozenScrollContent = styled.div`
+  position: absolute;
+  background-color: var(--rft-body-bg);
+  border-right: 1px solid var(--rft-border-color-base);
+  z-index: 2;
 `;
 
 export default Table;

@@ -71,6 +71,7 @@ export type SelectedAll = true | false | 'indeterminate';
 export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   headerHeight: number;
   frozenColumnIndex: number;
+  frozenColumnsWidth: number;
   columnsGroup: RFTableColumnGroup[];
   containerBorderWidth: number;
   contentBodyHeight: number;
@@ -89,4 +90,5 @@ export interface AppActions {
   setData: (data: RFTableDataItem[]) => void;
   setSelectedIds: (ids: number[]) => void;
   setSelectedAll: (selectedAll: SelectedAll) => void;
+  setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
 }

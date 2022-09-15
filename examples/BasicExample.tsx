@@ -11,7 +11,7 @@ interface IListItem {
   createAt: string;
 }
 
-const list = Array.from(Array(50)).map((v, i) => ({
+const list = Array.from(Array(100)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
     title: `title_${i}`,
@@ -27,11 +27,12 @@ function BasicExample(props: Props) {
         width={600}
         height={400}
         data={list}
+        frozenColumnIndex={1}
         columns={[
           {
             key: 'id',
             label: '아이디 IS LONG !',
-            width: 50,
+            width: 100,
           },
           {
             key: 'title',
