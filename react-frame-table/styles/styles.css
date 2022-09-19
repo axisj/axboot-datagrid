@@ -6,8 +6,10 @@
     --rft-row-selector-color: #ffffff;
     --rft-body-bg: #ffffff;
 
+    --rft-scroll-size: 11px;
     --rft-scroll-track-bg: #F9F9F9;
     --rft-scroll-track-corner-bg: #D2D5D9;
+    --rft-scroll-thumb-radius: 6px;
     --rft-scroll-thumb-bg: #c0c1c5;
     --rft-scroll-thumb-hover-bg: #a1a3a6;
 }

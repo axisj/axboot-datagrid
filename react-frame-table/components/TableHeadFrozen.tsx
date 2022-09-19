@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useAppStore } from '../store';
 import RowSelector from './RowSelector';
 import TableColGroupFrozen from './TableColGroupFrozen';
-import { HeadTable } from './TableHead';
+import { ColResizer, HeadTable } from './TableHead';
 
 interface Props {}
 
@@ -67,6 +67,7 @@ function TableHeadFrozen(props: Props) {
               }}
             >
               {c.label}
+              <ColResizer hideHandle={frozenColumnIndex - 1 === index} />
             </td>
           ))}
         </tr>
@@ -75,14 +76,6 @@ function TableHeadFrozen(props: Props) {
   );
 }
 
-const HeadTableFrozen = styled(HeadTable)`
-  tr[role='column-group'] > td {
-    &:last-child {
-      border-right-style: solid;
-      border-right-color: var(--rft-border-color-base);
-      border-right-width: 1px;
-    }
-  }
-`;
+const HeadTableFrozen = styled(HeadTable)``;
 
 export default TableHeadFrozen;

@@ -27,7 +27,6 @@ function BasicExample(props: Props) {
         width={600}
         height={400}
         data={list}
-        frozenColumnIndex={1}
         columns={[
           {
             key: 'id',

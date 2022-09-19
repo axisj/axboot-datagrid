@@ -14,6 +14,7 @@ export type StoreActions = <T>(set: ZustandSetter<AppModel<T>>, get: ZustandGett
 export const getAppStoreActions: StoreActions = (set, get) => ({
   setScrollTop: scrollTop => set({ scrollTop }),
   setScrollLeft: scrollLeft => set({ scrollLeft }),
+  setScroll: (scrollTop, scrollLeft) => set({ scrollTop, scrollLeft }),
   setData: data => set({ data }),
   setSelectedIds: keys => {
     const selectedIdsMap = get().selectedIdsMap;

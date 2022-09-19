@@ -24,11 +24,13 @@ function ColumnsGroupExample(props: Props) {
   return (
     <Container>
       <RFTable<IListItem>
-        width={600}
-        height={400}
+        width={1000}
+        height={800}
         data={list}
         frozenColumnIndex={2}
-        headerHeight={50}
+        headerHeight={60}
+        itemHeight={24}
+        itemPadding={5}
         columns={[
           {
             key: 'id',

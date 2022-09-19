@@ -84,13 +84,16 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   scrollLeft: number;
   selectedIdsMap: Map<number, any>;
   selectedAll: SelectedAll;
+  columnWidths?: number[];
 }
 
 export interface AppActions {
   setScrollTop: (scrollTop: number) => void;
-  setScrollLeft: (scrollTop: number) => void;
+  setScrollLeft: (scrollLeft: number) => void;
+  setScroll: (scrollTop: number, scrollLeft: number) => void;
   setData: (data: RFTableDataItem[]) => void;
   setSelectedIds: (ids: number[]) => void;
   setSelectedAll: (selectedAll: SelectedAll) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
+  setColumnWidths: (widths: number[]) => void;
 }

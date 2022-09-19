@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useAppStore } from '../store';
 import styled from '@emotion/styled';
 import TableColGroup from './TableColGroup';
+import { css } from '@emotion/react';
 
 function TableHead() {
   const headerHeight = useAppStore(s => s.headerHeight);
@@ -38,6 +39,7 @@ function TableHead() {
               }}
             >
               {c.label}
+              <ColResizer />
             </td>
           ))}
           <td />
@@ -62,6 +64,7 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
 
   > tbody > tr {
     > td {
+      position: relative;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
@@ -85,6 +88,40 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
       border-right-width: 1px;
     }
   }
+`;
+
+export const ColResizer = styled.div<{ hideHandle?: boolean }>`
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 7px;
+  height: 100%;
+  cursor: col-resize;
+
+  ${({ hideHandle = false }) => {
+    if (hideHandle) {
+      return css``;
+    }
+    return css`
+      &:after {
+        position: absolute;
+        top: 50%;
+        right: 3px;
+        content: '';
+        display: block;
+        width: 1px;
+        height: 0.8em;
+        transform: translateY(-50%);
+        background: var(--rft-border-color-base);
+      }
+
+      &:hover {
+        &:after {
+          background: var(--rft-primary-color);
+        }
+      }
+    `;
+  }}
 `;
 
 export default TableHead;
