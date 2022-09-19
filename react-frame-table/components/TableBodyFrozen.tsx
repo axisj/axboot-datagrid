@@ -6,7 +6,9 @@ import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
 import styled from '@emotion/styled';
 
-interface Props {}
+interface Props {
+  style?: React.CSSProperties;
+}
 
 function TableBodyFrozen(props: Props) {
   const scrollTop = useAppStore(s => s.scrollTop);
@@ -38,7 +40,7 @@ function TableBodyFrozen(props: Props) {
   );
 
   return (
-    <BodyTable>
+    <BodyTable style={props.style}>
       <TableColGroupFrozen />
       <tbody>
         {Array.from({ length: endNumber - startIdx }, (_, i) => {

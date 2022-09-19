@@ -14,6 +14,7 @@ export interface RFTableColumn<T> {
 export interface RFTableColumnGroup {
   label: string;
   colspan: number;
+  align?: Direction;
 }
 
 export type RFTableDataItem = {
@@ -72,6 +73,7 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   headerHeight: number;
   frozenColumnIndex: number;
   frozenColumnsWidth: number;
+  frozenColumnsGroup: RFTableColumnGroup[];
   columnsGroup: RFTableColumnGroup[];
   containerBorderWidth: number;
   contentBodyHeight: number;

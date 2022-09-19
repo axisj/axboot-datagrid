@@ -1,7 +1,13 @@
 [role="react-frame-table"] {
     --rft-primary-color: #3B82F6;
     --rft-header-bg: #F3F4F5;
+    --rft-header-group-bg: #e9e9e9;
     --rft-border-color-base: #D2D5D9;
     --rft-row-selector-color: #ffffff;
     --rft-body-bg: #ffffff;
+
+    --rft-scroll-track-bg: #F9F9F9;
+    --rft-scroll-track-corner-bg: #D2D5D9;
+    --rft-scroll-thumb-bg: #c0c1c5;
+    --rft-scroll-thumb-hover-bg: #a1a3a6;
 }
