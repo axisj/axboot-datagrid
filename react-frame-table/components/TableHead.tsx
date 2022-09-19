@@ -6,15 +6,39 @@ import TableColGroup from './TableColGroup';
 function TableHead() {
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
+  const columnsGroup = useAppStore(s => s.columnsGroup);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
 
   return (
-    <HeadTable height={headerHeight - 1}>
+    <HeadTable headerHeight={headerHeight}>
       <TableColGroup />
       <tbody>
+        {columnsGroup.length > 0 && (
+          <tr role={'column-group'}>
+            {columnsGroup.map((cg, index) => (
+              <td
+                key={index}
+                colSpan={cg.colspan}
+                style={{
+                  textAlign: cg.align,
+                }}
+              >
+                {cg.label}
+              </td>
+            ))}
+            <td />
+          </tr>
+        )}
         <tr>
-          {columns.slice(frozenColumnIndex).map((column, index) => (
-            <td key={index}>{column.label}</td>
+          {columns.slice(frozenColumnIndex).map((c, index) => (
+            <td
+              key={index}
+              style={{
+                textAlign: c.align,
+              }}
+            >
+              {c.label}
+            </td>
           ))}
           <td />
         </tr>
@@ -23,20 +47,42 @@ function TableHead() {
   );
 }
 
-export const HeadTable = styled.table<{ height: number }>`
+export const HeadTable = styled.table<{ headerHeight: number }>`
   table-layout: fixed;
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
   border-spacing: 0;
 
-  > tbody > tr {
-    height: ${p => p.height}px;
+  height: ${p => p.headerHeight}px;
 
+  tbody {
+    height: ${p => p.headerHeight}px;
+    overflow: hidden;
+  }
+
+  > tbody > tr {
     > td {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
       padding: 0 7px;
+      border-bottom-style: solid;
+      border-bottom-color: var(--rft-border-color-base);
+      border-bottom-width: 1px;
+    }
+  }
+
+  tr[role='column-group'] > td {
+    border-bottom-style: solid;
+    border-bottom-color: var(--rft-border-color-base);
+    border-bottom-width: 1px;
+    background-color: var(--rft-header-group-bg);
+
+    &[rowSpan='2'] {
+      background-color: transparent;
+      border-right-style: solid;
+      border-right-color: var(--rft-border-color-base);
+      border-right-width: 1px;
     }
   }
 `;

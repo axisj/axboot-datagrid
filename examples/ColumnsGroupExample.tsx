@@ -11,7 +11,7 @@ interface IListItem {
   createAt: string;
 }
 
-const list = Array.from(Array(1000)).map((v, i) => ({
+const list = Array.from(Array(100)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
     title: `title_${i}`,
@@ -20,14 +20,15 @@ const list = Array.from(Array(1000)).map((v, i) => ({
   },
 }));
 
-function BasicExample(props: Props) {
+function ColumnsGroupExample(props: Props) {
   return (
     <Container>
       <RFTable<IListItem>
         width={600}
         height={400}
         data={list}
-        frozenColumnIndex={1}
+        frozenColumnIndex={2}
+        headerHeight={50}
         columns={[
           {
             key: 'id',
@@ -37,7 +38,8 @@ function BasicExample(props: Props) {
           {
             key: 'title',
             label: '제목',
-            width: 300,
+            align: 'center',
+            width: 120,
             itemRender: item => {
               return `${item.writer}//${item.title}`;
             },
@@ -76,6 +78,11 @@ function BasicExample(props: Props) {
             width: 100,
           },
         ]}
+        columnsGroup={[
+          { label: '구분1', colspan: 2, align: 'center' },
+          { label: '구분2', colspan: 2 },
+          { label: '구분3', colspan: 4 },
+        ]}
         rowSelection={{
           selectedIds: [],
           onChange: (ids, selectedAll) => {
@@ -91,4 +98,4 @@ const Container = styled.div`
   font-size: 13px;
 `;
 
-export default BasicExample;
+export default ColumnsGroupExample;
