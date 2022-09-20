@@ -3,11 +3,14 @@ import * as React from 'react';
 import { useAppStore } from '../store';
 import RowSelector from './RowSelector';
 import TableColGroupFrozen from './TableColGroupFrozen';
-import { ColResizer, HeadTable } from './TableHead';
+import { HeadTable } from './TableHead';
+import ColResizer from './ColResizer';
 
-interface Props {}
+interface Props {
+  container: React.RefObject<HTMLDivElement>;
+}
 
-function TableHeadFrozen(props: Props) {
+function TableHeadFrozen({ container }: Props) {
   const hasRowSelection = useAppStore(s => !!s.rowSelection);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
@@ -61,13 +64,14 @@ function TableHeadFrozen(props: Props) {
           )}
           {columns.slice(0, frozenColumnIndex).map((c, index) => (
             <td
+              data-column-index={index}
               key={index}
               style={{
                 textAlign: c.align,
               }}
             >
               {c.label}
-              <ColResizer hideHandle={frozenColumnIndex - 1 === index} />
+              <ColResizer container={container} hideHandle={frozenColumnIndex - 1 === index} columnIndex={index} />
             </td>
           ))}
         </tr>

@@ -24,6 +24,7 @@ function Table() {
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
   const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const frozenScrollContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -81,6 +82,7 @@ function Table() {
 
   return (
     <Container
+      ref={containerRef}
       role={'react-frame-table'}
       style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
       className={className}
@@ -93,11 +95,11 @@ function Table() {
             }}
             role={'react-frame-table-frozen-header'}
           >
-            <TableHeadFrozen />
+            <TableHeadFrozen container={containerRef} />
           </FrozenHeader>
         )}
         <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'react-frame-table-header'}>
-          <TableHead />
+          <TableHead container={containerRef} />
         </Header>
       </HeaderContainer>
 

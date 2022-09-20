@@ -44,6 +44,7 @@ export interface RFTableProps<T> {
   data: RFTableDataItem[];
   columns: RFTableColumn<T>[];
   columnsGroup?: RFTableColumnGroup[];
+  columnWidths?: (number | undefined)[];
   frozenColumnIndex?: number;
   itemHeight?: number;
   itemPadding?: number;
@@ -84,7 +85,7 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   scrollLeft: number;
   selectedIdsMap: Map<number, any>;
   selectedAll: SelectedAll;
-  columnWidths?: number[];
+  columnWidths: (number | undefined)[];
 }
 
 export interface AppActions {
@@ -96,4 +97,5 @@ export interface AppActions {
   setSelectedAll: (selectedAll: SelectedAll) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
   setColumnWidths: (widths: number[]) => void;
+  setColumnWidth: (columnIndex: number, width?: number) => void;
 }

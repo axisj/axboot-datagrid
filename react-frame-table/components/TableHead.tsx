@@ -2,9 +2,13 @@ import * as React from 'react';
 import { useAppStore } from '../store';
 import styled from '@emotion/styled';
 import TableColGroup from './TableColGroup';
-import { css } from '@emotion/react';
+import ColResizer from './ColResizer';
 
-function TableHead() {
+interface Props {
+  container: React.RefObject<HTMLDivElement>;
+}
+
+function TableHead({ container }: Props) {
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
   const columnsGroup = useAppStore(s => s.columnsGroup);
@@ -33,13 +37,14 @@ function TableHead() {
         <tr>
           {columns.slice(frozenColumnIndex).map((c, index) => (
             <td
+              data-column-index={frozenColumnIndex + index}
               key={index}
               style={{
                 textAlign: c.align,
               }}
             >
               {c.label}
-              <ColResizer />
+              <ColResizer columnIndex={frozenColumnIndex + index} container={container} />
             </td>
           ))}
           <td />
@@ -88,40 +93,6 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
       border-right-width: 1px;
     }
   }
-`;
-
-export const ColResizer = styled.div<{ hideHandle?: boolean }>`
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 7px;
-  height: 100%;
-  cursor: col-resize;
-
-  ${({ hideHandle = false }) => {
-    if (hideHandle) {
-      return css``;
-    }
-    return css`
-      &:after {
-        position: absolute;
-        top: 50%;
-        right: 3px;
-        content: '';
-        display: block;
-        width: 1px;
-        height: 0.8em;
-        transform: translateY(-50%);
-        background: var(--rft-border-color-base);
-      }
-
-      &:hover {
-        &:after {
-          background: var(--rft-primary-color);
-        }
-      }
-    `;
-  }}
 `;
 
 export default TableHead;
