@@ -2,8 +2,13 @@ import * as React from 'react';
 import { useAppStore } from '../store';
 import styled from '@emotion/styled';
 import TableColGroup from './TableColGroup';
+import ColResizer from './ColResizer';
 
-function TableHead() {
+interface Props {
+  container: React.RefObject<HTMLDivElement>;
+}
+
+function TableHead({ container }: Props) {
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
   const columnsGroup = useAppStore(s => s.columnsGroup);
@@ -12,7 +17,7 @@ function TableHead() {
   return (
     <HeadTable headerHeight={headerHeight}>
       <TableColGroup />
-      <tbody>
+      <tbody role={'rft-head'}>
         {columnsGroup.length > 0 && (
           <tr role={'column-group'}>
             {columnsGroup.map((cg, index) => (
@@ -32,12 +37,14 @@ function TableHead() {
         <tr>
           {columns.slice(frozenColumnIndex).map((c, index) => (
             <td
+              data-column-index={frozenColumnIndex + index}
               key={index}
               style={{
                 textAlign: c.align,
               }}
             >
               {c.label}
+              <ColResizer columnIndex={frozenColumnIndex + index} container={container} />
             </td>
           ))}
           <td />
@@ -62,6 +69,7 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
 
   > tbody > tr {
     > td {
+      position: relative;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;

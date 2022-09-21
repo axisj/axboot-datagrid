@@ -6,7 +6,7 @@ type Size = 'small' | 'medium' | 'large';
 export interface RFTableColumn<T> {
   key: string | string[];
   label: string;
-  width?: number;
+  width: number;
   align?: Direction;
   itemRender?: (item: T) => React.ReactNode;
 }
@@ -44,6 +44,7 @@ export interface RFTableProps<T> {
   data: RFTableDataItem[];
   columns: RFTableColumn<T>[];
   columnsGroup?: RFTableColumnGroup[];
+  onChangeColumns?: (columnIndex: number, width: number, columns: RFTableColumn<T>[]) => void;
   frozenColumnIndex?: number;
   itemHeight?: number;
   itemPadding?: number;
@@ -88,9 +89,10 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
 
 export interface AppActions {
   setScrollTop: (scrollTop: number) => void;
-  setScrollLeft: (scrollTop: number) => void;
+  setScrollLeft: (scrollLeft: number) => void;
+  setScroll: (scrollTop: number, scrollLeft: number) => void;
   setData: (data: RFTableDataItem[]) => void;
   setSelectedIds: (ids: number[]) => void;
   setSelectedAll: (selectedAll: SelectedAll) => void;
-  setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
+  setColumnWidth: (columnIndex: number, width?: number) => void;
 }

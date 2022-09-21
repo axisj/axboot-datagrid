@@ -1,6 +1,7 @@
 import createContext from 'zustand/context';
 import { AppActions, AppModel, SelectedAll } from '../types';
 import { StoreApi } from 'zustand';
+import { getFrozenColumnsWidth } from '../utils';
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions {}
 
@@ -14,6 +15,7 @@ export type StoreActions = <T>(set: ZustandSetter<AppModel<T>>, get: ZustandGett
 export const getAppStoreActions: StoreActions = (set, get) => ({
   setScrollTop: scrollTop => set({ scrollTop }),
   setScrollLeft: scrollLeft => set({ scrollLeft }),
+  setScroll: (scrollTop, scrollLeft) => set({ scrollTop, scrollLeft }),
   setData: data => set({ data }),
   setSelectedIds: keys => {
     const selectedIdsMap = get().selectedIdsMap;
@@ -35,5 +37,24 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
 
     get().rowSelection?.onChange([...selectedIdsMap.keys()], selectedAll);
   },
-  setFrozenColumnsWidth: frozenColumnsWidth => set({ frozenColumnsWidth }),
+  setColumnWidth: (columnIndex, width) => {
+    const columns = get().columns;
+    if (width !== undefined) {
+      if (columns[columnIndex]) {
+        columns[columnIndex].width = width;
+
+        const frozenColumnsWidth = getFrozenColumnsWidth({
+          rowSelection: get().rowSelection,
+          itemHeight: get().itemHeight,
+          itemPadding: get().itemPadding,
+          frozenColumnIndex: get().frozenColumnIndex,
+          columns,
+        });
+
+        set({ columns: [...columns], frozenColumnsWidth });
+      }
+    } else {
+      get().onChangeColumns?.(columnIndex, columns[columnIndex].width, columns);
+    }
+  },
 });

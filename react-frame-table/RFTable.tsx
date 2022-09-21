@@ -3,7 +3,7 @@ import { AppStoreProvider, AppStore, getAppStoreActions } from './store';
 import Table from './components/Table';
 import { RFTableColumnGroup, RFTableProps } from './types';
 import create from 'zustand';
-import { getFrozenColumnsWidth } from './utils/getFrozenColumnsWidth';
+import { getFrozenColumnsWidth, useForceUpdate } from './utils';
 
 export function RFTable<T = Record<string, any>>({
   width,
@@ -12,6 +12,7 @@ export function RFTable<T = Record<string, any>>({
   data,
   columns,
   columnsGroup = [],
+  onChangeColumns,
   frozenColumnIndex = 0,
   itemHeight = 15,
   itemPadding = 7,
@@ -20,7 +21,6 @@ export function RFTable<T = Record<string, any>>({
   className,
   rowSelection,
 }: RFTableProps<T>) {
-  const headerRowSize = columnsGroup?.length > 0 ? 2 : 1;
   const containerBorderWidth = 1;
   const contentBodyHeight = height - headerHeight - containerBorderWidth * 2;
   const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
@@ -95,6 +95,7 @@ export function RFTable<T = Record<string, any>>({
           headerHeight,
           data,
           columns,
+          onChangeColumns,
           frozenColumnsGroup: columnGroups.leftGroups,
           columnsGroup: columnGroups.rightGroups,
           frozenColumnIndex,

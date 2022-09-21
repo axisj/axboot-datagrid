@@ -12,7 +12,8 @@ interface Props {
 }
 
 function RowSelector({ checked = false, indeterminate, handleChange }: Props) {
-  const checkboxHeight = useAppStore(s => s.itemHeight);
+  const checkboxHeight = useAppStore(s => Math.min(15, s.itemHeight));
+
   return (
     <Container
       checked={checked}

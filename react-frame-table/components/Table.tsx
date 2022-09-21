@@ -19,89 +19,86 @@ function Table() {
   const scrollTop = useAppStore(s => s.scrollTop);
   const contentBodyHeight = useAppStore(s => s.contentBodyHeight);
   const data = useAppStore(s => s.data);
-  const setScrollTop = useAppStore(s => s.setScrollTop);
-  const setScrollLeft = useAppStore(s => s.setScrollLeft);
+  const setScroll = useAppStore(s => s.setScroll);
   const trHeight = itemHeight + itemPadding * 2 + 1;
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
   const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const frozenScrollContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const handleScroll = React.useCallback(() => {
+  const onScroll = React.useCallback(() => {
     if (scrollContainerRef.current) {
-      const ref = scrollContainerRef.current;
-      setScrollTop(ref.scrollTop);
-      setScrollLeft(ref.scrollLeft);
+      const { scrollTop, scrollLeft } = scrollContainerRef.current;
+      setScroll(scrollTop, scrollLeft);
     }
-  }, [setScrollLeft, setScrollTop]);
+  }, [setScroll]);
 
-  const handleWheel: (this: HTMLDivElement, ev: HTMLElementEventMap['wheel']) => any = React.useCallback(
-    evt => {
-      evt.preventDefault();
+  const onWheel: (this: HTMLDivElement, ev: HTMLElementEventMap['wheel']) => any = React.useCallback(evt => {
+    evt.preventDefault();
 
-      if (scrollContainerRef.current) {
-        const delta = { x: 0, y: 0 };
+    if (scrollContainerRef.current) {
+      const delta = { x: 0, y: 0 };
 
-        if ((evt as any).detail) {
-          delta.y = (evt as any).detail * 10;
+      if ((evt as any).detail) {
+        delta.y = (evt as any).detail * 10;
+      } else {
+        if (typeof evt.deltaY === 'undefined') {
+          delta.y = -(evt as any).wheelDelta;
+          delta.x = 0;
         } else {
-          if (typeof evt.deltaY === 'undefined') {
-            delta.y = -(evt as any).wheelDelta;
-            delta.x = 0;
-          } else {
-            delta.y = evt.deltaY;
-            delta.x = evt.deltaX;
-          }
+          delta.y = evt.deltaY;
+          delta.x = evt.deltaX;
         }
-
-        // scrollContainerRef.current.scrollLeft = scrollLeft + delta.x;
-        scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop + delta.y;
       }
-    },
-    [contentBodyHeight, data.length, scrollTop, trHeight],
-  );
+
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop + delta.y;
+    }
+  }, []);
 
   React.useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current?.removeEventListener('scroll', handleScroll);
-      scrollContainerRef.current.addEventListener('scroll', handleScroll, { passive: true, capture: true });
-      scrollContainerRef.current.scrollLeft = scrollLeft;
-      scrollContainerRef.current.scrollTop = scrollTop;
+    const scrollContainerRefCurrent = scrollContainerRef?.current;
+    const frozenScrollContainerRefCurrent = frozenScrollContainerRef?.current;
+    if (scrollContainerRefCurrent) {
+      scrollContainerRefCurrent.removeEventListener('scroll', onScroll);
+      scrollContainerRefCurrent.addEventListener('scroll', onScroll, { passive: true, capture: true });
+      scrollContainerRefCurrent.scrollLeft = scrollLeft;
+      scrollContainerRefCurrent.scrollTop = scrollTop;
     }
 
-    if (frozenScrollContainerRef.current) {
-      scrollContainerRef.current?.removeEventListener('wheel', handleWheel);
-      frozenScrollContainerRef.current.addEventListener('wheel', handleWheel);
+    if (frozenScrollContainerRefCurrent) {
+      frozenScrollContainerRefCurrent.removeEventListener('wheel', onWheel);
+      frozenScrollContainerRefCurrent.addEventListener('wheel', onWheel);
     }
 
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      scrollContainerRef.current?.removeEventListener('wheel', handleWheel);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      scrollContainerRef.current?.removeEventListener('scroll', handleScroll);
+      scrollContainerRefCurrent?.removeEventListener('scroll', onScroll);
+      frozenScrollContainerRefCurrent?.removeEventListener('wheel', onWheel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleScroll]);
+  }, [onScroll, onWheel]);
 
   return (
     <Container
+      ref={containerRef}
       role={'react-frame-table'}
       style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
       className={className}
     >
-      <HeaderContainer style={{ height: headerHeight }}>
+      <HeaderContainer style={{ height: headerHeight }} role={'rft-header-container'}>
         {frozenColumnsWidth > 0 && (
           <FrozenHeader
             style={{
               width: frozenColumnsWidth,
             }}
+            role={'rft-frozen-header'}
           >
-            <TableHeadFrozen />
+            <TableHeadFrozen container={containerRef} />
           </FrozenHeader>
         )}
-        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }}>
-          <TableHead />
+        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rft-header'}>
+          <TableHead container={containerRef} />
         </Header>
       </HeaderContainer>
 
@@ -112,6 +109,7 @@ function Table() {
             style={{
               width: frozenColumnsWidth,
             }}
+            role={'rft-frozen-scroll-container'}
           >
             <TableBodyFrozen
               style={{
@@ -120,7 +118,7 @@ function Table() {
             />
           </FrozenScrollContent>
         )}
-        <ScrollContainer ref={scrollContainerRef}>
+        <ScrollContainer ref={scrollContainerRef} role={'rft-scroll-container'}>
           <ScrollContent
             style={{
               paddingTop: paddingTop,
@@ -157,7 +155,7 @@ const FrozenHeader = styled.div`
   position: absolute;
   background-color: var(--rft-header-bg);
   border-right: 1px solid var(--rft-border-color-base);
-  box-shadow: 1px 0 3px var(--rft-border-color-base);
+  box-shadow: 0 0 3px var(--rft-border-color-base);
   z-index: 2;
 `;
 
@@ -176,22 +174,22 @@ const ScrollContainer = styled.div`
   flex: 1;
 
   &::-webkit-scrollbar {
-    width: 11px;
-    height: 11px;
+    width: var(--rft-scroll-size);
+    height: var(--rft-scroll-size);
   }
 
   &::-webkit-scrollbar-thumb {
     background-color: var(--rft-scroll-thumb-bg);
-    border-radius: 6px;
+    border-radius: var(--rft-scroll-thumb-radius);
     border: 2px solid var(--rft-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-thumb:hover {
     background-color: var(--rft-scroll-thumb-hover-bg);
+    border: 1px solid var(--rft-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track {
-    border-radius: 10px;
     background-color: var(--rft-scroll-track-bg);
   }
 
@@ -217,7 +215,7 @@ const ScrollContent = styled.div`
 const FrozenScrollContent = styled.div`
   flex: none;
   border-right: 1px solid var(--rft-border-color-base);
-  box-shadow: 1px 0 3px var(--rft-border-color-base);
+  box-shadow: 0 0 3px var(--rft-border-color-base);
   z-index: 2;
   overflow: hidden;
   position: relative;

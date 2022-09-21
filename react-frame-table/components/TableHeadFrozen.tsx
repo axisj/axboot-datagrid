@@ -4,10 +4,13 @@ import { useAppStore } from '../store';
 import RowSelector from './RowSelector';
 import TableColGroupFrozen from './TableColGroupFrozen';
 import { HeadTable } from './TableHead';
+import ColResizer from './ColResizer';
 
-interface Props {}
+interface Props {
+  container: React.RefObject<HTMLDivElement>;
+}
 
-function TableHeadFrozen(props: Props) {
+function TableHeadFrozen({ container }: Props) {
   const hasRowSelection = useAppStore(s => !!s.rowSelection);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
@@ -19,7 +22,7 @@ function TableHeadFrozen(props: Props) {
   return (
     <HeadTableFrozen headerHeight={headerHeight}>
       <TableColGroupFrozen />
-      <tbody>
+      <tbody role={'rft-head-frozen'}>
         {frozenColumnsGroup.length > 0 && (
           <tr role={'column-group'}>
             {hasRowSelection && (
@@ -61,12 +64,14 @@ function TableHeadFrozen(props: Props) {
           )}
           {columns.slice(0, frozenColumnIndex).map((c, index) => (
             <td
+              data-column-index={index}
               key={index}
               style={{
                 textAlign: c.align,
               }}
             >
               {c.label}
+              <ColResizer container={container} hideHandle={frozenColumnIndex - 1 === index} columnIndex={index} />
             </td>
           ))}
         </tr>
@@ -75,14 +80,6 @@ function TableHeadFrozen(props: Props) {
   );
 }
 
-const HeadTableFrozen = styled(HeadTable)`
-  tr[role='column-group'] > td {
-    &:last-child {
-      border-right-style: solid;
-      border-right-color: var(--rft-border-color-base);
-      border-right-width: 1px;
-    }
-  }
-`;
+const HeadTableFrozen = styled(HeadTable)``;
 
 export default TableHeadFrozen;
