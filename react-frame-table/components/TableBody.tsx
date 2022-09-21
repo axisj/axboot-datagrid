@@ -20,7 +20,7 @@ function TableBody() {
   return (
     <BodyTable>
       <TableColGroup />
-      <tbody role={'react-frame-table-body'}>
+      <tbody role={'rft-body'}>
         {Array.from({ length: endNumber - startIdx }, (_, i) => {
           const ri = startIdx + i;
           const item = data[ri];

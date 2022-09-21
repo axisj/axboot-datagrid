@@ -42,7 +42,7 @@ function TableBodyFrozen(props: Props) {
   return (
     <BodyTable style={props.style}>
       <TableColGroupFrozen />
-      <tbody role={'react-frame-table-body-frozen'}>
+      <tbody role={'rft-body-frozen'}>
         {Array.from({ length: endNumber - startIdx }, (_, i) => {
           const ri = startIdx + i;
           const item = data[ri];

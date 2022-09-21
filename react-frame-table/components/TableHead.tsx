@@ -17,7 +17,7 @@ function TableHead({ container }: Props) {
   return (
     <HeadTable headerHeight={headerHeight}>
       <TableColGroup />
-      <tbody role={'react-frame-table-head'}>
+      <tbody role={'rft-head'}>
         {columnsGroup.length > 0 && (
           <tr role={'column-group'}>
             {columnsGroup.map((cg, index) => (

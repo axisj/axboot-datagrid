@@ -87,18 +87,18 @@ function Table() {
       style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
       className={className}
     >
-      <HeaderContainer style={{ height: headerHeight }} role={'react-frame-table-header-container'}>
+      <HeaderContainer style={{ height: headerHeight }} role={'rft-header-container'}>
         {frozenColumnsWidth > 0 && (
           <FrozenHeader
             style={{
               width: frozenColumnsWidth,
             }}
-            role={'react-frame-table-frozen-header'}
+            role={'rft-frozen-header'}
           >
             <TableHeadFrozen container={containerRef} />
           </FrozenHeader>
         )}
-        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'react-frame-table-header'}>
+        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rft-header'}>
           <TableHead container={containerRef} />
         </Header>
       </HeaderContainer>
@@ -110,7 +110,7 @@ function Table() {
             style={{
               width: frozenColumnsWidth,
             }}
-            role={'react-frame-table-frozen-scroll-container'}
+            role={'rft-frozen-scroll-container'}
           >
             <TableBodyFrozen
               style={{
@@ -119,7 +119,7 @@ function Table() {
             />
           </FrozenScrollContent>
         )}
-        <ScrollContainer ref={scrollContainerRef} role={'react-frame-table-scroll-container'}>
+        <ScrollContainer ref={scrollContainerRef} role={'rft-scroll-container'}>
           <ScrollContent
             style={{
               paddingTop: paddingTop,

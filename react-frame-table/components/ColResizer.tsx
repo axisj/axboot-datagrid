@@ -44,15 +44,16 @@ function ColResizer({ container, columnIndex, hideHandle }: Props) {
       evt.stopPropagation();
 
       if (container.current) {
-        const headFrozenHTML = container.current.querySelector('[role="react-frame-table-head-frozen"]')?.innerHTML;
-        const headHTML = container.current.querySelector('[role="react-frame-table-head"]')?.innerHTML;
-        const bodyFrozenHTML = container.current.querySelector('[role="react-frame-table-body-frozen"]')?.innerHTML;
-        const bodyHTML = container.current.querySelector('[role="react-frame-table-body"]')?.innerHTML;
+        const headFrozenHTML = container.current.querySelector('[role="rft-head-frozen"]')?.innerHTML;
+        const headHTML = container.current.querySelector('[role="rft-head"]')?.innerHTML;
+        const bodyFrozenHTML = container.current.querySelector('[role="rft-body-frozen"]')?.innerHTML;
+        const bodyHTML = container.current.querySelector('[role="rft-body"]')?.innerHTML;
         const targetDiv = document.createElement('div');
         targetDiv.style.position = 'fixed';
         targetDiv.style.top = '-9999px';
 
-        targetDiv.innerHTML = `<table><thead>${headFrozenHTML}</thead><tbody>${bodyFrozenHTML}</tbody></table><table><thead>${headHTML}</thead><tbody>${bodyHTML}</tbody></table>`;
+        targetDiv.innerHTML = `<table><thead>${headFrozenHTML}</thead><tbody>${bodyFrozenHTML}</tbody></table>
+<table><thead>${headHTML}</thead><tbody>${bodyHTML}</tbody></table>`;
         const bodyTarget = document.getElementById('root') ?? document.body;
         bodyTarget.append(targetDiv);
 
