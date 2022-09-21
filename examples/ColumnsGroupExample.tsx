@@ -25,7 +25,7 @@ function ColumnsGroupExample(props: Props) {
     <Container>
       <RFTable<IListItem>
         width={1000}
-        height={800}
+        height={700}
         data={list}
         frozenColumnIndex={2}
         headerHeight={60}

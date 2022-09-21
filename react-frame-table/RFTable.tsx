@@ -3,7 +3,7 @@ import { AppStoreProvider, AppStore, getAppStoreActions } from './store';
 import Table from './components/Table';
 import { RFTableColumnGroup, RFTableProps } from './types';
 import create from 'zustand';
-import { getFrozenColumnsWidth } from './utils';
+import { getFrozenColumnsWidth, useForceUpdate } from './utils';
 
 export function RFTable<T = Record<string, any>>({
   width,
@@ -12,7 +12,7 @@ export function RFTable<T = Record<string, any>>({
   data,
   columns,
   columnsGroup = [],
-  columnWidths,
+  onChangeColumns,
   frozenColumnIndex = 0,
   itemHeight = 15,
   itemPadding = 7,
@@ -73,12 +73,6 @@ export function RFTable<T = Record<string, any>>({
     };
   }, [columnsGroup, frozenColumnIndex]);
 
-  if (columnWidths) {
-    columnWidths.forEach((cw, ci) => {
-      columns[ci].width = cw;
-    });
-  }
-
   const frozenColumnsWidth = React.useMemo(
     () =>
       getFrozenColumnsWidth({
@@ -101,7 +95,7 @@ export function RFTable<T = Record<string, any>>({
           headerHeight,
           data,
           columns,
-          columnWidths: columns.map(c => c.width),
+          onChangeColumns,
           frozenColumnsGroup: columnGroups.leftGroups,
           columnsGroup: columnGroups.rightGroups,
           frozenColumnIndex,

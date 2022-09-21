@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFTable } from '../react-frame-table';
+import { RFTable, RFTableColumn } from '../react-frame-table';
+import { Button } from 'antd';
 
 interface Props {}
 
@@ -21,60 +22,66 @@ const list = Array.from(Array(1000)).map((v, i) => ({
 }));
 
 function BasicExample(props: Props) {
+  const [columns, setColumns] = React.useState<RFTableColumn<IListItem>[]>([
+    {
+      key: 'id',
+      label: '아이디 IS LONG !',
+      width: 100,
+    },
+    {
+      key: 'title',
+      label: '제목',
+      width: 300,
+      itemRender: item => {
+        return `${item.writer}//${item.title}`;
+      },
+    },
+    {
+      key: 'writer',
+      label: '작성자',
+      width: 100,
+      itemRender: item => {
+        return `${item.writer}//A`;
+      },
+    },
+    {
+      key: 'createAt',
+      label: '작성일A',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일B',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일C',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일D',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일E',
+      width: 100,
+    },
+  ]);
+
   return (
     <Container>
       <RFTable<IListItem>
         width={600}
         height={400}
         data={list}
-        columns={[
-          {
-            key: 'id',
-            label: '아이디 IS LONG !',
-            width: 100,
-          },
-          {
-            key: 'title',
-            label: '제목',
-            width: 300,
-            itemRender: item => {
-              return `${item.writer}//${item.title}`;
-            },
-          },
-          {
-            key: 'writer',
-            label: '작성자',
-            width: 100,
-            itemRender: item => {
-              return `${item.writer}//A`;
-            },
-          },
-          {
-            key: 'createAt',
-            label: '작성일A',
-            width: 100,
-          },
-          {
-            key: 'createAt',
-            label: '작성일B',
-            width: 100,
-          },
-          {
-            key: 'createAt',
-            label: '작성일C',
-            width: 100,
-          },
-          {
-            key: 'createAt',
-            label: '작성일D',
-            width: 100,
-          },
-          {
-            key: 'createAt',
-            label: '작성일E',
-            width: 100,
-          },
-        ]}
+        columns={columns}
+        onChangeColumns={(columnIndex, width, columns) => {
+          console.log('onChangeColumnWidths', columnIndex, width, columns);
+          setColumns(columns);
+        }}
         rowSelection={{
           selectedIds: [],
           onChange: (ids, selectedAll) => {
@@ -82,6 +89,16 @@ function BasicExample(props: Props) {
           },
         }}
       />
+
+      <br />
+      <Button
+        onClick={() => {
+          columns[0].width = 200;
+          setColumns([...columns]);
+        }}
+      >
+        아이디 컬럼 너비 : 200
+      </Button>
     </Container>
   );
 }

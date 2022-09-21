@@ -37,30 +37,11 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
 
     get().rowSelection?.onChange([...selectedIdsMap.keys()], selectedAll);
   },
-  setFrozenColumnsWidth: frozenColumnsWidth => set({ frozenColumnsWidth }),
-  setColumnWidths: columnWidths => {
-    const columns = get().columns;
-    columnWidths.forEach((cw, ci) => {
-      columns[ci].width = cw;
-    });
-
-    const frozenColumnsWidth = getFrozenColumnsWidth({
-      rowSelection: get().rowSelection,
-      itemHeight: get().itemHeight,
-      itemPadding: get().itemPadding,
-      frozenColumnIndex: get().frozenColumnIndex,
-      columns,
-    });
-
-    set({ columns: [...columns], columnWidths, frozenColumnsWidth });
-  },
   setColumnWidth: (columnIndex, width) => {
+    const columns = get().columns;
     if (width !== undefined) {
-      const columns = get().columns;
-      let columnWidths = get().columnWidths;
       if (columns[columnIndex]) {
         columns[columnIndex].width = width;
-        columnWidths[columnIndex] = width;
 
         const frozenColumnsWidth = getFrozenColumnsWidth({
           rowSelection: get().rowSelection,
@@ -70,9 +51,10 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
           columns,
         });
 
-        set({ columns: [...columns], columnWidths, frozenColumnsWidth });
+        set({ columns: [...columns], frozenColumnsWidth });
       }
     } else {
+      get().onChangeColumns?.(columnIndex, columns[columnIndex].width, columns);
     }
   },
 });

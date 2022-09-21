@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
-import { mouseEventSubscribe } from '../utils';
+import { delay, mouseEventSubscribe } from '../utils';
 import { useAppStore } from '../store';
 
 interface StyledProps {
@@ -42,34 +42,39 @@ function ColResizer({ container, columnIndex, hideHandle }: Props) {
     async (evt: React.MouseEvent<HTMLDivElement, MouseEvent>, columnIndex: number) => {
       evt.preventDefault();
       evt.stopPropagation();
-      //
-      // const theadHTML = containerRef.current?.querySelector('thead')?.innerHTML;
-      // const tbodyHTML = scrollContainer?.querySelector('tbody')?.innerHTML;
-      // const targetDiv = document.createElement('div');
-      // targetDiv.className = 'qptable-mirror';
-      //
-      // targetDiv.innerHTML = `<table><thead>${theadHTML}</thead><tbody>${tbodyHTML}</tbody></table>`;
-      // const bodyTarget = document.getElementById('root') ?? document.body;
-      // bodyTarget.append(targetDiv);
-      //
-      // await delay(30);
-      //
-      // const targetTd = targetDiv.querySelector(`tr:first-of-type td[data-column-index="${columnIndex}"]`);
-      //
-      // if (targetTd) {
-      //   onChangeColumnWidth(columnIndex, targetTd.getBoundingClientRect().width);
-      //   onChangeColumnWidth(columnIndex);
-      // }
-      // targetDiv.remove();
+
+      if (container.current) {
+        const headFrozenHTML = container.current.querySelector('[role="react-frame-table-head-frozen"]')?.innerHTML;
+        const headHTML = container.current.querySelector('[role="react-frame-table-head"]')?.innerHTML;
+        const bodyFrozenHTML = container.current.querySelector('[role="react-frame-table-body-frozen"]')?.innerHTML;
+        const bodyHTML = container.current.querySelector('[role="react-frame-table-body"]')?.innerHTML;
+        const targetDiv = document.createElement('div');
+        targetDiv.style.position = 'fixed';
+        targetDiv.style.top = '-9999px';
+
+        targetDiv.innerHTML = `<table><thead>${headFrozenHTML}</thead><tbody>${bodyFrozenHTML}</tbody></table><table><thead>${headHTML}</thead><tbody>${bodyHTML}</tbody></table>`;
+        const bodyTarget = document.getElementById('root') ?? document.body;
+        bodyTarget.append(targetDiv);
+
+        await delay(30);
+
+        const targetTd = targetDiv.querySelector(`tr:last-of-type td[data-column-index="${columnIndex}"]`);
+
+        if (targetTd) {
+          setColumnWidth(columnIndex, targetTd.getBoundingClientRect().width);
+          setColumnWidth(columnIndex);
+        }
+        targetDiv.remove();
+      }
     },
-    [],
+    [container, setColumnWidth],
   );
 
   return (
     <Container
       hideHandle={hideHandle}
       onMouseDown={evt => onMouseDownResizerHandle(evt, columnIndex)}
-      onDoubleClick={() => {}}
+      onDoubleClick={evt => onMouseDoubleClick(evt, columnIndex)}
     />
   );
 }

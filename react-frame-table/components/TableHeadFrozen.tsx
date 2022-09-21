@@ -22,7 +22,7 @@ function TableHeadFrozen({ container }: Props) {
   return (
     <HeadTableFrozen headerHeight={headerHeight}>
       <TableColGroupFrozen />
-      <tbody>
+      <tbody role={'react-frame-table-head-frozen'}>
         {frozenColumnsGroup.length > 0 && (
           <tr role={'column-group'}>
             {hasRowSelection && (
