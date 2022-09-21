@@ -53,32 +53,31 @@ function Table() {
         }
       }
 
-      // scrollContainerRef.current.scrollLeft = scrollLeft + delta.x;
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop + delta.y;
     }
   }, []);
 
   React.useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current?.removeEventListener('scroll', onScroll);
-      scrollContainerRef.current.addEventListener('scroll', onScroll, { passive: true, capture: true });
-      scrollContainerRef.current.scrollLeft = scrollLeft;
-      scrollContainerRef.current.scrollTop = scrollTop;
+    const scrollContainerRefCurrent = scrollContainerRef?.current;
+    const frozenScrollContainerRefCurrent = frozenScrollContainerRef?.current;
+    if (scrollContainerRefCurrent) {
+      scrollContainerRefCurrent.removeEventListener('scroll', onScroll);
+      scrollContainerRefCurrent.addEventListener('scroll', onScroll, { passive: true, capture: true });
+      scrollContainerRefCurrent.scrollLeft = scrollLeft;
+      scrollContainerRefCurrent.scrollTop = scrollTop;
     }
 
-    if (frozenScrollContainerRef.current) {
-      scrollContainerRef.current?.removeEventListener('wheel', onWheel);
-      frozenScrollContainerRef.current.addEventListener('wheel', onWheel);
+    if (frozenScrollContainerRefCurrent) {
+      frozenScrollContainerRefCurrent.removeEventListener('wheel', onWheel);
+      frozenScrollContainerRefCurrent.addEventListener('wheel', onWheel);
     }
 
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      scrollContainerRef.current?.removeEventListener('wheel', onWheel);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      scrollContainerRef.current?.removeEventListener('scroll', onScroll);
+      scrollContainerRefCurrent?.removeEventListener('scroll', onScroll);
+      frozenScrollContainerRefCurrent?.removeEventListener('wheel', onWheel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onScroll]);
+  }, [onScroll, onWheel]);
 
   return (
     <Container
