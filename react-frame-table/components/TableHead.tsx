@@ -3,16 +3,21 @@ import { useAppStore } from '../store';
 import styled from '@emotion/styled';
 import TableColGroup from './TableColGroup';
 import ColResizer from './ColResizer';
+import TableHeadColumn from './TableHeadColumn';
+import { css } from '@emotion/react';
 
 interface Props {
   container: React.RefObject<HTMLDivElement>;
 }
 
 function TableHead({ container }: Props) {
+  const sort = useAppStore(s => s.sort);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
   const columnsGroup = useAppStore(s => s.columnsGroup);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
+  const columnResizing = useAppStore(s => s.columnResizing);
+  const toggleColumnSort = useAppStore(s => s.toggleColumnSort);
 
   return (
     <HeadTable headerHeight={headerHeight}>
@@ -21,7 +26,7 @@ function TableHead({ container }: Props) {
         {columnsGroup.length > 0 && (
           <tr role={'column-group'}>
             {columnsGroup.map((cg, index) => (
-              <td
+              <HeadGroupTd
                 key={index}
                 colSpan={cg.colspan}
                 style={{
@@ -29,25 +34,31 @@ function TableHead({ container }: Props) {
                 }}
               >
                 {cg.label}
-              </td>
+              </HeadGroupTd>
             ))}
-            <td />
+            <HeadGroupTd />
           </tr>
         )}
         <tr>
           {columns.slice(frozenColumnIndex).map((c, index) => (
-            <td
+            <HeadTd
               data-column-index={frozenColumnIndex + index}
               key={index}
               style={{
                 textAlign: c.align,
               }}
+              hasOnClick={sort && !c.sortDisable}
+              columnResizing={columnResizing}
+              onClick={evt => {
+                evt.preventDefault();
+                toggleColumnSort(frozenColumnIndex + index);
+              }}
             >
-              {c.label}
+              <TableHeadColumn column={c} />
               <ColResizer columnIndex={frozenColumnIndex + index} container={container} />
-            </td>
+            </HeadTd>
           ))}
-          <td />
+          <HeadTd />
         </tr>
       </tbody>
     </HeadTable>
@@ -66,33 +77,40 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
     height: ${p => p.headerHeight}px;
     overflow: hidden;
   }
+`;
 
-  > tbody > tr {
-    > td {
-      position: relative;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      padding: 0 7px;
-      border-bottom-style: solid;
-      border-bottom-color: var(--rft-border-color-base);
-      border-bottom-width: 1px;
-    }
+export const HeadGroupTd = styled.td`
+  border-bottom-style: solid;
+  border-bottom-color: var(--rft-border-color-base);
+  border-bottom-width: 1px;
+  background-color: var(--rft-header-group-bg);
+
+  &[rowSpan='2'] {
+    background-color: transparent;
+    border-right-style: solid;
+    border-right-color: var(--rft-border-color-base);
+    border-right-width: 1px;
   }
+`;
 
-  tr[role='column-group'] > td {
-    border-bottom-style: solid;
-    border-bottom-color: var(--rft-border-color-base);
-    border-bottom-width: 1px;
-    background-color: var(--rft-header-group-bg);
+export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean }>`
+  position: relative;
+  padding: 0 7px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--rft-border-color-base);
+  border-bottom-width: 1px;
 
-    &[rowSpan='2'] {
-      background-color: transparent;
-      border-right-style: solid;
-      border-right-color: var(--rft-border-color-base);
-      border-right-width: 1px;
+  ${({ hasOnClick, columnResizing }) => {
+    if (hasOnClick && !columnResizing) {
+      return css`
+        cursor: pointer;
+
+        &:hover {
+          background: var(--rft-header-hover-bg);
+        }
+      `;
     }
-  }
+  }}
 `;
 
 export default TableHead;

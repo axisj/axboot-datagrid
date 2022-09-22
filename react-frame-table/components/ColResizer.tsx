@@ -15,6 +15,7 @@ interface Props extends StyledProps {
 
 function ColResizer({ container, columnIndex, hideHandle }: Props) {
   const setColumnWidth = useAppStore(s => s.setColumnWidth);
+  const setColumnResizing = useAppStore(s => s.setColumnResizing);
 
   const onMouseDownResizerHandle = React.useCallback(
     (evt: React.MouseEvent<HTMLDivElement, MouseEvent>, columnIndex: number) => {
@@ -28,14 +29,16 @@ function ColResizer({ container, columnIndex, hideHandle }: Props) {
         mousePosition => {
           const mX = mousePosition.clientX + 4;
           const width = columnSX + 50 < mX ? mX - columnSX : 50;
+          setColumnResizing(true);
           setColumnWidth(columnIndex, width);
         },
         () => {
+          setColumnResizing(false);
           setColumnWidth(columnIndex);
         },
       );
     },
-    [container, setColumnWidth],
+    [container, setColumnResizing, setColumnWidth],
   );
 
   const onMouseDoubleClick = React.useCallback(
@@ -76,17 +79,19 @@ function ColResizer({ container, columnIndex, hideHandle }: Props) {
       hideHandle={hideHandle}
       onMouseDown={evt => onMouseDownResizerHandle(evt, columnIndex)}
       onDoubleClick={evt => onMouseDoubleClick(evt, columnIndex)}
+      onClick={evt => evt.stopPropagation()}
     />
   );
 }
 
 const Container = styled.div<StyledProps>`
   position: absolute;
-  right: 0;
+  right: -7px;
   top: 0;
-  width: 7px;
+  width: 14px;
   height: 100%;
   cursor: col-resize;
+  z-index: 2;
 
   ${({ hideHandle = false }) => {
     if (hideHandle) {
@@ -96,7 +101,7 @@ const Container = styled.div<StyledProps>`
       &:after {
         position: absolute;
         top: 50%;
-        right: 3px;
+        right: 7px;
         content: '';
         display: block;
         width: 1px;

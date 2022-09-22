@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { AppStoreProvider, AppStore, getAppStoreActions } from './store';
 import Table from './components/Table';
-import { RFTableColumnGroup, RFTableProps } from './types';
+import { RFTableColumnGroup, RFTableProps, RFTableSortParam } from './types';
 import create from 'zustand';
 import { getFrozenColumnsWidth, useForceUpdate } from './utils';
 
@@ -20,6 +20,7 @@ export function RFTable<T = Record<string, any>>({
   scrollLeft = 0,
   className,
   rowSelection,
+  sort,
 }: RFTableProps<T>) {
   const containerBorderWidth = 1;
   const contentBodyHeight = height - headerHeight - containerBorderWidth * 2;
@@ -85,6 +86,18 @@ export function RFTable<T = Record<string, any>>({
     [columns, frozenColumnIndex, itemHeight, itemPadding, rowSelection],
   );
 
+  const sortParams = React.useMemo(() => {
+    if (sort) {
+      return sort.sortParams.reduce((acc, cur, currentIndex) => {
+        cur.index = currentIndex;
+        if (cur.key) acc[cur.key] = cur;
+        return acc;
+      }, {} as Record<string, RFTableSortParam>);
+    }
+
+    return {};
+  }, [sort]);
+
   return (
     <AppStoreProvider
       createStore={() =>
@@ -98,6 +111,7 @@ export function RFTable<T = Record<string, any>>({
           onChangeColumns,
           frozenColumnsGroup: columnGroups.leftGroups,
           columnsGroup: columnGroups.rightGroups,
+          columnResizing: false,
           frozenColumnIndex,
           itemHeight,
           itemPadding,
@@ -110,6 +124,8 @@ export function RFTable<T = Record<string, any>>({
           selectedIdsMap,
           selectedAll: false,
           frozenColumnsWidth,
+          sort,
+          sortParams,
           ...getAppStoreActions(set, get),
         }))
       }

@@ -8,6 +8,8 @@ export interface RFTableColumn<T> {
   label: string;
   width: number;
   align?: Direction;
+  sortDisable?: boolean;
+  className?: string;
   itemRender?: (item: T) => React.ReactNode;
 }
 
@@ -37,6 +39,18 @@ export interface RFTableRowSelection {
   onChange: (selectedKeys: number[], selectedAll?: SelectedAll) => void;
 }
 
+export interface RFTableSortParam {
+  key?: string;
+  index?: number;
+  orderBy: 'asc' | 'desc';
+}
+
+export interface RFTableSortInfo {
+  multiSort?: boolean;
+  sortParams: RFTableSortParam[];
+  onChange: (sortParams: RFTableSortParam[]) => void;
+}
+
 export interface RFTableProps<T> {
   width: number;
   height: number;
@@ -63,6 +77,9 @@ export interface RFTableProps<T> {
   scrollLeft?: number;
 
   rowSelection?: RFTableRowSelection;
+  sort?: RFTableSortInfo;
+  onClick?: () => void;
+
   msg?: {
     emptyList?: string;
   };
@@ -76,6 +93,7 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   frozenColumnsWidth: number;
   frozenColumnsGroup: RFTableColumnGroup[];
   columnsGroup: RFTableColumnGroup[];
+  columnResizing: boolean;
   containerBorderWidth: number;
   contentBodyHeight: number;
   displayItemCount: number;
@@ -85,6 +103,7 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   scrollLeft: number;
   selectedIdsMap: Map<number, any>;
   selectedAll: SelectedAll;
+  sortParams: Record<string, RFTableSortParam>;
 }
 
 export interface AppActions {
@@ -95,4 +114,6 @@ export interface AppActions {
   setSelectedIds: (ids: number[]) => void;
   setSelectedAll: (selectedAll: SelectedAll) => void;
   setColumnWidth: (columnIndex: number, width?: number) => void;
+  setColumnResizing: (columnResizing: boolean) => void;
+  toggleColumnSort: (columnIndex: number) => void;
 }
