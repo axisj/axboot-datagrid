@@ -161,7 +161,7 @@ const FrozenHeader = styled.div`
   background-color: var(--rft-header-bg);
   border-right: 1px solid var(--rft-border-color-base);
   box-shadow: 0 0 3px var(--rft-border-color-base);
-  z-index: 2;
+  z-index: 3;
 `;
 
 const BodyContainer = styled.div`
@@ -227,10 +227,10 @@ const FrozenScrollContent = styled.div`
 `;
 
 const FooterContainer = styled.div`
-  background: var(--rft-header-bg);
   position: relative;
   min-width: 100%;
   overflow: hidden;
+  background: var(--rft-footer-bg);
   border-top: 1px solid var(--rft-border-color-base);
 `;
 
