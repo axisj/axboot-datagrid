@@ -57,4 +57,42 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
       get().onChangeColumns?.(columnIndex, columns[columnIndex].width, columns);
     }
   },
+  setColumnResizing: columnResizing => set({ columnResizing }),
+  toggleColumnSort: columnIndex => {
+    const columns = get().columns;
+    const sortParams = get().sortParams;
+
+    const column = columns[columnIndex];
+    const columnKey = Array.isArray(column.key) ? column.key.join('.') : column.key;
+    //
+    if (sortParams[columnKey]) {
+      if (sortParams[columnKey].orderBy === 'asc') {
+        sortParams[columnKey].orderBy = 'desc';
+      } else {
+        // remove
+        delete sortParams[columnKey];
+
+        Object.values(sortParams)
+          .sort((a, b) => {
+            return (a.index ?? 0) - (b.index ?? 0);
+          })
+          .forEach((sortParam, index) => {
+            sortParam.index = index;
+          });
+      }
+    } else {
+      sortParams[columnKey] = {
+        key: columnKey,
+        index: Object.keys(sortParams).length,
+        orderBy: 'asc',
+      };
+    }
+
+    set({ sortParams: { ...sortParams } });
+    get().sort?.onChange(
+      Object.values(get().sortParams).sort((a, b) => {
+        return (a.index ?? 0) - (b.index ?? 0);
+      }),
+    );
+  },
 });
