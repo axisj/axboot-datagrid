@@ -55,13 +55,14 @@ export interface RFTableProps<T> {
   width: number;
   height: number;
   headerHeight?: number;
-  data: RFTableDataItem[];
+  footerHeight?: number;
+  itemHeight?: number;
+  itemPadding?: number;
   columns: RFTableColumn<T>[];
   columnsGroup?: RFTableColumnGroup[];
   onChangeColumns?: (columnIndex: number, width: number, columns: RFTableColumn<T>[]) => void;
   frozenColumnIndex?: number;
-  itemHeight?: number;
-  itemPadding?: number;
+  data: RFTableDataItem[];
 
   page?: RFTablePage;
   enableLoadMore?: boolean;
@@ -89,6 +90,9 @@ export type SelectedAll = true | false | 'indeterminate';
 
 export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   headerHeight: number;
+  footerHeight: number;
+  itemHeight: number;
+  itemPadding: number;
   frozenColumnIndex: number;
   frozenColumnsWidth: number;
   frozenColumnsGroup: RFTableColumnGroup[];
@@ -97,8 +101,6 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   containerBorderWidth: number;
   contentBodyHeight: number;
   displayItemCount: number;
-  itemHeight: number;
-  itemPadding: number;
   scrollTop: number;
   scrollLeft: number;
   selectedIdsMap: Map<number, any>;
