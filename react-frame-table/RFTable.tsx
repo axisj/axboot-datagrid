@@ -9,7 +9,7 @@ export function RFTable<T = Record<string, any>>({
   width,
   height,
   headerHeight = 30,
-  footerHeight = 30,
+  footerHeight = 24,
   itemHeight = 15,
   itemPadding = 7,
   columns,
@@ -25,7 +25,7 @@ export function RFTable<T = Record<string, any>>({
   sort,
 }: RFTableProps<T>) {
   const containerBorderWidth = 1;
-  const contentBodyHeight = height - headerHeight - containerBorderWidth * 2;
+  const contentBodyHeight = height - headerHeight - footerHeight - containerBorderWidth * 2;
   const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
 
   const selectedIdsMap: Map<number, any> = React.useMemo(

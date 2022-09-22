@@ -15,6 +15,7 @@ function Table() {
   const itemPadding = useAppStore(s => s.itemPadding);
 
   const headerHeight = useAppStore(s => s.headerHeight);
+  const footerHeight = useAppStore(s => s.footerHeight);
   const scrollLeft = useAppStore(s => s.scrollLeft);
   const scrollTop = useAppStore(s => s.scrollTop);
   const contentBodyHeight = useAppStore(s => s.contentBodyHeight);
@@ -129,6 +130,10 @@ function Table() {
           </ScrollContent>
         </ScrollContainer>
       </BodyContainer>
+
+      <FooterContainer style={{ height: footerHeight }} role={'rft-footer-container'}>
+        Footer
+      </FooterContainer>
     </Container>
   );
 }
@@ -219,6 +224,14 @@ const FrozenScrollContent = styled.div`
   z-index: 2;
   overflow: hidden;
   position: relative;
+`;
+
+const FooterContainer = styled.div`
+  background: var(--rft-header-bg);
+  position: relative;
+  min-width: 100%;
+  overflow: hidden;
+  border-top: 1px solid var(--rft-border-color-base);
 `;
 
 export default Table;
