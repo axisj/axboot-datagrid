@@ -9,7 +9,7 @@ export function RFTable<T = Record<string, any>>({
   width,
   height,
   headerHeight = 30,
-  footerHeight = 24,
+  footerHeight = 30,
   itemHeight = 15,
   itemPadding = 7,
   columns,

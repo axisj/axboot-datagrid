@@ -5,6 +5,7 @@ import { useAppStore } from '../store';
 import TableHead from './TableHead';
 import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
+import TableFooter from './TableFooter';
 
 function Table() {
   const width = useAppStore(s => s.width);
@@ -132,7 +133,7 @@ function Table() {
       </BodyContainer>
 
       <FooterContainer style={{ height: footerHeight }} role={'rft-footer-container'}>
-        Footer
+        <TableFooter />
       </FooterContainer>
     </Container>
   );
