@@ -108,6 +108,7 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   selectedAll: SelectedAll;
   sortParams: Record<string, RFTableSortParam>;
   displayPaginationLength: number;
+  hoverItemIndex?: number;
 }
 
 export interface AppActions {
@@ -121,4 +122,6 @@ export interface AppActions {
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
   setPage: (page: RFTablePage) => void;
+  setHoverItemIndex: (hoverItemIndex?: number) => void;
+  handleClick: () => void;
 }

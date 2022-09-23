@@ -40,7 +40,7 @@ function Pagination(props: Props) {
           if (i <= page.totalPages) {
             const num = (pageNumber = pageStartNumber + i);
             return (
-              <No key={i} active={page.currentPage === num} onClick={() => onClickPageNo(num)}>
+              <No key={num} active={page.currentPage === num} onClick={() => onClickPageNo(num)}>
                 {num}
               </No>
             );
@@ -59,12 +59,15 @@ function Pagination(props: Props) {
 }
 
 const Container = styled.div`
+  transition: all 0.3s;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  user-select: none;
 `;
 const No = styled.a<{ active?: boolean }>`
+  transition: all 0.3s;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -82,8 +85,9 @@ const No = styled.a<{ active?: boolean }>`
       return css`
         color: var(--rft-primary-color);
         border: 1px solid var(--rft-primary-color);
+        background-color: var(--rft-body-bg);
         border-radius: 2px;
-        margin: 0 2px;
+        margin: 0 3px;
       `;
     }
   }}

@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
 import { getCellValue } from '../utils';
+import { css } from '@emotion/react';
 
 function TableBody() {
   const scrollTop = useAppStore(s => s.scrollTop);
@@ -13,6 +14,9 @@ function TableBody() {
   const data = useAppStore(s => s.data);
   const columns = useAppStore(s => s.columns);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
+  const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
+  const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
+  const handleClick = useAppStore(s => s.handleClick);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = startIdx + displayItemCount > data.length ? data.length : startIdx + displayItemCount;
@@ -29,9 +33,20 @@ function TableBody() {
           }
 
           return (
-            <TableBodyTr key={ri} itemHeight={itemHeight} itemPadding={itemPadding}>
+            <TableBodyTr
+              key={ri}
+              itemHeight={itemHeight}
+              itemPadding={itemPadding}
+              hover={hoverItemIndex === ri}
+              onMouseOver={() => setHoverItemIndex(ri)}
+              onMouseOut={() => setHoverItemIndex(undefined)}
+            >
               {columns.slice(frozenColumnIndex).map((column, idx) => {
-                return <td key={idx}>{getCellValue(column, item)}</td>;
+                return (
+                  <td key={idx} onClick={() => handleClick()}>
+                    {getCellValue(column, item)}
+                  </td>
+                );
               })}
               <td />
             </TableBodyTr>
@@ -66,7 +81,14 @@ export const BodyTable = styled.table`
   }
 `;
 
-export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number }>`
+export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; hover?: boolean }>`
+  ${({ hover }) => {
+    if (hover) {
+      return css`
+        background-color: var(--rft-body-hover-bg);
+      `;
+    }
+  }}
   > td {
     line-height: ${p => p.itemHeight}px; // - border
     padding: ${p => p.itemPadding}px 6.5px;

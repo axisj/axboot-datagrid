@@ -73,6 +73,9 @@ function PagingExample(props: Props) {
           },
           displayPaginationLength: 5,
         }}
+        onClick={() => {
+          console.log('click tr');
+        }}
       />
     </Container>
   );

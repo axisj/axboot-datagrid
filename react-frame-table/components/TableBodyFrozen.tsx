@@ -23,6 +23,9 @@ function TableBodyFrozen(props: Props) {
   const hasRowSelection = useAppStore(s => !!s.rowSelection);
   const columns = useAppStore(s => s.columns);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
+  const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
+  const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
+  const handleClick = useAppStore(s => s.handleClick);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = startIdx + displayItemCount > data.length ? data.length : startIdx + displayItemCount;
@@ -51,7 +54,14 @@ function TableBodyFrozen(props: Props) {
           }
 
           return (
-            <TableBodyTr key={ri} itemHeight={itemHeight} itemPadding={itemPadding}>
+            <TableBodyTr
+              key={ri}
+              itemHeight={itemHeight}
+              itemPadding={itemPadding}
+              hover={hoverItemIndex === ri}
+              onMouseOver={() => setHoverItemIndex(ri)}
+              onMouseOut={() => setHoverItemIndex(undefined)}
+            >
               {hasRowSelection && (
                 <td>
                   <RowSelector
@@ -61,7 +71,11 @@ function TableBodyFrozen(props: Props) {
                 </td>
               )}
               {columns.slice(0, frozenColumnIndex).map((column, idx) => {
-                return <td key={idx}>{getCellValue(column, item)}</td>;
+                return (
+                  <td key={idx} onClick={() => handleClick()}>
+                    {getCellValue(column, item)}
+                  </td>
+                );
               })}
             </TableBodyTr>
           );

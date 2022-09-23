@@ -98,4 +98,8 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setPage: page => {
     set({ page });
   },
+  setHoverItemIndex: hoverItemIndex => set({ hoverItemIndex }),
+  handleClick: () => {
+    get().onClick?.();
+  },
 });
