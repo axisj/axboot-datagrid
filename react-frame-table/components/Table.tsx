@@ -25,6 +25,7 @@ function Table() {
   const trHeight = itemHeight + itemPadding * 2 + 1;
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
   const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
+  const page = useAppStore(s => s.page);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -132,9 +133,11 @@ function Table() {
         </ScrollContainer>
       </BodyContainer>
 
-      <FooterContainer style={{ height: footerHeight }} role={'rft-footer-container'}>
-        <TableFooter />
-      </FooterContainer>
+      {page && (
+        <FooterContainer style={{ height: footerHeight }} role={'rft-footer-container'}>
+          <TableFooter />
+        </FooterContainer>
+      )}
     </Container>
   );
 }

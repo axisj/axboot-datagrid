@@ -26,12 +26,13 @@ export type RFTableDataItem = {
 };
 
 export interface RFTablePage {
-  currentPage?: number;
+  currentPage: number;
   pageSize?: number;
-  totalPages?: number;
+  totalPages: number;
   totalElements?: number;
   loading?: boolean;
   onChange?: (currentPage: number, pageSize?: number) => void;
+  displayPaginationLength?: number;
 }
 
 export interface RFTableRowSelection {
@@ -106,6 +107,7 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   selectedIdsMap: Map<number, any>;
   selectedAll: SelectedAll;
   sortParams: Record<string, RFTableSortParam>;
+  displayPaginationLength: number;
 }
 
 export interface AppActions {
@@ -118,4 +120,5 @@ export interface AppActions {
   setColumnWidth: (columnIndex: number, width?: number) => void;
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
+  setPage: (page: RFTablePage) => void;
 }

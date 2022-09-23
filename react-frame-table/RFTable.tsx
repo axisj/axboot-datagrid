@@ -25,7 +25,7 @@ export function RFTable<T = Record<string, any>>({
   sort,
 }: RFTableProps<T>) {
   const containerBorderWidth = 1;
-  const contentBodyHeight = height - headerHeight - footerHeight - containerBorderWidth * 2;
+  const contentBodyHeight = height - headerHeight - (page ? footerHeight : 0) - containerBorderWidth * 2;
   const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
 
   const selectedIdsMap: Map<number, any> = React.useMemo(
@@ -100,11 +100,16 @@ export function RFTable<T = Record<string, any>>({
     return {};
   }, [sort]);
 
+  const displayPaginationLength = React.useMemo(() => {
+    return page?.displayPaginationLength ?? 5;
+  }, [page?.displayPaginationLength]);
+
   return (
     <AppStoreProvider
       createStore={() =>
         create<AppStore<T>>((set, get) => ({
           containerBorderWidth: 1,
+          displayPaginationLength,
           width,
           height,
           headerHeight,

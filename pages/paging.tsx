@@ -2,9 +2,9 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
-import BasicExample from '../examples/BasicExample';
+import PagingExample from '../examples/PagingExample';
 
-const Home: NextPage = () => {
+const Sort: NextPage = () => {
   return (
     <PageContainer>
       <Head>
@@ -15,8 +15,8 @@ const Home: NextPage = () => {
 
       <Container>
         <div>
-          <h1>Basic</h1>
-          <BasicExample />
+          <h1>Paging</h1>
+          <PagingExample />
         </div>
       </Container>
     </PageContainer>
@@ -27,4 +27,4 @@ const PageContainer = styled.div`
   padding: 20px;
 `;
 
-export default Home;
+export default Sort;
