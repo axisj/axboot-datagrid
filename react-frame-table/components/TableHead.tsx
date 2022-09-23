@@ -80,6 +80,7 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
 `;
 
 export const HeadGroupTd = styled.td`
+  padding: 0 7px;
   border-bottom-style: solid;
   border-bottom-color: var(--rft-border-color-base);
   border-bottom-width: 1px;

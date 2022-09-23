@@ -5,6 +5,7 @@ import { useAppStore } from '../store';
 import TableHead from './TableHead';
 import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
+import TableFooter from './TableFooter';
 
 function Table() {
   const width = useAppStore(s => s.width);
@@ -15,6 +16,7 @@ function Table() {
   const itemPadding = useAppStore(s => s.itemPadding);
 
   const headerHeight = useAppStore(s => s.headerHeight);
+  const footerHeight = useAppStore(s => s.footerHeight);
   const scrollLeft = useAppStore(s => s.scrollLeft);
   const scrollTop = useAppStore(s => s.scrollTop);
   const contentBodyHeight = useAppStore(s => s.contentBodyHeight);
@@ -23,6 +25,7 @@ function Table() {
   const trHeight = itemHeight + itemPadding * 2 + 1;
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
   const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
+  const page = useAppStore(s => s.page);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -129,6 +132,12 @@ function Table() {
           </ScrollContent>
         </ScrollContainer>
       </BodyContainer>
+
+      {page && (
+        <FooterContainer style={{ height: footerHeight }} role={'rft-footer-container'}>
+          <TableFooter />
+        </FooterContainer>
+      )}
     </Container>
   );
 }
@@ -156,7 +165,7 @@ const FrozenHeader = styled.div`
   background-color: var(--rft-header-bg);
   border-right: 1px solid var(--rft-border-color-base);
   box-shadow: 0 0 3px var(--rft-border-color-base);
-  z-index: 2;
+  z-index: 3;
 `;
 
 const BodyContainer = styled.div`
@@ -219,6 +228,14 @@ const FrozenScrollContent = styled.div`
   z-index: 2;
   overflow: hidden;
   position: relative;
+`;
+
+const FooterContainer = styled.div`
+  position: relative;
+  min-width: 100%;
+  overflow: hidden;
+  background: var(--rft-footer-bg);
+  border-top: 1px solid var(--rft-border-color-base);
 `;
 
 export default Table;

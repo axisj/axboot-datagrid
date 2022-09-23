@@ -26,12 +26,13 @@ export type RFTableDataItem = {
 };
 
 export interface RFTablePage {
-  currentPage?: number;
+  currentPage: number;
   pageSize?: number;
-  totalPages?: number;
+  totalPages: number;
   totalElements?: number;
   loading?: boolean;
   onChange?: (currentPage: number, pageSize?: number) => void;
+  displayPaginationLength?: number;
 }
 
 export interface RFTableRowSelection {
@@ -55,13 +56,14 @@ export interface RFTableProps<T> {
   width: number;
   height: number;
   headerHeight?: number;
-  data: RFTableDataItem[];
+  footerHeight?: number;
+  itemHeight?: number;
+  itemPadding?: number;
   columns: RFTableColumn<T>[];
   columnsGroup?: RFTableColumnGroup[];
   onChangeColumns?: (columnIndex: number, width: number, columns: RFTableColumn<T>[]) => void;
   frozenColumnIndex?: number;
-  itemHeight?: number;
-  itemPadding?: number;
+  data: RFTableDataItem[];
 
   page?: RFTablePage;
   enableLoadMore?: boolean;
@@ -89,6 +91,9 @@ export type SelectedAll = true | false | 'indeterminate';
 
 export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   headerHeight: number;
+  footerHeight: number;
+  itemHeight: number;
+  itemPadding: number;
   frozenColumnIndex: number;
   frozenColumnsWidth: number;
   frozenColumnsGroup: RFTableColumnGroup[];
@@ -97,13 +102,12 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   containerBorderWidth: number;
   contentBodyHeight: number;
   displayItemCount: number;
-  itemHeight: number;
-  itemPadding: number;
   scrollTop: number;
   scrollLeft: number;
   selectedIdsMap: Map<number, any>;
   selectedAll: SelectedAll;
   sortParams: Record<string, RFTableSortParam>;
+  displayPaginationLength: number;
 }
 
 export interface AppActions {
@@ -116,4 +120,5 @@ export interface AppActions {
   setColumnWidth: (columnIndex: number, width?: number) => void;
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
+  setPage: (page: RFTablePage) => void;
 }

@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { Container } from '../styles/Layouts';
+import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
 import SortExample from '../examples/SortExample';
 

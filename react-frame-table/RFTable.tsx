@@ -9,13 +9,15 @@ export function RFTable<T = Record<string, any>>({
   width,
   height,
   headerHeight = 30,
-  data,
+  footerHeight = 30,
+  itemHeight = 15,
+  itemPadding = 7,
   columns,
   columnsGroup = [],
   onChangeColumns,
   frozenColumnIndex = 0,
-  itemHeight = 15,
-  itemPadding = 7,
+  data,
+  page,
   scrollTop = 0,
   scrollLeft = 0,
   className,
@@ -23,7 +25,7 @@ export function RFTable<T = Record<string, any>>({
   sort,
 }: RFTableProps<T>) {
   const containerBorderWidth = 1;
-  const contentBodyHeight = height - headerHeight - containerBorderWidth * 2;
+  const contentBodyHeight = height - headerHeight - (page ? footerHeight : 0) - containerBorderWidth * 2;
   const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
 
   const selectedIdsMap: Map<number, any> = React.useMemo(
@@ -98,23 +100,30 @@ export function RFTable<T = Record<string, any>>({
     return {};
   }, [sort]);
 
+  const displayPaginationLength = React.useMemo(() => {
+    return page?.displayPaginationLength ?? 5;
+  }, [page?.displayPaginationLength]);
+
   return (
     <AppStoreProvider
       createStore={() =>
         create<AppStore<T>>((set, get) => ({
           containerBorderWidth: 1,
+          displayPaginationLength,
           width,
           height,
           headerHeight,
+          footerHeight,
+          itemHeight,
+          itemPadding,
           data,
+          page,
           columns,
           onChangeColumns,
           frozenColumnsGroup: columnGroups.leftGroups,
           columnsGroup: columnGroups.rightGroups,
           columnResizing: false,
           frozenColumnIndex,
-          itemHeight,
-          itemPadding,
           scrollTop,
           scrollLeft,
           contentBodyHeight,
