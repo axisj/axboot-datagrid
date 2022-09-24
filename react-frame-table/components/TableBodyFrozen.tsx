@@ -72,7 +72,7 @@ function TableBodyFrozen(props: Props) {
               )}
               {columns.slice(0, frozenColumnIndex).map((column, idx) => {
                 return (
-                  <td key={idx} onClick={() => handleClick()}>
+                  <td key={idx} onClick={() => handleClick(ri, idx)}>
                     {getCellValue(column, item)}
                   </td>
                 );

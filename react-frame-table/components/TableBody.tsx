@@ -43,7 +43,7 @@ function TableBody() {
             >
               {columns.slice(frozenColumnIndex).map((column, idx) => {
                 return (
-                  <td key={idx} onClick={() => handleClick()}>
+                  <td key={idx} onClick={() => handleClick(ri, frozenColumnIndex + idx)}>
                     {getCellValue(column, item)}
                   </td>
                 );
@@ -82,6 +82,8 @@ export const BodyTable = styled.table`
 `;
 
 export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; hover?: boolean }>`
+  cursor: pointer;
+
   ${({ hover }) => {
     if (hover) {
       return css`
