@@ -3,14 +3,14 @@ import { AppActions, AppModel, SelectedAll } from '../types';
 import { StoreApi } from 'zustand';
 import { getFrozenColumnsWidth } from '../utils';
 
-export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions {}
+export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}
 
 const { Provider: AppStoreProvider, useStore: useAppStore } = createContext<StoreApi<AppStore<any>>>();
 export { AppStoreProvider, useAppStore };
 
 export type ZustandSetter<T> = (partial: Partial<T>, replace?: boolean | undefined) => void;
 export type ZustandGetter<T> = () => T;
-export type StoreActions = <T>(set: ZustandSetter<AppModel<T>>, get: ZustandGetter<AppModel<T>>) => AppActions;
+export type StoreActions = <T>(set: ZustandSetter<AppModel<T>>, get: ZustandGetter<AppModel<T>>) => AppActions<T>;
 
 export const getAppStoreActions: StoreActions = (set, get) => ({
   setScrollTop: scrollTop => set({ scrollTop }),
@@ -97,5 +97,14 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   },
   setPage: page => {
     set({ page });
+  },
+  setHoverItemIndex: hoverItemIndex => set({ hoverItemIndex }),
+  handleClick: (itemIndex, columnIndex) => {
+    get().onClick?.({
+      itemIndex,
+      columnIndex,
+      item: get().data[itemIndex].values,
+      column: get().columns[columnIndex],
+    });
   },
 });

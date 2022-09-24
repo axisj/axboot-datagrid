@@ -19,8 +19,8 @@ export interface RFTableColumnGroup {
   align?: Direction;
 }
 
-export type RFTableDataItem = {
-  values: Record<string, any>;
+export type RFTableDataItem<T> = {
+  values: T;
   status?: string;
   parentItemIndex?: number;
 };
@@ -52,6 +52,13 @@ export interface RFTableSortInfo {
   onChange: (sortParams: RFTableSortParam[]) => void;
 }
 
+export interface RFTableClickParams<T> {
+  itemIndex: number;
+  columnIndex: number;
+  item: T;
+  column: RFTableColumn<T>;
+}
+
 export interface RFTableProps<T> {
   width: number;
   height: number;
@@ -63,7 +70,7 @@ export interface RFTableProps<T> {
   columnsGroup?: RFTableColumnGroup[];
   onChangeColumns?: (columnIndex: number, width: number, columns: RFTableColumn<T>[]) => void;
   frozenColumnIndex?: number;
-  data: RFTableDataItem[];
+  data: RFTableDataItem<T>[];
 
   page?: RFTablePage;
   enableLoadMore?: boolean;
@@ -80,7 +87,7 @@ export interface RFTableProps<T> {
 
   rowSelection?: RFTableRowSelection;
   sort?: RFTableSortInfo;
-  onClick?: () => void;
+  onClick?: (params: RFTableClickParams<T>) => void;
 
   msg?: {
     emptyList?: string;
@@ -89,7 +96,7 @@ export interface RFTableProps<T> {
 
 export type SelectedAll = true | false | 'indeterminate';
 
-export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
+export interface AppModel<T> extends RFTableProps<T> {
   headerHeight: number;
   footerHeight: number;
   itemHeight: number;
@@ -108,17 +115,20 @@ export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
   selectedAll: SelectedAll;
   sortParams: Record<string, RFTableSortParam>;
   displayPaginationLength: number;
+  hoverItemIndex?: number;
 }
 
-export interface AppActions {
+export interface AppActions<T> {
   setScrollTop: (scrollTop: number) => void;
   setScrollLeft: (scrollLeft: number) => void;
   setScroll: (scrollTop: number, scrollLeft: number) => void;
-  setData: (data: RFTableDataItem[]) => void;
+  setData: (data: RFTableDataItem<T>[]) => void;
   setSelectedIds: (ids: number[]) => void;
   setSelectedAll: (selectedAll: SelectedAll) => void;
   setColumnWidth: (columnIndex: number, width?: number) => void;
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
   setPage: (page: RFTablePage) => void;
+  setHoverItemIndex: (hoverItemIndex?: number) => void;
+  handleClick: (itemIndex: number, columnIndex: number) => void;
 }

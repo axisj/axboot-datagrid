@@ -47,10 +47,10 @@ const Container = styled.div<Props>`
 
       &:after {
         position: absolute;
-        top: 50%;
+        top: 47%;
         left: ${97 - (11 / size) * 100}%;
         width: ${size - 11}px;
-        height: ${size - 8}px;
+        height: ${size - 9}px;
       }
     `;
   }};
@@ -82,7 +82,6 @@ const Container = styled.div<Props>`
           border-left: 0;
           transform: rotate(45deg) scale(1) translate(-50%, -50%);
           opacity: 1;
-          transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
           content: ' ';
         }
       `;

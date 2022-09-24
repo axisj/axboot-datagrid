@@ -23,6 +23,7 @@ export function RFTable<T = Record<string, any>>({
   className,
   rowSelection,
   sort,
+  onClick,
 }: RFTableProps<T>) {
   const containerBorderWidth = 1;
   const contentBodyHeight = height - headerHeight - (page ? footerHeight : 0) - containerBorderWidth * 2;
@@ -135,6 +136,7 @@ export function RFTable<T = Record<string, any>>({
           frozenColumnsWidth,
           sort,
           sortParams,
+          onClick,
           ...getAppStoreActions(set, get),
         }))
       }
