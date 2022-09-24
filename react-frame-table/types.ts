@@ -19,7 +19,7 @@ export interface RFTableColumnGroup {
   align?: Direction;
 }
 
-export type RFTableDataItem<T = Record<string, any>> = {
+export type RFTableDataItem<T> = {
   values: T;
   status?: string;
   parentItemIndex?: number;
@@ -96,7 +96,7 @@ export interface RFTableProps<T> {
 
 export type SelectedAll = true | false | 'indeterminate';
 
-export interface AppModel<T = Record<string, any>> extends RFTableProps<T> {
+export interface AppModel<T> extends RFTableProps<T> {
   headerHeight: number;
   footerHeight: number;
   itemHeight: number;
