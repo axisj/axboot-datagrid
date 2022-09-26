@@ -18,12 +18,47 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Styling
+
+```typescript jsx
+import 'react-frame-datagrid/style.css';
+```
+
+or
+
+Add the code below to your project.
+
+```css
+[role="react-frame-datagrid"] {
+    --rfdg-primary-color: #3B82F6;
+    --rfdg-header-bg: #F3F4F5;
+    --rfdg-header-hover-bg: #e2e5e5;
+    --rfdg-header-group-bg: #e9e9e9;
+    --rfdg-footer-bg: #F3F4F5;
+    --rfdg-border-color-base: #D2D5D9;
+    --rfdg-row-selector-color: #ffffff;
+    --rfdg-body-bg: #ffffff;
+    --rfdg-body-hover-bg: #F3F4F5;
+
+    --rfdg-scroll-size: 11px;
+    --rfdg-scroll-track-bg: #F9F9F9;
+    --rfdg-scroll-track-corner-bg: #D2D5D9;
+    --rfdg-scroll-thumb-radius: 6px;
+    --rfdg-scroll-thumb-bg: #c0c1c5;
+    --rfdg-scroll-thumb-hover-bg: #a1a3a6;
+
+    --rfdg-lodaing-bg: rgba(163, 163, 163, 0.1);
+    --rfdg-lodaing-color: rgba(0, 0, 0, 0.1);
+    --rfdg-lodaing-second-color: #767676;
+}
+```
+
 ## USE
 
 ```typescript jsx
 import * as React from 'react';
 import styled from '@emotion/styled';
-import {RFDataGrid, RFDGColumn} from '../react-frame-datagrid';
+import {RFDataGrid, RFDGColumn} from 'react-frame-datagrid';
 
 interface Props {
 }
@@ -122,3 +157,5 @@ const Container = styled.div`
 
 export default BasicExample;
 ```
+
+TBD Examples
