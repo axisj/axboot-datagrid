@@ -27,6 +27,14 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
 
     get().rowSelection?.onChange([...selectedIdsMap.keys()], selectedAll);
   },
+  setSelectedIdsMap: selectedIdsMap => {
+    const selectedAll: SelectedAll =
+      selectedIdsMap.size > 0 && selectedIdsMap.size !== get().data.length
+        ? 'indeterminate'
+        : selectedIdsMap.size !== 0;
+
+    set({ selectedIdsMap, selectedAll });
+  },
   setColumnWidth: (columnIndex, width) => {
     const columns = get().columns;
     if (width !== undefined) {
@@ -110,4 +118,6 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setItemHeight: itemHeight => set({ itemHeight }),
   setItemPadding: itemPadding => set({ itemPadding }),
   setFrozenColumnIndex: frozenColumnIndex => set({ frozenColumnIndex }),
+  setSortParams: sortParams => set({ sortParams }),
+  setFrozenColumnsWidth: frozenColumnsWidth => set({ frozenColumnsWidth }),
 });

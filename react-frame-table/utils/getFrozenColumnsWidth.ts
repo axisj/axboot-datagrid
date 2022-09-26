@@ -17,7 +17,7 @@ export function getFrozenColumnsWidth<T>({
 }: Props<T>) {
   let frozenColumnsWidth: number = 0;
   if (!!rowSelection) {
-    frozenColumnsWidth += itemHeight + itemPadding * 2;
+    frozenColumnsWidth += Math.min(itemHeight, 15) + 7 * 2;
   }
   if (frozenColumnIndex > 0) {
     frozenColumnsWidth += columns.slice(0, frozenColumnIndex).reduce((acc, cur) => {

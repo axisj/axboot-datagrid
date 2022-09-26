@@ -155,6 +155,8 @@ export function RFTable<T = Record<string, any>>({
           itemHeight,
           itemPadding,
           frozenColumnIndex,
+          selectedIdsMap,
+          sortParams,
         }}
       />
     </AppStoreProvider>

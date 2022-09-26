@@ -149,6 +149,9 @@ export interface AppActions<T> {
   setItemHeight: (itemHeight: number) => void;
   setItemPadding: (itemPadding: number) => void;
   setFrozenColumnIndex: (frozenColumnIndex: number) => void;
+  setSelectedIdsMap: (selectedIdsMap: Map<number, any>) => void;
+  setSortParams: (sortParams: Record<string, RFTableSortParam>) => void;
+  setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}

@@ -3,30 +3,44 @@ import styled from '@emotion/styled';
 import { useAppStore } from '../store';
 import { css } from '@emotion/react';
 
-interface Props {
+interface StylesProps {
   checked?: boolean;
   indeterminate?: boolean;
   disabled?: boolean;
   size?: number;
+  itemHeight?: number;
+}
+
+interface Props extends StylesProps {
   handleChange?: (checked: boolean) => void;
 }
 
 function RowSelector({ checked = false, indeterminate, handleChange }: Props) {
-  const checkboxHeight = useAppStore(s => Math.min(15, s.itemHeight));
+  const itemHeight = useAppStore(s => s.itemHeight);
+  const checkboxHeight = itemHeight > 15 ? 15 : itemHeight;
 
   return (
-    <Container
-      checked={checked}
-      indeterminate={indeterminate}
-      size={checkboxHeight}
-      onClick={() => handleChange?.(!checked)}
-    />
+    <Container itemHeight={itemHeight} onClick={() => handleChange?.(!checked)}>
+      <CheckBoxControl size={checkboxHeight} checked={checked} indeterminate={indeterminate} />
+    </Container>
   );
 }
 
-const Container = styled.div<Props>`
+const Container = styled.div<StylesProps>`
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+
+  height: ${p => p.itemHeight}px;
+`;
+
+const CheckBoxControl = styled.div<StylesProps>`
   position: relative;
   transition: all 0.3s;
+
   cursor: pointer;
   box-sizing: border-box;
   display: block;
@@ -46,11 +60,14 @@ const Container = styled.div<Props>`
       height: ${size}px;
 
       &:after {
+        display: table;
+        content: ' ';
+        opacity: 1;
         position: absolute;
         top: 47%;
-        left: ${98 - (11 / size) * 100}%;
-        width: ${size - 10}px;
-        height: ${size - 8}px;
+        left: 23%;
+        width: 5px;
+        height: 7px;
       }
     `;
   }};
@@ -59,9 +76,6 @@ const Container = styled.div<Props>`
     if (indeterminate) {
       return css`
         &:after {
-          display: table;
-          opacity: 1;
-          content: ' ';
           background-color: var(--rft-primary-color);
           width: ${size - 8}px;
           height: ${size - 8}px;
@@ -76,13 +90,10 @@ const Container = styled.div<Props>`
         border-color: var(--rft-primary-color);
 
         &:after {
-          display: table;
           border: 2px solid #fff;
           border-top: 0;
           border-left: 0;
           transform: rotate(45deg) scale(1) translate(-50%, -50%);
-          opacity: 1;
-          content: ' ';
         }
       `;
     }

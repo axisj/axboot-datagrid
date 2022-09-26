@@ -23,6 +23,9 @@ function Nav(props: Props) {
         <li>
           <ActiveLink href={'/loading'}>Loading</ActiveLink>
         </li>
+        <li>
+          <ActiveLink href={'/propsChange'}>Props Change</ActiveLink>
+        </li>
       </ul>
     </Container>
   );

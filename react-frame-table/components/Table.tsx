@@ -7,6 +7,8 @@ import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
+import { RFTableSortParam } from '../types';
+import { getFrozenColumnsWidth } from '../utils';
 
 interface Props {
   width?: number;
@@ -21,6 +23,9 @@ interface Props {
   itemHeight?: number;
   itemPadding?: number;
   frozenColumnIndex?: number;
+
+  selectedIdsMap?: Map<number, any>;
+  sortParams?: Record<string, RFTableSortParam>;
 }
 
 function Table(props: Props) {
@@ -37,11 +42,13 @@ function Table(props: Props) {
   const scrollLeft = useAppStore(s => s.scrollLeft);
   const scrollTop = useAppStore(s => s.scrollTop);
   const contentBodyHeight = useAppStore(s => s.contentBodyHeight);
+  const columns = useAppStore(s => s.columns);
   const data = useAppStore(s => s.data);
   const setScroll = useAppStore(s => s.setScroll);
   const trHeight = itemHeight + itemPadding * 2 + 1;
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
   const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
+  const rowSelection = useAppStore(s => s.rowSelection);
   const page = useAppStore(s => s.page);
   const loading = useAppStore(s => s.loading);
   const spinning = useAppStore(s => s.spinning);
@@ -58,6 +65,9 @@ function Table(props: Props) {
   const setItemHeight = useAppStore(s => s.setItemHeight);
   const setItemPadding = useAppStore(s => s.setItemPadding);
   const setFrozenColumnIndex = useAppStore(s => s.setFrozenColumnIndex);
+  const setSelectedIdsMap = useAppStore(s => s.setSelectedIdsMap);
+  const setSortParams = useAppStore(s => s.setSortParams);
+  const setFrozenColumnsWidth = useAppStore(s => s.setFrozenColumnsWidth);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -94,8 +104,9 @@ function Table(props: Props) {
 
   React.useEffect(() => {
     if (props.height !== undefined) {
-      setHeight(props.height);
-      const contentBodyHeight = height - headerHeight - (page ? footerHeight : 0) - containerBorderWidth * 2;
+      const propsHeight = Math.max(props.height, 100);
+      setHeight(propsHeight);
+      const contentBodyHeight = propsHeight - headerHeight - (page ? footerHeight : 0) - containerBorderWidth * 2;
       const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
 
       setContentBodyHeight(contentBodyHeight);
@@ -116,7 +127,9 @@ function Table(props: Props) {
   ]);
 
   React.useEffect(() => {
-    if (props.width !== undefined) setWidth(props.width);
+    if (props.width !== undefined) {
+      setWidth(Math.max(props.width, 100));
+    }
   }, [setWidth, props.width]);
   React.useEffect(() => {
     if (props.loading !== undefined) setLoading(props.loading);
@@ -125,7 +138,7 @@ function Table(props: Props) {
     if (props.spinning !== undefined) setSpinning(props.spinning);
   }, [setSpinning, props.spinning]);
   React.useEffect(() => {
-    if (props.headerHeight !== undefined) setHeaderHeight(props.headerHeight);
+    if (props.headerHeight !== undefined) setHeaderHeight(Math.max(props.headerHeight, 22));
   }, [setHeaderHeight, props.headerHeight]);
   React.useEffect(() => {
     if (props.footerHeight !== undefined) setFooterHeight(props.footerHeight);
@@ -137,8 +150,32 @@ function Table(props: Props) {
     if (props.itemPadding !== undefined) setItemPadding(props.itemPadding);
   }, [setItemPadding, props.itemPadding]);
   React.useEffect(() => {
-    if (props.frozenColumnIndex !== undefined) setFrozenColumnIndex(props.frozenColumnIndex);
-  }, [setFrozenColumnIndex, props.frozenColumnIndex]);
+    if (props.frozenColumnIndex !== undefined) {
+      const frozenColumnsWidth = getFrozenColumnsWidth({
+        rowSelection,
+        itemHeight,
+        itemPadding,
+        frozenColumnIndex: props.frozenColumnIndex,
+        columns,
+      });
+      setFrozenColumnsWidth(frozenColumnsWidth);
+      setFrozenColumnIndex(props.frozenColumnIndex);
+    }
+  }, [
+    setFrozenColumnIndex,
+    props.frozenColumnIndex,
+    rowSelection,
+    itemHeight,
+    itemPadding,
+    columns,
+    setFrozenColumnsWidth,
+  ]);
+  React.useEffect(() => {
+    if (props.selectedIdsMap !== undefined) setSelectedIdsMap(props.selectedIdsMap);
+  }, [setSelectedIdsMap, props.selectedIdsMap]);
+  React.useEffect(() => {
+    if (props.sortParams !== undefined) setSortParams(props.sortParams);
+  }, [setSortParams, props.sortParams]);
 
   //setInitialized
   React.useEffect(() => {
