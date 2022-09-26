@@ -12,7 +12,7 @@
     "jsxImportSource": ""
   },
   "include": [
-    "../react-frame-contextmenu/**/*"
+    "../react-frame-table/**/*"
   ],
   "exclude": [
     "node_modules",
