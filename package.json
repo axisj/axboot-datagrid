@@ -6,14 +6,14 @@
   "main": "dist/commonjs/index.js",
   "scripts": {
     "dev": "next dev",
-    "next:build": "next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:common": "mkdir ./dist && ncp react-frame-datagrid/style.css ./dist/style.css",
+    "build:common": "ncp react-frame-datagrid/style.css ./dist/style.css",
     "build:es5": "rimraf ./dist/commonjs && tsc --p tsconfigs/tsconfig.es5.json",
     "build:es6": "rimraf ./dist/es6 && tsc --p tsconfigs/tsconfig.es6.json",
-    "build": "npm run build:common && npm run build:es5 && npm run build:es6",
-    "prepublishOnly": "npm run build",
+    "build:library": "npm run build:common && npm run build:es5 && npm run build:es6",
+    "prepublishOnly": "npm run build:library",
     "test": "jest"
   },
   "lint-staged": {
