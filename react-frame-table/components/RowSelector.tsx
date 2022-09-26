@@ -48,9 +48,9 @@ const Container = styled.div<Props>`
       &:after {
         position: absolute;
         top: 47%;
-        left: ${97 - (11 / size) * 100}%;
-        width: ${size - 11}px;
-        height: ${size - 9}px;
+        left: ${98 - (11 / size) * 100}%;
+        width: ${size - 10}px;
+        height: ${size - 8}px;
       }
     `;
   }};

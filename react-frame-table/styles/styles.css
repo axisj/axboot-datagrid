@@ -15,4 +15,8 @@
     --rft-scroll-thumb-radius: 6px;
     --rft-scroll-thumb-bg: #c0c1c5;
     --rft-scroll-thumb-hover-bg: #a1a3a6;
+
+    --rft-lodaing-bg: rgba(163, 163, 163, 0.1);
+    --rft-lodaing-color: rgba(0, 0, 0, 0.1);
+    --rft-lodaing-second-color: #767676;
 }
