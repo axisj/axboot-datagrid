@@ -1,12 +1,12 @@
-import { SelectedAll, StoreActions } from '../types';
-import { getFrozenColumnsWidth } from '../utils';
+import {SelectedAll, StoreActions} from '../types';
+import {getFrozenColumnsWidth} from '../utils';
 
 export const getAppStoreActions: StoreActions = (set, get) => ({
-  setInitialized: initialized => set({ initialized }),
-  setScrollTop: scrollTop => set({ scrollTop }),
-  setScrollLeft: scrollLeft => set({ scrollLeft }),
-  setScroll: (scrollTop, scrollLeft) => set({ scrollTop, scrollLeft }),
-  setData: data => set({ data }),
+  setInitialized: initialized => set({initialized}),
+  setScrollTop: scrollTop => set({scrollTop}),
+  setScrollLeft: scrollLeft => set({scrollLeft}),
+  setScroll: (scrollTop, scrollLeft) => set({scrollTop, scrollLeft}),
+  setData: data => set({data}),
   setSelectedIds: keys => {
     const selectedIdsMap = get().selectedIdsMap;
     selectedIdsMap.clear();
@@ -17,13 +17,13 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
         ? 'indeterminate'
         : selectedIdsMap.size !== 0;
 
-    set({ selectedIdsMap: new Map([...selectedIdsMap]), selectedAll });
+    set({selectedIdsMap: new Map([...selectedIdsMap]), selectedAll});
     get().rowSelection?.onChange([...get().selectedIdsMap.keys()].sort(), selectedAll);
   },
   setSelectedAll: selectedAll => {
     const selectedIdsMap: Map<number, any> =
       selectedAll === true ? new Map(get().data.map((v, i) => [i, true])) : new Map();
-    set({ selectedIdsMap, selectedAll });
+    set({selectedIdsMap, selectedAll});
 
     get().rowSelection?.onChange([...selectedIdsMap.keys()], selectedAll);
   },
@@ -33,7 +33,7 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
         ? 'indeterminate'
         : selectedIdsMap.size !== 0;
 
-    set({ selectedIdsMap, selectedAll });
+    set({selectedIdsMap, selectedAll});
   },
   setColumnWidth: (columnIndex, width) => {
     const columns = get().columns;
@@ -44,18 +44,17 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
         const frozenColumnsWidth = getFrozenColumnsWidth({
           rowSelection: get().rowSelection,
           itemHeight: get().itemHeight,
-          itemPadding: get().itemPadding,
           frozenColumnIndex: get().frozenColumnIndex,
           columns,
         });
 
-        set({ columns: [...columns], frozenColumnsWidth });
+        set({columns: [...columns], frozenColumnsWidth});
       }
     } else {
       get().onChangeColumns?.(columnIndex, columns[columnIndex].width, columns);
     }
   },
-  setColumnResizing: columnResizing => set({ columnResizing }),
+  setColumnResizing: columnResizing => set({columnResizing}),
   toggleColumnSort: columnIndex => {
     const columns = get().columns;
     const sortParams = get().sortParams;
@@ -86,7 +85,7 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
       };
     }
 
-    set({ sortParams: { ...sortParams } });
+    set({sortParams: {...sortParams}});
     get().sort?.onChange(
       Object.values(get().sortParams).sort((a, b) => {
         return (a.index ?? 0) - (b.index ?? 0);
@@ -94,10 +93,10 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
     );
   },
   setPage: page => {
-    set({ page });
+    set({page});
     page?.onChange?.(page.currentPage, page?.pageSize);
   },
-  setHoverItemIndex: hoverItemIndex => set({ hoverItemIndex }),
+  setHoverItemIndex: hoverItemIndex => set({hoverItemIndex}),
   handleClick: (itemIndex, columnIndex) => {
     get().onClick?.({
       itemIndex,
@@ -106,18 +105,18 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
       column: get().columns[columnIndex],
     });
   },
-  setWidth: width => set({ width }),
-  setHeight: height => set({ height }),
-  setContentBodyHeight: contentBodyHeight => set({ contentBodyHeight }),
-  setDisplayItemCount: displayItemCount => set({ displayItemCount }),
-  setLoading: loading => set({ loading }),
-  setSpinning: spinning => set({ spinning }),
+  setWidth: width => set({width}),
+  setHeight: height => set({height}),
+  setContentBodyHeight: contentBodyHeight => set({contentBodyHeight}),
+  setDisplayItemCount: displayItemCount => set({displayItemCount}),
+  setLoading: loading => set({loading}),
+  setSpinning: spinning => set({spinning}),
 
-  setHeaderHeight: headerHeight => set({ headerHeight }),
-  setFooterHeight: footerHeight => set({ footerHeight }),
-  setItemHeight: itemHeight => set({ itemHeight }),
-  setItemPadding: itemPadding => set({ itemPadding }),
-  setFrozenColumnIndex: frozenColumnIndex => set({ frozenColumnIndex }),
-  setSortParams: sortParams => set({ sortParams }),
-  setFrozenColumnsWidth: frozenColumnsWidth => set({ frozenColumnsWidth }),
+  setHeaderHeight: headerHeight => set({headerHeight}),
+  setFooterHeight: footerHeight => set({footerHeight}),
+  setItemHeight: itemHeight => set({itemHeight}),
+  setItemPadding: itemPadding => set({itemPadding}),
+  setFrozenColumnIndex: frozenColumnIndex => set({frozenColumnIndex}),
+  setSortParams: sortParams => set({sortParams}),
+  setFrozenColumnsWidth: frozenColumnsWidth => set({frozenColumnsWidth}),
 });
