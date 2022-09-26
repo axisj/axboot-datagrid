@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFDataGrid, RFDGColumn } from '../react-frame-datagrid';
-import { Button } from 'antd';
+import {RFDataGrid, RFDGColumn} from '../react-frame-datagrid';
 
-interface Props {}
+interface Props {
+}
 
 interface IListItem {
   id: string;
