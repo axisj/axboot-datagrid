@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import TableBody from './TableBody';
-import { useAppStore } from '../store';
+import {useAppStore} from '../store';
 import TableHead from './TableHead';
 import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
-import { RFDGSortParam } from '../types';
-import { getFrozenColumnsWidth } from '../utils';
+import {RFDGSortParam} from '../types';
+import {getFrozenColumnsWidth} from '../utils';
 
 interface Props {
   width?: number;
@@ -75,7 +75,7 @@ function Table(props: Props) {
 
   const onScroll = React.useCallback(() => {
     if (scrollContainerRef.current) {
-      const { scrollTop, scrollLeft } = scrollContainerRef.current;
+      const {scrollTop, scrollLeft} = scrollContainerRef.current;
       setScroll(scrollTop, scrollLeft);
     }
   }, [setScroll]);
@@ -84,7 +84,7 @@ function Table(props: Props) {
     evt.preventDefault();
 
     if (scrollContainerRef.current) {
-      const delta = { x: 0, y: 0 };
+      const delta = {x: 0, y: 0};
 
       if ((evt as any).detail) {
         delta.y = (evt as any).detail * 10;
@@ -176,7 +176,7 @@ function Table(props: Props) {
     const frozenScrollContainerRefCurrent = frozenScrollContainerRef?.current;
     if (scrollContainerRefCurrent) {
       scrollContainerRefCurrent.removeEventListener('scroll', onScroll);
-      scrollContainerRefCurrent.addEventListener('scroll', onScroll, { passive: true, capture: true });
+      scrollContainerRefCurrent.addEventListener('scroll', onScroll, {passive: true, capture: true});
       scrollContainerRefCurrent.scrollLeft = props.scrollLeft ?? scrollLeft;
       scrollContainerRefCurrent.scrollTop = props.scrollTop ?? scrollTop;
     }
@@ -197,10 +197,10 @@ function Table(props: Props) {
     <Container
       ref={containerRef}
       role={'react-frame-datagrid'}
-      style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
+      style={{width, height, borderWidth: `${containerBorderWidth}px`}}
       className={className}
     >
-      <HeaderContainer style={{ height: headerHeight }} role={'rfdg-header-container'}>
+      <HeaderContainer style={{height: headerHeight}} role={'rfdg-header-container'}>
         {frozenColumnsWidth > 0 && (
           <FrozenHeader
             style={{
@@ -208,15 +208,15 @@ function Table(props: Props) {
             }}
             role={'rfdg-frozen-header'}
           >
-            <TableHeadFrozen container={containerRef} />
+            <TableHeadFrozen container={containerRef}/>
           </FrozenHeader>
         )}
-        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rfdg-header'}>
-          <TableHead container={containerRef} />
+        <Header style={{marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth}} role={'rfdg-header'}>
+          <TableHead container={containerRef}/>
         </Header>
       </HeaderContainer>
 
-      <BodyContainer style={{ height: contentBodyHeight }}>
+      <BodyContainer style={{height: contentBodyHeight}}>
         {frozenColumnsWidth > 0 && (
           <FrozenScrollContent
             ref={frozenScrollContainerRef}
@@ -239,19 +239,19 @@ function Table(props: Props) {
               height: data.length * trHeight,
             }}
           >
-            <TableBody />
+            <TableBody/>
           </ScrollContent>
         </ScrollContainer>
 
-        <Loading active={!!spinning} size={'small'} />
+        <Loading active={!!spinning} size={'small'}/>
       </BodyContainer>
 
       {page && (
-        <FooterContainer style={{ height: footerHeight }} role={'rfdg-footer-container'}>
-          <TableFooter />
+        <FooterContainer style={{height: footerHeight}} role={'rfdg-footer-container'}>
+          <TableFooter/>
         </FooterContainer>
       )}
-      <Loading active={!!loading} />
+      <Loading active={!!loading}/>
     </Container>
   );
 }
@@ -289,6 +289,7 @@ const BodyContainer = styled.div`
   justify-content: stretch;
   align-content: stretch;
   background-color: var(--rfdg-scroll-track-bg);
+  overflow: hidden;
 `;
 
 const ScrollContainer = styled.div`

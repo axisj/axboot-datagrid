@@ -15,7 +15,7 @@ const Home: NextPage = () => {
 
       <Container>
         <div>
-          <h1>Basic</h1>
+          <h2>Basic</h2>
           <BasicExample />
         </div>
       </Container>

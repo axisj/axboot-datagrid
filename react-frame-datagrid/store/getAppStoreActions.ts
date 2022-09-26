@@ -37,18 +37,28 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   },
   setColumnWidth: (columnIndex, width) => {
     const columns = get().columns;
+    const frozenColumnIndex = get().frozenColumnIndex;
     if (width !== undefined) {
       if (columns[columnIndex]) {
+        const _columnWidth = columns[columnIndex].width;
         columns[columnIndex].width = width;
 
-        const frozenColumnsWidth = getFrozenColumnsWidth({
-          rowSelection: get().rowSelection,
-          itemHeight: get().itemHeight,
-          frozenColumnIndex: get().frozenColumnIndex,
-          columns,
-        });
+        if (columnIndex < frozenColumnIndex) {
+          const frozenColumnsWidth = getFrozenColumnsWidth({
+            rowSelection: get().rowSelection,
+            itemHeight: get().itemHeight,
+            frozenColumnIndex: get().frozenColumnIndex,
+            columns,
+          });
 
-        set({columns: [...columns], frozenColumnsWidth});
+          if (frozenColumnsWidth + 20 > get().width) {
+            columns[columnIndex].width = _columnWidth;
+          } else {
+            set({columns: [...columns], frozenColumnsWidth});
+          }
+        } else {
+          set({columns: [...columns]});
+        }
       }
     } else {
       get().onChangeColumns?.(columnIndex, columns[columnIndex].width, columns);

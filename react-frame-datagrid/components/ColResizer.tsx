@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
-import { delay, mouseEventSubscribe } from '../utils';
-import { useAppStore } from '../store';
+import {css} from '@emotion/react';
+import {delay, mouseEventSubscribe} from '../utils';
+import {useAppStore} from '../store';
 
 interface StyledProps {
   hideHandle?: boolean;
@@ -13,7 +13,7 @@ interface Props extends StyledProps {
   columnIndex: number;
 }
 
-function ColResizer({ container, columnIndex, hideHandle }: Props) {
+function ColResizer({container, columnIndex, hideHandle}: Props) {
   const setColumnWidth = useAppStore(s => s.setColumnWidth);
   const setColumnResizing = useAppStore(s => s.setColumnResizing);
 
@@ -93,7 +93,7 @@ const Container = styled.div<StyledProps>`
   cursor: col-resize;
   z-index: 2;
 
-  ${({ hideHandle = false }) => {
+  ${({hideHandle = false}) => {
     if (hideHandle) {
       return css``;
     }

@@ -1,32 +1,40 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import ActiveLink from './ActiveLink';
+import { Tabs } from 'antd';
+import { useRouter } from 'next/router';
+import pkg from '../package.json';
+import { GithubFilled } from '@ant-design/icons';
 
 interface Props {}
 
 function Nav(props: Props) {
+  const router = useRouter();
+
   return (
     <Container>
-      <ul>
-        <li>
-          <ActiveLink href={'/'}>Index</ActiveLink>
-        </li>
-        <li>
-          <ActiveLink href={'/columnGroup'}>columnGroup</ActiveLink>
-        </li>
-        <li>
-          <ActiveLink href={'/sort'}>Sort</ActiveLink>
-        </li>
-        <li>
-          <ActiveLink href={'/paging'}>Paging</ActiveLink>
-        </li>
-        <li>
-          <ActiveLink href={'/loading'}>Loading</ActiveLink>
-        </li>
-        <li>
-          <ActiveLink href={'/propsChange'}>Props Change</ActiveLink>
-        </li>
-      </ul>
+      <Header>
+        <h1>react-frame-datagrid</h1>
+        <Version>{pkg.version}</Version>
+
+        <GithubFilled
+          style={{ fontSize: 20 }}
+          onClick={() => window.open('https://github.com/thomasjang/react-frame-datagrid')}
+        />
+      </Header>
+      <Tabs
+        defaultActiveKey={router.asPath}
+        items={[
+          { label: `Index`, key: '/' },
+          { label: `ColumnGroup`, key: '/columnGroup' },
+          { label: `Sort`, key: '/sort' },
+          { label: `Paging`, key: '/paging' },
+          { label: `Loading`, key: '/loading' },
+          { label: `Props Change`, key: '/propsChange' },
+        ]}
+        onChange={async activeKey => {
+          await router.push(activeKey);
+        }}
+      />
     </Container>
   );
 }
@@ -50,6 +58,24 @@ const Container = styled.div`
       }
     }
   }
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+
+  h1 {
+    margin: 0;
+  }
+`;
+
+const Version = styled.div`
+  padding: 1px 5px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 4px;
 `;
 
 export default Nav;

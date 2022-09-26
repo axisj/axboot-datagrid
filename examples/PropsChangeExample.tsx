@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFDataGrid, RFDGColumn, RFDGSortParam } from '../react-frame-datagrid';
-import { Button, Checkbox, Col, Divider, Form, Input, InputNumber, Row, Select, Switch } from 'antd';
+import {RFDataGrid, RFDGColumn, RFDGSortParam} from '../react-frame-datagrid';
+import {Button, Checkbox, Col, Divider, Form, Input, InputNumber, Row, Select, Switch} from 'antd';
 
-interface Props {}
+interface Props {
+}
 
 interface IListItem {
   id: string;
@@ -28,7 +29,7 @@ function PropsChangeExample(props: Props) {
   const [height, setHeight] = React.useState(300);
   const [headerHeight, setHeaderHeight] = React.useState(35);
   const [footerHeight, setFooterHeight] = React.useState(30);
-  const [itemHeight, setItemHeight] = React.useState(14);
+  const [itemHeight, setItemHeight] = React.useState(15);
   const [itemPadding, setItemPadding] = React.useState(7);
   const [frozenColumnIndex, setFrozenColumnIndex] = React.useState(0);
   const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
@@ -108,7 +109,7 @@ function PropsChangeExample(props: Props) {
         spinning={spinning}
       />
 
-      <Divider />
+      <Divider/>
 
       <Form
         layout={'vertical'}
@@ -128,12 +129,12 @@ function PropsChangeExample(props: Props) {
         <Row gutter={20}>
           <Col span={6}>
             <Form.Item name={'loading'} label={'Loading'} valuePropName={'checked'}>
-              <Switch onChange={checked => setLoading(checked)} />
+              <Switch onChange={checked => setLoading(checked)}/>
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item name={'spinning'} label={'Spinning'} valuePropName={'checked'}>
-              <Switch onChange={checked => setSpinning(checked)} />
+              <Switch onChange={checked => setSpinning(checked)}/>
             </Form.Item>
           </Col>
           <Col span={6}>
@@ -202,14 +203,14 @@ function PropsChangeExample(props: Props) {
             <Form.Item name={'frozenColumnIndex'} label={'Frozen Column Index'}>
               <Select
                 onChange={value => setFrozenColumnIndex(value)}
-                options={columns.map((c, i) => ({ value: i, text: i }))}
+                options={columns.map((c, i) => ({value: i, text: i}))}
               />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item name={'selectedIds'} label={'Selected ID'}>
               <Checkbox.Group
-                options={Array.from({ length: 30 }).map((_, i) => ({ label: i, value: i }))}
+                options={Array.from({length: 30}).map((_, i) => ({label: i, value: i}))}
                 onChange={checkedValue => {
                   setSelectedIds(checkedValue as number[]);
                 }}
@@ -220,10 +221,10 @@ function PropsChangeExample(props: Props) {
             <Form.Item name={'sortParams'} label={'SortParams'}>
               <Checkbox.Group
                 options={[
-                  { label: 'id desc', value: `{ "key": "id", "orderBy": "desc" }` },
-                  { label: 'title asc', value: `{ "key": "title", "orderBy": "asc" }` },
-                  { label: 'writer desc', value: `{ "key": "writer", "orderBy": "desc" }` },
-                  { label: 'createAt asc', value: `{ "key": "createAt", "orderBy": "asc" }` },
+                  {label: 'id desc', value: `{ "key": "id", "orderBy": "desc" }`},
+                  {label: 'title asc', value: `{ "key": "title", "orderBy": "asc" }`},
+                  {label: 'writer desc', value: `{ "key": "writer", "orderBy": "desc" }`},
+                  {label: 'createAt asc', value: `{ "key": "createAt", "orderBy": "asc" }`},
                 ]}
                 onChange={checkedValue => {
                   setSortParams(

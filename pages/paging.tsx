@@ -15,7 +15,7 @@ const Sort: NextPage = () => {
 
       <Container>
         <div>
-          <h1>Paging</h1>
+          <h2>Paging</h2>
           <PagingExample />
         </div>
       </Container>

@@ -15,7 +15,7 @@ const Sort: NextPage = () => {
 
       <Container>
         <div>
-          <h1>ColumnsGroup</h1>
+          <h2>ColumnsGroup</h2>
           <ColumnsGroupExample />
         </div>
       </Container>

@@ -17,7 +17,7 @@ const PropsChange: NextPage = () => {
 
       <Container>
         <div>
-          <h1>Props Change</h1>
+          <h2>Props Change</h2>
           <PropsChangeExample />
         </div>
       </Container>
