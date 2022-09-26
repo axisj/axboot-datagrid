@@ -22,7 +22,7 @@ function TableHead({ container }: Props) {
   return (
     <HeadTable headerHeight={headerHeight}>
       <TableColGroup />
-      <tbody role={'rft-head'}>
+      <tbody role={'rfdg-head'}>
         {columnsGroup.length > 0 && (
           <tr role={'column-group'}>
             {columnsGroup.map((cg, index) => (
@@ -82,14 +82,14 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
 export const HeadGroupTd = styled.td`
   padding: 0 7px;
   border-bottom-style: solid;
-  border-bottom-color: var(--rft-border-color-base);
+  border-bottom-color: var(--rfdg-border-color-base);
   border-bottom-width: 1px;
-  background-color: var(--rft-header-group-bg);
+  background-color: var(--rfdg-header-group-bg);
 
   &[rowSpan='2'] {
     background-color: transparent;
     border-right-style: solid;
-    border-right-color: var(--rft-border-color-base);
+    border-right-color: var(--rfdg-border-color-base);
     border-right-width: 1px;
   }
 `;
@@ -98,7 +98,7 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
   position: relative;
   padding: 0 7px;
   border-bottom-style: solid;
-  border-bottom-color: var(--rft-border-color-base);
+  border-bottom-color: var(--rfdg-border-color-base);
   border-bottom-width: 1px;
 
   ${({ hasOnClick, columnResizing }) => {
@@ -107,7 +107,7 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
         cursor: pointer;
 
         &:hover {
-          background: var(--rft-header-hover-bg);
+          background: var(--rfdg-header-hover-bg);
         }
       `;
     }

@@ -46,12 +46,12 @@ const CheckBoxControl = styled.div<StylesProps>`
   display: block;
   border-width: 1px;
   border-style: solid;
-  border-color: var(--rft-border-color-base);
+  border-color: var(--rfdg-border-color-base);
   border-radius: 2px;
-  background-color: var(--rft-row-selector-color);
+  background-color: var(--rfdg-row-selector-color);
 
   &:hover {
-    border-color: var(--rft-primary-color);
+    border-color: var(--rfdg-primary-color);
   }
 
   ${({ size = 0 }) => {
@@ -76,7 +76,7 @@ const CheckBoxControl = styled.div<StylesProps>`
     if (indeterminate) {
       return css`
         &:after {
-          background-color: var(--rft-primary-color);
+          background-color: var(--rfdg-primary-color);
           width: ${size - 8}px;
           height: ${size - 8}px;
           left: 3px;
@@ -86,8 +86,8 @@ const CheckBoxControl = styled.div<StylesProps>`
     }
     if (checked) {
       return css`
-        background-color: var(--rft-primary-color);
-        border-color: var(--rft-primary-color);
+        background-color: var(--rfdg-primary-color);
+        border-color: var(--rfdg-primary-color);
 
         &:after {
           border: 2px solid #fff;

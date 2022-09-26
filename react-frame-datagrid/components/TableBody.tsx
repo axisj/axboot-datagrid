@@ -24,7 +24,7 @@ function TableBody() {
   return (
     <BodyTable>
       <TableColGroup />
-      <tbody role={'rft-body'}>
+      <tbody role={'rfdg-body'}>
         {Array.from({ length: endNumber - startIdx }, (_, i) => {
           const ri = startIdx + i;
           const item = data[ri];
@@ -63,12 +63,12 @@ export const BodyTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
-  background-color: var(--rft-body-bg);
+  background-color: var(--rfdg-body-bg);
 
   > tbody > tr {
     border-width: 1px;
     border-style: solid;
-    border-color: var(--rft-border-color-base);
+    border-color: var(--rfdg-border-color-base);
     border-top: 0 none;
     border-left: 0 none;
     border-right: 0 none;
@@ -87,7 +87,7 @@ export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; 
   ${({ hover }) => {
     if (hover) {
       return css`
-        background-color: var(--rft-body-hover-bg);
+        background-color: var(--rfdg-body-hover-bg);
       `;
     }
   }}

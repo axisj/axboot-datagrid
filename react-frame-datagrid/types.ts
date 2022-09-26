@@ -1,11 +1,8 @@
 import React from 'react';
-import createContext from 'zustand/context';
-import { StoreApi } from 'zustand';
 
 type Direction = 'left' | 'center' | 'right';
-type Size = 'small' | 'medium' | 'large';
 
-export interface RFTableColumn<T> {
+export interface RFDGColumn<T> {
   key: string | string[];
   label: string;
   width: number;
@@ -15,19 +12,19 @@ export interface RFTableColumn<T> {
   itemRender?: (item: T) => React.ReactNode;
 }
 
-export interface RFTableColumnGroup {
+export interface RFDGColumnGroup {
   label: string;
   colspan: number;
   align?: Direction;
 }
 
-export type RFTableDataItem<T> = {
+export type RFDGDataItem<T> = {
   values: T;
   status?: string;
   parentItemIndex?: number;
 };
 
-export interface RFTablePage {
+export interface RFDGPage {
   currentPage: number;
   pageSize?: number;
   totalPages: number;
@@ -39,44 +36,44 @@ export interface RFTablePage {
   paginationRender?: () => void;
 }
 
-export interface RFTableRowSelection {
+export interface RFDGRowSelection {
   selectedIds: number[];
   onChange: (selectedKeys: number[], selectedAll?: SelectedAll) => void;
 }
 
-export interface RFTableSortParam {
+export interface RFDGSortParam {
   key?: string;
   index?: number;
   orderBy: 'asc' | 'desc';
 }
 
-export interface RFTableSortInfo {
+export interface RFDGSortInfo {
   multiSort?: boolean;
-  sortParams: RFTableSortParam[];
-  onChange: (sortParams: RFTableSortParam[]) => void;
+  sortParams: RFDGSortParam[];
+  onChange: (sortParams: RFDGSortParam[]) => void;
 }
 
-export interface RFTableClickParams<T> {
+export interface RFDGClickParams<T> {
   itemIndex: number;
   columnIndex: number;
   item: T;
-  column: RFTableColumn<T>;
+  column: RFDGColumn<T>;
 }
 
-export interface RFTableProps<T> {
+export interface RFDGProps<T> {
   width: number;
   height: number;
   headerHeight?: number;
   footerHeight?: number;
   itemHeight?: number;
   itemPadding?: number;
-  columns: RFTableColumn<T>[];
-  columnsGroup?: RFTableColumnGroup[];
-  onChangeColumns?: (columnIndex: number, width: number, columns: RFTableColumn<T>[]) => void;
+  columns: RFDGColumn<T>[];
+  columnsGroup?: RFDGColumnGroup[];
+  onChangeColumns?: (columnIndex: number, width: number, columns: RFDGColumn<T>[]) => void;
   frozenColumnIndex?: number;
-  data: RFTableDataItem<T>[];
+  data: RFDGDataItem<T>[];
 
-  page?: RFTablePage;
+  page?: RFDGPage;
   enableLoadMore?: boolean;
   onLoadMore?: (params: { scrollLeft: number; scrollTop: number }) => void;
   endLoadMoreRender?: () => React.ReactNode;
@@ -89,9 +86,9 @@ export interface RFTableProps<T> {
   scrollTop?: number;
   scrollLeft?: number;
 
-  rowSelection?: RFTableRowSelection;
-  sort?: RFTableSortInfo;
-  onClick?: (params: RFTableClickParams<T>) => void;
+  rowSelection?: RFDGRowSelection;
+  sort?: RFDGSortInfo;
+  onClick?: (params: RFDGClickParams<T>) => void;
 
   msg?: {
     emptyList?: string;
@@ -100,7 +97,7 @@ export interface RFTableProps<T> {
 
 export type SelectedAll = true | false | 'indeterminate';
 
-export interface AppModel<T> extends RFTableProps<T> {
+export interface AppModel<T> extends RFDGProps<T> {
   initialized: boolean;
   headerHeight: number;
   footerHeight: number;
@@ -108,8 +105,8 @@ export interface AppModel<T> extends RFTableProps<T> {
   itemPadding: number;
   frozenColumnIndex: number;
   frozenColumnsWidth: number;
-  frozenColumnsGroup: RFTableColumnGroup[];
-  columnsGroup: RFTableColumnGroup[];
+  frozenColumnsGroup: RFDGColumnGroup[];
+  columnsGroup: RFDGColumnGroup[];
   columnResizing: boolean;
   containerBorderWidth: number;
   contentBodyHeight: number;
@@ -118,7 +115,7 @@ export interface AppModel<T> extends RFTableProps<T> {
   scrollLeft: number;
   selectedIdsMap: Map<number, any>;
   selectedAll: SelectedAll;
-  sortParams: Record<string, RFTableSortParam>;
+  sortParams: Record<string, RFDGSortParam>;
   displayPaginationLength: number;
   hoverItemIndex?: number;
   loading: boolean;
@@ -129,13 +126,13 @@ export interface AppActions<T> {
   setScrollTop: (scrollTop: number) => void;
   setScrollLeft: (scrollLeft: number) => void;
   setScroll: (scrollTop: number, scrollLeft: number) => void;
-  setData: (data: RFTableDataItem<T>[]) => void;
+  setData: (data: RFDGDataItem<T>[]) => void;
   setSelectedIds: (ids: number[]) => void;
   setSelectedAll: (selectedAll: SelectedAll) => void;
   setColumnWidth: (columnIndex: number, width?: number) => void;
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
-  setPage: (page: RFTablePage) => void;
+  setPage: (page: RFDGPage) => void;
   setHoverItemIndex: (hoverItemIndex?: number) => void;
   handleClick: (itemIndex: number, columnIndex: number) => void;
   setWidth: (width: number) => void;
@@ -150,7 +147,7 @@ export interface AppActions<T> {
   setItemPadding: (itemPadding: number) => void;
   setFrozenColumnIndex: (frozenColumnIndex: number) => void;
   setSelectedIdsMap: (selectedIdsMap: Map<number, any>) => void;
-  setSortParams: (sortParams: Record<string, RFTableSortParam>) => void;
+  setSortParams: (sortParams: Record<string, RFDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
 }
 

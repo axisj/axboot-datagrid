@@ -1,6 +1,6 @@
-import { RFTableColumn, RFTableDataItem } from '../types';
+import { RFDGColumn, RFDGDataItem } from '../types';
 
-export function getCellValue<T>(column: RFTableColumn<T>, item: RFTableDataItem<any>) {
+export function getCellValue<T>(column: RFDGColumn<T>, item: RFDGDataItem<any>) {
   if (column.itemRender) {
     return column.itemRender(item.values as T);
   } else if (Array.isArray(column.key)) {

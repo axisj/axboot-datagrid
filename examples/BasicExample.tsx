@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFTable, RFTableColumn } from '../react-frame-table';
+import { RFDataGrid, RFDGColumn } from '../react-frame-datagrid';
 import { Button } from 'antd';
 
 interface Props {}
@@ -22,7 +22,7 @@ const list = Array.from(Array(1000)).map((v, i) => ({
 }));
 
 function BasicExample(props: Props) {
-  const [columns, setColumns] = React.useState<RFTableColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: '아이디 IS LONG !',
@@ -73,7 +73,7 @@ function BasicExample(props: Props) {
 
   return (
     <Container>
-      <RFTable<IListItem>
+      <RFDataGrid<IListItem>
         width={600}
         height={400}
         data={list}
@@ -89,16 +89,6 @@ function BasicExample(props: Props) {
           },
         }}
       />
-
-      <br />
-      <Button
-        onClick={() => {
-          columns[0].width = 200;
-          setColumns([...columns]);
-        }}
-      >
-        아이디 컬럼 너비 : 200
-      </Button>
     </Container>
   );
 }

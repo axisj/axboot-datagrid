@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { AppStoreProvider, getAppStoreActions } from './store';
 import Table from './components/Table';
-import { AppStore, RFTableColumnGroup, RFTableProps, RFTableSortParam } from './types';
+import { AppStore, RFDGColumnGroup, RFDGProps, RFDGSortParam } from './types';
 import create from 'zustand';
 import { getFrozenColumnsWidth } from './utils';
 
-export function RFTable<T = Record<string, any>>({
+export function RFDataGrid<T = Record<string, any>>({
   width,
   height,
   headerHeight = 30,
@@ -26,15 +26,15 @@ export function RFTable<T = Record<string, any>>({
   onClick,
   loading = false,
   spinning,
-}: RFTableProps<T>) {
+}: RFDGProps<T>) {
   const selectedIdsMap: Map<number, any> = React.useMemo(
     () => new Map(rowSelection?.selectedIds.map(id => [id, true])),
     [rowSelection?.selectedIds],
   );
 
   const columnGroups = React.useMemo(() => {
-    const leftGroups: RFTableColumnGroup[] = [];
-    const rightGroups: RFTableColumnGroup[] = [];
+    const leftGroups: RFDGColumnGroup[] = [];
+    const rightGroups: RFDGColumnGroup[] = [];
     const cgs = columnsGroup
       ?.map(({ label, align, colspan }, groupIndex) => {
         return Array.from({ length: colspan }).map((_, i) => ({
@@ -80,11 +80,10 @@ export function RFTable<T = Record<string, any>>({
       getFrozenColumnsWidth({
         rowSelection,
         itemHeight,
-        itemPadding,
         frozenColumnIndex,
         columns,
       }),
-    [columns, frozenColumnIndex, itemHeight, itemPadding, rowSelection],
+    [columns, frozenColumnIndex, itemHeight, rowSelection],
   );
 
   const sortParams = React.useMemo(() => {
@@ -93,7 +92,7 @@ export function RFTable<T = Record<string, any>>({
         cur.index = currentIndex;
         if (cur.key) acc[cur.key] = cur;
         return acc;
-      }, {} as Record<string, RFTableSortParam>);
+      }, {} as Record<string, RFDGSortParam>);
     }
 
     return {};

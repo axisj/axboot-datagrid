@@ -1,20 +1,13 @@
-import { RFTableColumn, RFTableRowSelection } from '../types';
+import { RFDGColumn, RFDGRowSelection } from '../types';
 
 interface Props<T> {
-  rowSelection?: RFTableRowSelection;
+  rowSelection?: RFDGRowSelection;
   itemHeight: number;
-  itemPadding: number;
   frozenColumnIndex: number;
-  columns: RFTableColumn<T>[];
+  columns: RFDGColumn<T>[];
 }
 
-export function getFrozenColumnsWidth<T>({
-  rowSelection,
-  itemHeight,
-  itemPadding,
-  frozenColumnIndex,
-  columns,
-}: Props<T>) {
+export function getFrozenColumnsWidth<T>({ rowSelection, itemHeight, frozenColumnIndex, columns }: Props<T>) {
   let frozenColumnsWidth: number = 0;
   if (!!rowSelection) {
     frozenColumnsWidth += Math.min(itemHeight, 15) + 7 * 2;

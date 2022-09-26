@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFTable } from '../react-frame-table';
+import { RFDataGrid } from '../react-frame-datagrid';
 
 interface Props {}
 
@@ -23,7 +23,7 @@ const list = Array.from(Array(100)).map((v, i) => ({
 function ColumnsGroupExample(props: Props) {
   return (
     <Container>
-      <RFTable<IListItem>
+      <RFDataGrid<IListItem>
         width={1000}
         height={700}
         data={list}

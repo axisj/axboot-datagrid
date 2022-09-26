@@ -26,7 +26,7 @@ function TableHeadFrozen({ container }: Props) {
   return (
     <HeadTableFrozen headerHeight={headerHeight}>
       <TableColGroupFrozen />
-      <tbody role={'rft-head-frozen'}>
+      <tbody role={'rfdg-head-frozen'}>
         {frozenColumnsGroup.length > 0 && (
           <tr role={'column-group'}>
             {hasRowSelection && (

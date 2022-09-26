@@ -75,15 +75,15 @@ const No = styled.span<{ active?: boolean }>`
   height: 20px;
 
   &:hover {
-    color: var(--rft-primary-color);
+    color: var(--rfdg-primary-color);
   }
 
   ${({ active }) => {
     if (active) {
       return css`
-        color: var(--rft-primary-color);
-        border: 1px solid var(--rft-primary-color);
-        background-color: var(--rft-body-bg);
+        color: var(--rfdg-primary-color);
+        border: 1px solid var(--rfdg-primary-color);
+        background-color: var(--rfdg-body-bg);
         border-radius: 2px;
         margin: 0 3px;
       `;

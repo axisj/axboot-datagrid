@@ -10,7 +10,7 @@ const PropsChange: NextPage = () => {
   return (
     <PageContainer>
       <Head>
-        <title>react-frame-table</title>
+        <title>react-frame-datagrid</title>
         <meta name='description' content='Index' />
         <link rel='icon' href='/favicon.ico' />
       </Head>

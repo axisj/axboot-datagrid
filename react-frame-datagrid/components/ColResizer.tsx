@@ -47,10 +47,10 @@ function ColResizer({ container, columnIndex, hideHandle }: Props) {
       evt.stopPropagation();
 
       if (container.current) {
-        const headFrozenHTML = container.current.querySelector('[role="rft-head-frozen"]')?.innerHTML;
-        const headHTML = container.current.querySelector('[role="rft-head"]')?.innerHTML;
-        const bodyFrozenHTML = container.current.querySelector('[role="rft-body-frozen"]')?.innerHTML;
-        const bodyHTML = container.current.querySelector('[role="rft-body"]')?.innerHTML;
+        const headFrozenHTML = container.current.querySelector('[role="rfdg-head-frozen"]')?.innerHTML;
+        const headHTML = container.current.querySelector('[role="rfdg-head"]')?.innerHTML;
+        const bodyFrozenHTML = container.current.querySelector('[role="rfdg-body-frozen"]')?.innerHTML;
+        const bodyHTML = container.current.querySelector('[role="rfdg-body"]')?.innerHTML;
         const targetDiv = document.createElement('div');
         targetDiv.style.position = 'fixed';
         targetDiv.style.top = '-9999px';
@@ -107,12 +107,12 @@ const Container = styled.div<StyledProps>`
         width: 1px;
         height: 0.8em;
         transform: translateY(-50%);
-        background: var(--rft-border-color-base);
+        background: var(--rfdg-border-color-base);
       }
 
       &:hover {
         &:after {
-          background: var(--rft-primary-color);
+          background: var(--rfdg-primary-color);
         }
       }
     `;

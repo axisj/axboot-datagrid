@@ -7,7 +7,7 @@ import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
-import { RFTableSortParam } from '../types';
+import { RFDGSortParam } from '../types';
 import { getFrozenColumnsWidth } from '../utils';
 
 interface Props {
@@ -25,7 +25,7 @@ interface Props {
   frozenColumnIndex?: number;
 
   selectedIdsMap?: Map<number, any>;
-  sortParams?: Record<string, RFTableSortParam>;
+  sortParams?: Record<string, RFDGSortParam>;
 }
 
 function Table(props: Props) {
@@ -154,22 +154,13 @@ function Table(props: Props) {
       const frozenColumnsWidth = getFrozenColumnsWidth({
         rowSelection,
         itemHeight,
-        itemPadding,
         frozenColumnIndex: props.frozenColumnIndex,
         columns,
       });
       setFrozenColumnsWidth(frozenColumnsWidth);
       setFrozenColumnIndex(props.frozenColumnIndex);
     }
-  }, [
-    setFrozenColumnIndex,
-    props.frozenColumnIndex,
-    rowSelection,
-    itemHeight,
-    itemPadding,
-    columns,
-    setFrozenColumnsWidth,
-  ]);
+  }, [setFrozenColumnIndex, props.frozenColumnIndex, rowSelection, itemHeight, columns, setFrozenColumnsWidth]);
   React.useEffect(() => {
     if (props.selectedIdsMap !== undefined) setSelectedIdsMap(props.selectedIdsMap);
   }, [setSelectedIdsMap, props.selectedIdsMap]);
@@ -205,22 +196,22 @@ function Table(props: Props) {
   return (
     <Container
       ref={containerRef}
-      role={'react-frame-table'}
+      role={'react-frame-datagrid'}
       style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
       className={className}
     >
-      <HeaderContainer style={{ height: headerHeight }} role={'rft-header-container'}>
+      <HeaderContainer style={{ height: headerHeight }} role={'rfdg-header-container'}>
         {frozenColumnsWidth > 0 && (
           <FrozenHeader
             style={{
               width: frozenColumnsWidth,
             }}
-            role={'rft-frozen-header'}
+            role={'rfdg-frozen-header'}
           >
             <TableHeadFrozen container={containerRef} />
           </FrozenHeader>
         )}
-        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rft-header'}>
+        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rfdg-header'}>
           <TableHead container={containerRef} />
         </Header>
       </HeaderContainer>
@@ -232,7 +223,7 @@ function Table(props: Props) {
             style={{
               width: frozenColumnsWidth,
             }}
-            role={'rft-frozen-scroll-container'}
+            role={'rfdg-frozen-scroll-container'}
           >
             <TableBodyFrozen
               style={{
@@ -241,7 +232,7 @@ function Table(props: Props) {
             />
           </FrozenScrollContent>
         )}
-        <ScrollContainer ref={scrollContainerRef} role={'rft-scroll-container'}>
+        <ScrollContainer ref={scrollContainerRef} role={'rfdg-scroll-container'}>
           <ScrollContent
             style={{
               paddingTop: paddingTop,
@@ -256,7 +247,7 @@ function Table(props: Props) {
       </BodyContainer>
 
       {page && (
-        <FooterContainer style={{ height: footerHeight }} role={'rft-footer-container'}>
+        <FooterContainer style={{ height: footerHeight }} role={'rfdg-footer-container'}>
           <TableFooter />
         </FooterContainer>
       )}
@@ -266,14 +257,14 @@ function Table(props: Props) {
 }
 
 const Container = styled.div`
-  border-color: var(--rft-border-color-base);
+  border-color: var(--rfdg-border-color-base);
   border-style: solid;
   box-sizing: border-box;
   position: relative;
 `;
 
 const HeaderContainer = styled.div`
-  background: var(--rft-header-bg);
+  background: var(--rfdg-header-bg);
   position: relative;
   min-width: 100%;
   overflow: hidden;
@@ -285,9 +276,9 @@ const Header = styled.div`
 
 const FrozenHeader = styled.div`
   position: absolute;
-  background-color: var(--rft-header-bg);
-  border-right: 1px solid var(--rft-border-color-base);
-  box-shadow: 0 0 3px var(--rft-border-color-base);
+  background-color: var(--rfdg-header-bg);
+  border-right: 1px solid var(--rfdg-border-color-base);
+  box-shadow: 0 0 3px var(--rfdg-border-color-base);
   z-index: 3;
 `;
 
@@ -297,7 +288,7 @@ const BodyContainer = styled.div`
   align-items: stretch;
   justify-content: stretch;
   align-content: stretch;
-  background-color: var(--rft-scroll-track-bg);
+  background-color: var(--rfdg-scroll-track-bg);
 `;
 
 const ScrollContainer = styled.div`
@@ -306,35 +297,35 @@ const ScrollContainer = styled.div`
   flex: 1;
 
   &::-webkit-scrollbar {
-    width: var(--rft-scroll-size);
-    height: var(--rft-scroll-size);
+    width: var(--rfdg-scroll-size);
+    height: var(--rfdg-scroll-size);
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: var(--rft-scroll-thumb-bg);
-    border-radius: var(--rft-scroll-thumb-radius);
-    border: 2px solid var(--rft-scroll-track-bg);
+    background-color: var(--rfdg-scroll-thumb-bg);
+    border-radius: var(--rfdg-scroll-thumb-radius);
+    border: 2px solid var(--rfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background-color: var(--rft-scroll-thumb-hover-bg);
-    border: 1px solid var(--rft-scroll-track-bg);
+    background-color: var(--rfdg-scroll-thumb-hover-bg);
+    border: 1px solid var(--rfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track {
-    background-color: var(--rft-scroll-track-bg);
+    background-color: var(--rfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track:vertical {
-    background-color: var(--rft-scroll-track-bg);
+    background-color: var(--rfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track:horizontal {
-    background-color: var(--rft-scroll-track-bg);
+    background-color: var(--rfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-corner {
-    background-color: var(--rft-scroll-track-corner-bg);
+    background-color: var(--rfdg-scroll-track-corner-bg);
   }
 `;
 
@@ -346,8 +337,8 @@ const ScrollContent = styled.div`
 
 const FrozenScrollContent = styled.div`
   flex: none;
-  border-right: 1px solid var(--rft-border-color-base);
-  box-shadow: 0 0 3px var(--rft-border-color-base);
+  border-right: 1px solid var(--rfdg-border-color-base);
+  box-shadow: 0 0 3px var(--rfdg-border-color-base);
   z-index: 2;
   overflow: hidden;
   position: relative;
@@ -357,8 +348,8 @@ const FooterContainer = styled.div`
   position: relative;
   min-width: 100%;
   overflow: hidden;
-  background: var(--rft-footer-bg);
-  border-top: 1px solid var(--rft-border-color-base);
+  background: var(--rfdg-footer-bg);
+  border-top: 1px solid var(--rfdg-border-color-base);
 `;
 
 export default Table;

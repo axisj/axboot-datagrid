@@ -30,7 +30,7 @@
     "node_modules/@types"
   ],
   "include": [
-    "react-frame-table"
+    "react-frame-datagrid"
   ],
   "exclude": [
     "node_modules"

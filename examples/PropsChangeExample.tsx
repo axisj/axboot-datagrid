@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFTable, RFTableColumn, RFTableSortParam } from '../react-frame-table';
+import { RFDataGrid, RFDGColumn, RFDGSortParam } from '../react-frame-datagrid';
 import { Button, Checkbox, Col, Divider, Form, Input, InputNumber, Row, Select, Switch } from 'antd';
 
 interface Props {}
@@ -32,10 +32,10 @@ function PropsChangeExample(props: Props) {
   const [itemPadding, setItemPadding] = React.useState(7);
   const [frozenColumnIndex, setFrozenColumnIndex] = React.useState(0);
   const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
-  const [sortParams, setSortParams] = React.useState<RFTableSortParam[]>([]);
+  const [sortParams, setSortParams] = React.useState<RFDGSortParam[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
 
-  const [columns, setColumns] = React.useState<RFTableColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: '아이디 IS LONG !',
@@ -66,7 +66,7 @@ function PropsChangeExample(props: Props) {
 
   return (
     <Container>
-      <RFTable<IListItem>
+      <RFDataGrid<IListItem>
         width={width}
         height={height}
         headerHeight={headerHeight}
