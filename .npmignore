@@ -1,5 +1,6 @@
 .idea
 .next
+components
 examples
 node_modules
 customEffect
@@ -14,6 +15,7 @@ tsconfigs
 .npmignore
 .prettierignore
 .prettierrc
+jest.config.js
 next.config.js
 next-env.d.ts
 package-lock.json

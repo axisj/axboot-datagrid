@@ -4,6 +4,7 @@
     "outDir": "../dist/commonjs",
     "module": "commonjs",
     "target": "es5",
+    "downlevelIteration": true,
     "allowJs": false,
     "declaration": true,
     "sourceMap": false,
@@ -12,7 +13,7 @@
     "jsxImportSource": ""
   },
   "include": [
-    "../react-frame-contextmenu/**/*"
+    "../react-frame-table/**/*"
   ],
   "exclude": [
     "node_modules",

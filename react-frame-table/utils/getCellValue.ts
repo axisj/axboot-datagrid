@@ -1,6 +1,6 @@
 import { RFTableColumn, RFTableDataItem } from '../types';
 
-export function getCellValue<T>(column: RFTableColumn<T>, item: RFTableDataItem) {
+export function getCellValue<T>(column: RFTableColumn<T>, item: RFTableDataItem<any>) {
   if (column.itemRender) {
     return column.itemRender(item.values as T);
   } else if (Array.isArray(column.key)) {

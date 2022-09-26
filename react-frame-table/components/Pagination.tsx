@@ -64,7 +64,7 @@ const Container = styled.div`
   align-items: center;
   user-select: none;
 `;
-const No = styled.a<{ active?: boolean }>`
+const No = styled.span<{ active?: boolean }>`
   transition: all 0.3s;
   display: flex;
   flex-direction: column;
