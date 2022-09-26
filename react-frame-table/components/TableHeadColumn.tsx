@@ -104,7 +104,7 @@ const ColumnSorter = styled.span<SorterProps>`
 const ColumnSorterBadge = styled.div`
   display: flex;
   align-items: center;
-  font-size: 9px;
+  font-size: 11px;
 `;
 
 export default TableHeadColumn;

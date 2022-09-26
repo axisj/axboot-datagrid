@@ -6,8 +6,25 @@ import TableHead from './TableHead';
 import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
+import Loading from './Loading';
 
-function Table() {
+interface Props {
+  width?: number;
+  height?: number;
+  loading?: boolean;
+  spinning?: boolean;
+  scrollTop?: number;
+  scrollLeft?: number;
+
+  headerHeight?: number;
+  footerHeight?: number;
+  itemHeight?: number;
+  itemPadding?: number;
+  frozenColumnIndex?: number;
+}
+
+function Table(props: Props) {
+  const setInitialized = useAppStore(s => s.setInitialized);
   const width = useAppStore(s => s.width);
   const height = useAppStore(s => s.height);
   const containerBorderWidth = useAppStore(s => s.containerBorderWidth);
@@ -26,6 +43,21 @@ function Table() {
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
   const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
   const page = useAppStore(s => s.page);
+  const loading = useAppStore(s => s.loading);
+  const spinning = useAppStore(s => s.spinning);
+
+  const setHeight = useAppStore(s => s.setHeight);
+  const setContentBodyHeight = useAppStore(s => s.setContentBodyHeight);
+  const setDisplayItemCount = useAppStore(s => s.setDisplayItemCount);
+  const setWidth = useAppStore(s => s.setWidth);
+  const setLoading = useAppStore(s => s.setLoading);
+  const setSpinning = useAppStore(s => s.setSpinning);
+
+  const setHeaderHeight = useAppStore(s => s.setHeaderHeight);
+  const setFooterHeight = useAppStore(s => s.setFooterHeight);
+  const setItemHeight = useAppStore(s => s.setItemHeight);
+  const setItemPadding = useAppStore(s => s.setItemPadding);
+  const setFrozenColumnIndex = useAppStore(s => s.setFrozenColumnIndex);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -61,13 +93,64 @@ function Table() {
   }, []);
 
   React.useEffect(() => {
+    if (props.height !== undefined) {
+      setHeight(props.height);
+      const contentBodyHeight = height - headerHeight - (page ? footerHeight : 0) - containerBorderWidth * 2;
+      const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
+
+      setContentBodyHeight(contentBodyHeight);
+      setDisplayItemCount(displayItemCount);
+    }
+  }, [
+    setHeight,
+    props.height,
+    height,
+    headerHeight,
+    page,
+    footerHeight,
+    containerBorderWidth,
+    itemHeight,
+    itemPadding,
+    setContentBodyHeight,
+    setDisplayItemCount,
+  ]);
+
+  React.useEffect(() => {
+    if (props.width !== undefined) setWidth(props.width);
+  }, [setWidth, props.width]);
+  React.useEffect(() => {
+    if (props.loading !== undefined) setLoading(props.loading);
+  }, [setLoading, props.loading]);
+  React.useEffect(() => {
+    if (props.spinning !== undefined) setSpinning(props.spinning);
+  }, [setSpinning, props.spinning]);
+  React.useEffect(() => {
+    if (props.headerHeight !== undefined) setHeaderHeight(props.headerHeight);
+  }, [setHeaderHeight, props.headerHeight]);
+  React.useEffect(() => {
+    if (props.footerHeight !== undefined) setFooterHeight(props.footerHeight);
+  }, [setFooterHeight, props.footerHeight]);
+  React.useEffect(() => {
+    if (props.itemHeight !== undefined) setItemHeight(props.itemHeight);
+  }, [setItemHeight, props.itemHeight]);
+  React.useEffect(() => {
+    if (props.itemPadding !== undefined) setItemPadding(props.itemPadding);
+  }, [setItemPadding, props.itemPadding]);
+  React.useEffect(() => {
+    if (props.frozenColumnIndex !== undefined) setFrozenColumnIndex(props.frozenColumnIndex);
+  }, [setFrozenColumnIndex, props.frozenColumnIndex]);
+
+  //setInitialized
+  React.useEffect(() => {
+    setInitialized(true);
+
     const scrollContainerRefCurrent = scrollContainerRef?.current;
     const frozenScrollContainerRefCurrent = frozenScrollContainerRef?.current;
     if (scrollContainerRefCurrent) {
       scrollContainerRefCurrent.removeEventListener('scroll', onScroll);
       scrollContainerRefCurrent.addEventListener('scroll', onScroll, { passive: true, capture: true });
-      scrollContainerRefCurrent.scrollLeft = scrollLeft;
-      scrollContainerRefCurrent.scrollTop = scrollTop;
+      scrollContainerRefCurrent.scrollLeft = props.scrollLeft ?? scrollLeft;
+      scrollContainerRefCurrent.scrollTop = props.scrollTop ?? scrollTop;
     }
 
     if (frozenScrollContainerRefCurrent) {
@@ -80,7 +163,7 @@ function Table() {
       frozenScrollContainerRefCurrent?.removeEventListener('wheel', onWheel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onScroll, onWheel]);
+  }, [props.scrollTop, props.scrollLeft]);
 
   return (
     <Container
@@ -131,6 +214,8 @@ function Table() {
             <TableBody />
           </ScrollContent>
         </ScrollContainer>
+
+        <Loading active={!!spinning} size={'small'} />
       </BodyContainer>
 
       {page && (
@@ -138,6 +223,7 @@ function Table() {
           <TableFooter />
         </FooterContainer>
       )}
+      <Loading active={!!loading} />
     </Container>
   );
 }

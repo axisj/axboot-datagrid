@@ -20,6 +20,9 @@ function Nav(props: Props) {
         <li>
           <ActiveLink href={'/paging'}>Paging</ActiveLink>
         </li>
+        <li>
+          <ActiveLink href={'/loading'}>Loading</ActiveLink>
+        </li>
       </ul>
     </Container>
   );

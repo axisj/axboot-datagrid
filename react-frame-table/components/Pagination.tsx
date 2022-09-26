@@ -12,8 +12,6 @@ function Pagination(props: Props) {
 
   const onClickPageNo = React.useCallback(
     (pageNo: number) => {
-      page?.onChange?.(pageNo, page?.pageSize);
-
       if (page) setPage({ ...page, currentPage: pageNo });
     },
     [page, setPage],

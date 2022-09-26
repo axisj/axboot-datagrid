@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { AppStoreProvider, AppStore, getAppStoreActions } from './store';
+import { AppStoreProvider, getAppStoreActions } from './store';
 import Table from './components/Table';
-import { RFTableColumnGroup, RFTableProps, RFTableSortParam } from './types';
+import { AppStore, RFTableColumnGroup, RFTableProps, RFTableSortParam } from './types';
 import create from 'zustand';
-import { getFrozenColumnsWidth, useForceUpdate } from './utils';
+import { getFrozenColumnsWidth } from './utils';
 
 export function RFTable<T = Record<string, any>>({
   width,
@@ -24,11 +24,9 @@ export function RFTable<T = Record<string, any>>({
   rowSelection,
   sort,
   onClick,
+  loading = false,
+  spinning,
 }: RFTableProps<T>) {
-  const containerBorderWidth = 1;
-  const contentBodyHeight = height - headerHeight - (page ? footerHeight : 0) - containerBorderWidth * 2;
-  const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
-
   const selectedIdsMap: Map<number, any> = React.useMemo(
     () => new Map(rowSelection?.selectedIds.map(id => [id, true])),
     [rowSelection?.selectedIds],
@@ -109,6 +107,7 @@ export function RFTable<T = Record<string, any>>({
     <AppStoreProvider
       createStore={() =>
         create<AppStore<T>>((set, get) => ({
+          initialized: false,
           containerBorderWidth: 1,
           displayPaginationLength,
           width,
@@ -127,8 +126,8 @@ export function RFTable<T = Record<string, any>>({
           frozenColumnIndex,
           scrollTop,
           scrollLeft,
-          contentBodyHeight,
-          displayItemCount,
+          contentBodyHeight: 0,
+          displayItemCount: 0,
           className,
           rowSelection,
           selectedIdsMap,
@@ -137,11 +136,27 @@ export function RFTable<T = Record<string, any>>({
           sort,
           sortParams,
           onClick,
+          loading,
+          spinning,
           ...getAppStoreActions(set, get),
         }))
       }
     >
-      <Table />
+      <Table
+        {...{
+          width,
+          height,
+          loading,
+          spinning,
+          scrollLeft,
+          scrollTop,
+          headerHeight,
+          footerHeight,
+          itemHeight,
+          itemPadding,
+          frozenColumnIndex,
+        }}
+      />
     </AppStoreProvider>
   );
 }

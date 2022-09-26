@@ -1,4 +1,6 @@
 import React from 'react';
+import createContext from 'zustand/context';
+import { StoreApi } from 'zustand';
 
 type Direction = 'left' | 'center' | 'right';
 type Size = 'small' | 'medium' | 'large';
@@ -33,6 +35,8 @@ export interface RFTablePage {
   loading?: boolean;
   onChange?: (currentPage: number, pageSize?: number) => void;
   displayPaginationLength?: number;
+  statusRender?: () => void;
+  paginationRender?: () => void;
 }
 
 export interface RFTableRowSelection {
@@ -97,6 +101,7 @@ export interface RFTableProps<T> {
 export type SelectedAll = true | false | 'indeterminate';
 
 export interface AppModel<T> extends RFTableProps<T> {
+  initialized: boolean;
   headerHeight: number;
   footerHeight: number;
   itemHeight: number;
@@ -116,9 +121,11 @@ export interface AppModel<T> extends RFTableProps<T> {
   sortParams: Record<string, RFTableSortParam>;
   displayPaginationLength: number;
   hoverItemIndex?: number;
+  loading: boolean;
 }
 
 export interface AppActions<T> {
+  setInitialized: (initialized: boolean) => void;
   setScrollTop: (scrollTop: number) => void;
   setScrollLeft: (scrollLeft: number) => void;
   setScroll: (scrollTop: number, scrollLeft: number) => void;
@@ -131,4 +138,21 @@ export interface AppActions<T> {
   setPage: (page: RFTablePage) => void;
   setHoverItemIndex: (hoverItemIndex?: number) => void;
   handleClick: (itemIndex: number, columnIndex: number) => void;
+  setWidth: (width: number) => void;
+  setHeight: (height: number) => void;
+  setContentBodyHeight: (contentBodyHeight: number) => void;
+  setDisplayItemCount: (displayItemCount: number) => void;
+  setLoading: (loading: boolean) => void;
+  setSpinning: (spinning: boolean) => void;
+  setHeaderHeight: (headerHeight: number) => void;
+  setFooterHeight: (footerHeight: number) => void;
+  setItemHeight: (itemHeight: number) => void;
+  setItemPadding: (itemPadding: number) => void;
+  setFrozenColumnIndex: (frozenColumnIndex: number) => void;
 }
+
+export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}
+
+export type ZustandSetter<T> = (partial: Partial<T>, replace?: boolean | undefined) => void;
+export type ZustandGetter<T> = () => T;
+export type StoreActions = <T>(set: ZustandSetter<AppModel<T>>, get: ZustandGetter<AppModel<T>>) => AppActions<T>;
