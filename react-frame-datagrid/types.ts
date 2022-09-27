@@ -71,7 +71,7 @@ export interface RFDGProps<T> {
   columnsGroup?: RFDGColumnGroup[];
   onChangeColumns?: (columnIndex: number, width: number, columns: RFDGColumn<T>[]) => void;
   frozenColumnIndex?: number;
-  data: RFDGDataItem<T>[];
+  data?: RFDGDataItem<T>[];
 
   page?: RFDGPage;
   enableLoadMore?: boolean;
@@ -107,6 +107,7 @@ export interface AppModel<T> extends RFDGProps<T> {
   frozenColumnsWidth: number;
   frozenColumnsGroup: RFDGColumnGroup[];
   columnsGroup: RFDGColumnGroup[];
+  data: RFDGDataItem<T>[];
   columnResizing: boolean;
   containerBorderWidth: number;
   contentBodyHeight: number;

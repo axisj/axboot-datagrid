@@ -16,7 +16,7 @@ export function RFDataGrid<T = Record<string, any>>({
   columnsGroup = [],
   onChangeColumns,
   frozenColumnIndex = 0,
-  data,
+  data = [],
   page,
   scrollTop = 0,
   scrollLeft = 0,
