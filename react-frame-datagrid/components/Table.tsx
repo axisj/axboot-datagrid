@@ -1,16 +1,16 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import TableBody from './TableBody';
-import {useAppStore} from '../store';
+import { useAppStore } from '../store';
 import TableHead from './TableHead';
 import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
-import {RFDGSortParam} from '../types';
-import {getFrozenColumnsWidth} from '../utils';
+import { RFDGDataItem, RFDGPage, RFDGSortParam } from '../types';
+import { getFrozenColumnsWidth } from '../utils';
 
-interface Props {
+interface Props<T> {
   width?: number;
   height?: number;
   loading?: boolean;
@@ -26,9 +26,11 @@ interface Props {
 
   selectedIdsMap?: Map<number, any>;
   sortParams?: Record<string, RFDGSortParam>;
+  page?: RFDGPage;
+  data?: RFDGDataItem<T>[];
 }
 
-function Table(props: Props) {
+function Table<T>(props: Props<T>) {
   const setInitialized = useAppStore(s => s.setInitialized);
   const width = useAppStore(s => s.width);
   const height = useAppStore(s => s.height);
@@ -68,6 +70,8 @@ function Table(props: Props) {
   const setSelectedIdsMap = useAppStore(s => s.setSelectedIdsMap);
   const setSortParams = useAppStore(s => s.setSortParams);
   const setFrozenColumnsWidth = useAppStore(s => s.setFrozenColumnsWidth);
+  const setPage = useAppStore(s => s.setPage);
+  const setData = useAppStore(s => s.setData);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -75,7 +79,7 @@ function Table(props: Props) {
 
   const onScroll = React.useCallback(() => {
     if (scrollContainerRef.current) {
-      const {scrollTop, scrollLeft} = scrollContainerRef.current;
+      const { scrollTop, scrollLeft } = scrollContainerRef.current;
       setScroll(scrollTop, scrollLeft);
     }
   }, [setScroll]);
@@ -84,7 +88,7 @@ function Table(props: Props) {
     evt.preventDefault();
 
     if (scrollContainerRef.current) {
-      const delta = {x: 0, y: 0};
+      const delta = { x: 0, y: 0 };
 
       if ((evt as any).detail) {
         delta.y = (evt as any).detail * 10;
@@ -167,6 +171,22 @@ function Table(props: Props) {
   React.useEffect(() => {
     if (props.sortParams !== undefined) setSortParams(props.sortParams);
   }, [setSortParams, props.sortParams]);
+  React.useEffect(() => {
+    if (props.page !== undefined) setPage({ ...props.page });
+  }, [
+    setPage,
+    props.page,
+    props.page?.currentPage,
+    props.page?.loading,
+    props.page?.pageSize,
+    props.page?.totalPages,
+    props.page?.totalElements,
+    props.page?.onChange,
+    props.page?.displayPaginationLength,
+  ]);
+  React.useEffect(() => {
+    if (props.data !== undefined) setData(props.data);
+  }, [setData, props.data]);
 
   //setInitialized
   React.useEffect(() => {
@@ -176,7 +196,7 @@ function Table(props: Props) {
     const frozenScrollContainerRefCurrent = frozenScrollContainerRef?.current;
     if (scrollContainerRefCurrent) {
       scrollContainerRefCurrent.removeEventListener('scroll', onScroll);
-      scrollContainerRefCurrent.addEventListener('scroll', onScroll, {passive: true, capture: true});
+      scrollContainerRefCurrent.addEventListener('scroll', onScroll, { passive: true, capture: true });
       scrollContainerRefCurrent.scrollLeft = props.scrollLeft ?? scrollLeft;
       scrollContainerRefCurrent.scrollTop = props.scrollTop ?? scrollTop;
     }
@@ -197,10 +217,10 @@ function Table(props: Props) {
     <Container
       ref={containerRef}
       role={'react-frame-datagrid'}
-      style={{width, height, borderWidth: `${containerBorderWidth}px`}}
+      style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
       className={className}
     >
-      <HeaderContainer style={{height: headerHeight}} role={'rfdg-header-container'}>
+      <HeaderContainer style={{ height: headerHeight }} role={'rfdg-header-container'}>
         {frozenColumnsWidth > 0 && (
           <FrozenHeader
             style={{
@@ -208,15 +228,15 @@ function Table(props: Props) {
             }}
             role={'rfdg-frozen-header'}
           >
-            <TableHeadFrozen container={containerRef}/>
+            <TableHeadFrozen container={containerRef} />
           </FrozenHeader>
         )}
-        <Header style={{marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth}} role={'rfdg-header'}>
-          <TableHead container={containerRef}/>
+        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rfdg-header'}>
+          <TableHead container={containerRef} />
         </Header>
       </HeaderContainer>
 
-      <BodyContainer style={{height: contentBodyHeight}}>
+      <BodyContainer style={{ height: contentBodyHeight }}>
         {frozenColumnsWidth > 0 && (
           <FrozenScrollContent
             ref={frozenScrollContainerRef}
@@ -239,19 +259,19 @@ function Table(props: Props) {
               height: data.length * trHeight,
             }}
           >
-            <TableBody/>
+            <TableBody />
           </ScrollContent>
         </ScrollContainer>
 
-        <Loading active={!!spinning} size={'small'}/>
+        <Loading active={!!spinning} size={'small'} />
       </BodyContainer>
 
       {page && (
-        <FooterContainer style={{height: footerHeight}} role={'rfdg-footer-container'}>
-          <TableFooter/>
+        <FooterContainer style={{ height: footerHeight }} role={'rfdg-footer-container'}>
+          <TableFooter />
         </FooterContainer>
       )}
-      <Loading active={!!loading}/>
+      <Loading active={!!loading} />
     </Container>
   );
 }

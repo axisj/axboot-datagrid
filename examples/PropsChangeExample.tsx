@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFDataGrid, RFDGColumn, RFDGSortParam } from '../react-frame-datagrid';
+import { RFDataGrid, RFDGColumn, RFDGDataItem, RFDGSortParam } from '../react-frame-datagrid';
 import { Button, Checkbox, Col, Divider, Form, Input, InputNumber, Row, Select, Switch } from 'antd';
+import { delay } from '../react-frame-datagrid/utils';
 
 interface Props {}
 
@@ -12,16 +13,56 @@ interface IListItem {
   createAt: string;
 }
 
-const list = Array.from(Array(1000)).map((v, i) => ({
+const listFirst: RFDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) => ({
   values: {
-    id: `ID_${i}`,
-    title: `title_${i}`,
-    writer: `writer_${i}`,
+    id: `FIRST_${i}`,
+    title: `F title_${i}`,
+    writer: `F writer_${i}`,
     createAt: `2022-09-08`,
   },
 }));
 
+const listSecond: RFDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i) => ({
+  values: {
+    id: `SECOND ID_${i}`,
+    title: `S title_${i}`,
+    writer: `S writer_${i}`,
+    createAt: `2022-09-08`,
+  },
+}));
+
+const columnsFirst: RFDGColumn<IListItem>[] = [
+  {
+    key: 'id',
+    label: '아이디 IS LONG !',
+    width: 100,
+  },
+  {
+    key: 'title',
+    label: '제목',
+    width: 300,
+    itemRender: item => {
+      return `${item.writer}//${item.title}`;
+    },
+  },
+  {
+    key: 'writer',
+    label: '작성자',
+    width: 100,
+    itemRender: item => {
+      return `${item.writer}//A`;
+    },
+  },
+  {
+    key: 'createAt',
+    label: '작성일',
+    width: 100,
+  },
+];
+
 function PropsChangeExample(props: Props) {
+  const [list, setList] = React.useState(listFirst);
+  const [listName, setListName] = React.useState('listFirst');
   const [loading, setLoading] = React.useState(false);
   const [spinning, setSpinning] = React.useState(false);
   const [width, setWidth] = React.useState(600);
@@ -34,35 +75,7 @@ function PropsChangeExample(props: Props) {
   const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
   const [sortParams, setSortParams] = React.useState<RFDGSortParam[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-
-  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>([
-    {
-      key: 'id',
-      label: '아이디 IS LONG !',
-      width: 100,
-    },
-    {
-      key: 'title',
-      label: '제목',
-      width: 300,
-      itemRender: item => {
-        return `${item.writer}//${item.title}`;
-      },
-    },
-    {
-      key: 'writer',
-      label: '작성자',
-      width: 100,
-      itemRender: item => {
-        return `${item.writer}//A`;
-      },
-    },
-    {
-      key: 'createAt',
-      label: '작성일',
-      width: 100,
-    },
-  ]);
+  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>(columnsFirst);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -95,10 +108,10 @@ function PropsChangeExample(props: Props) {
           },
         }}
         page={{
-          currentPage: currentPage,
+          currentPage,
           pageSize: 50,
           totalPages: 10,
-          totalElements: 498,
+          totalElements: list.length,
           loading: false,
           onChange: (pageNo, pageSize) => {
             console.log(pageNo, pageSize);
@@ -131,6 +144,7 @@ function PropsChangeExample(props: Props) {
           selectedIds,
           sortParams,
           currentPage,
+          listName,
         }}
       >
         <Row gutter={20}>
@@ -215,6 +229,39 @@ function PropsChangeExample(props: Props) {
             </Form.Item>
           </Col>
           <Col xs={12} sm={6}>
+            <Form.Item name={'currentPage'} label={'CurrentPage'}>
+              <Select
+                onChange={value => setCurrentPage(value)}
+                options={Array.from({ length: 10 }).map((_, i) => ({ label: i + 1, value: i + 1 }))}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Form.Item name={'listName'} label={'Data Change'}>
+              <Select
+                onChange={async value => {
+                  setListName(value);
+                  setSpinning(true);
+                  await delay(300);
+
+                  if (value === 'listFirst') {
+                    setList(listFirst);
+                  } else {
+                    setList(listSecond);
+                  }
+
+                  setSpinning(false);
+                }}
+                options={[
+                  { value: 'listFirst', label: 'listFirst' },
+                  { value: 'listSecond', label: 'listSecond' },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={20}>
+          <Col xs={12} sm={12}>
             <Form.Item name={'selectedIds'} label={'Selected ID'}>
               <Checkbox.Group
                 options={Array.from({ length: 10 }).map((_, i) => ({ label: i, value: i }))}
@@ -224,7 +271,7 @@ function PropsChangeExample(props: Props) {
               />
             </Form.Item>
           </Col>
-          <Col xs={12} sm={6}>
+          <Col xs={12} sm={12}>
             <Form.Item name={'sortParams'} label={'SortParams'}>
               <Checkbox.Group
                 options={[

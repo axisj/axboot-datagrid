@@ -156,6 +156,8 @@ export function RFDataGrid<T = Record<string, any>>({
           frozenColumnIndex,
           selectedIdsMap,
           sortParams,
+          page,
+          data,
         }}
       />
     </AppStoreProvider>
