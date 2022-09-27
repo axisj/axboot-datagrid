@@ -38,7 +38,7 @@ const Container = styled.div<Props>`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--rfdg-lodaing-bg);
+  background-color: var(--rfdg-loading-bg);
 
   display: flex;
   flex-direction: column;
@@ -92,7 +92,7 @@ const Container = styled.div<Props>`
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border: 0.3em solid var(--rfdg-lodaing-color);
+      border: 0.3em solid var(--rfdg-loading-color);
     }
 
     &:after {
@@ -104,7 +104,7 @@ const Container = styled.div<Props>`
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border-color: var(--rfdg-lodaing-second-color) transparent transparent;
+      border-color: var(--rfdg-loading-second-color) transparent transparent;
       border-style: solid;
       border-width: 0.3em;
       -webkit-box-shadow: 0 0 0 1px transparent;

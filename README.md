@@ -47,9 +47,9 @@ Add the code below to your project.
     --rfdg-scroll-thumb-bg: #c0c1c5;
     --rfdg-scroll-thumb-hover-bg: #a1a3a6;
 
-    --rfdg-lodaing-bg: rgba(163, 163, 163, 0.1);
-    --rfdg-lodaing-color: rgba(0, 0, 0, 0.1);
-    --rfdg-lodaing-second-color: #767676;
+    --rfdg-loading-bg: rgba(163, 163, 163, 0.1);
+    --rfdg-loading-color: rgba(0, 0, 0, 0.1);
+    --rfdg-loading-second-color: #767676;
 }
 ```
 
