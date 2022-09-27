@@ -28,7 +28,7 @@ function TableBodyFrozen(props: Props) {
   const handleClick = useAppStore(s => s.handleClick);
 
   const startIdx = Math.floor(scrollTop / trHeight);
-  const endNumber = startIdx + displayItemCount > data.length ? data.length : startIdx + displayItemCount;
+  const endNumber = Math.min(startIdx + displayItemCount, data.length);
 
   const handleChangeChecked = React.useCallback(
     (itemIndex: number, checked: boolean) => {
