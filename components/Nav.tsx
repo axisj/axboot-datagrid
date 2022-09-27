@@ -22,6 +22,7 @@ function Nav(props: Props) {
         />
       </Header>
       <Tabs
+        animated={false}
         defaultActiveKey={router.asPath}
         items={[
           { label: `Index`, key: '/' },
@@ -31,7 +32,7 @@ function Nav(props: Props) {
           { label: `Loading`, key: '/loading' },
           { label: `Props Change`, key: '/propsChange' },
         ]}
-        onChange={async activeKey => {
+        onTabClick={async activeKey => {
           await router.push(activeKey);
         }}
       />

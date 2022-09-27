@@ -27,7 +27,6 @@ function SortExample(props: Props) {
       key: 'id',
       label: '아이디 IS LONG !',
       width: 100,
-      sortDisable: true,
     },
     {
       key: 'title',
@@ -49,13 +48,22 @@ function SortExample(props: Props) {
       key: 'createAt',
       label: '작성일',
       width: 100,
+      sortDisable: true,
     },
   ]);
+  const [width, setWidth] = React.useState(600);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (containerRef.current) {
+      setWidth(containerRef.current.clientWidth);
+    }
+  }, []);
 
   return (
-    <Container>
+    <Container ref={containerRef}>
       <RFDataGrid<IListItem>
-        width={1000}
+        width={width}
         height={400}
         headerHeight={35}
         data={list}

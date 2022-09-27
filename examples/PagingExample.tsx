@@ -52,11 +52,19 @@ function PagingExample(props: Props) {
       width: 100,
     },
   ]);
+  const [width, setWidth] = React.useState(600);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (containerRef.current) {
+      setWidth(containerRef.current.clientWidth);
+    }
+  }, []);
 
   return (
-    <Container>
+    <Container ref={containerRef}>
       <RFDataGrid<IListItem>
-        width={600}
+        width={width}
         height={300}
         headerHeight={35}
         data={list}

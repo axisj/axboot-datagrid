@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import {RFDataGrid, RFDGColumn} from '../react-frame-datagrid';
+import { RFDataGrid, RFDGColumn } from '../react-frame-datagrid';
 
-interface Props {
-}
+interface Props {}
 
 interface IListItem {
   id: string;
@@ -71,10 +70,19 @@ function BasicExample(props: Props) {
     },
   ]);
 
+  const [width, setWidth] = React.useState(600);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (containerRef.current) {
+      setWidth(containerRef.current.clientWidth);
+    }
+  }, []);
+
   return (
-    <Container>
+    <Container ref={containerRef}>
       <RFDataGrid<IListItem>
-        width={600}
+        width={width}
         height={400}
         data={list}
         columns={columns}

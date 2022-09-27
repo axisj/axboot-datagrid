@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { RFDataGrid, RFDGColumn } from '../react-frame-datagrid';
-import { Button, Divider } from 'antd';
+import { Button, Divider, Space } from 'antd';
 
 interface Props {}
 
@@ -56,8 +56,16 @@ function LoadingExample(props: Props) {
     },
   ]);
 
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (containerRef.current) {
+      setWidth(containerRef.current.clientWidth);
+    }
+  }, []);
+
   return (
-    <Container>
+    <Container ref={containerRef}>
       <RFDataGrid<IListItem>
         width={width}
         height={height}
@@ -80,13 +88,12 @@ function LoadingExample(props: Props) {
 
       <br />
 
-      <Button onClick={() => setLoading(true)}>Loading : true</Button>
-      <Divider type='vertical' />
-      <Button onClick={() => setLoading(false)}>Loading : false</Button>
-      <Divider type='vertical' />
-      <Button onClick={() => setSpinning(true)}>Spinning : true</Button>
-      <Divider type='vertical' />
-      <Button onClick={() => setSpinning(false)}>Spinning : false</Button>
+      <Space wrap>
+        <Button onClick={() => setLoading(true)}>Loading : true</Button>
+        <Button onClick={() => setLoading(false)}>Loading : false</Button>
+        <Button onClick={() => setSpinning(true)}>Spinning : true</Button>
+        <Button onClick={() => setSpinning(false)}>Spinning : false</Button>
+      </Space>
     </Container>
   );
 }

@@ -4,16 +4,11 @@ import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
 import SortExample from '../examples/SortExample';
 import LoadingExample from '../examples/LoadingExample';
+import BodyRoot from '../components/BodyRoot';
 
 const Loading: NextPage = () => {
   return (
     <PageContainer>
-      <Head>
-        <title>react-frame-datagrid</title>
-        <meta name='description' content='Index' />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-
       <Container>
         <div>
           <h2>Loading</h2>
@@ -24,8 +19,6 @@ const Loading: NextPage = () => {
   );
 };
 
-const PageContainer = styled.div`
-  padding: 20px;
-`;
+const PageContainer = styled(BodyRoot)``;
 
 export default Loading;

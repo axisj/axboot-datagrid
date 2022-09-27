@@ -21,10 +21,19 @@ const list = Array.from(Array(100)).map((v, i) => ({
 }));
 
 function ColumnsGroupExample(props: Props) {
+  const [width, setWidth] = React.useState(600);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (containerRef.current) {
+      setWidth(containerRef.current.clientWidth);
+    }
+  }, []);
+
   return (
-    <Container>
+    <Container ref={containerRef}>
       <RFDataGrid<IListItem>
-        width={1000}
+        width={width}
         height={700}
         data={list}
         frozenColumnIndex={2}
