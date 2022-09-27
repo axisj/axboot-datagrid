@@ -36,6 +36,7 @@ Add the code below to your project.
     --rfdg-header-group-bg: #e9e9e9;
     --rfdg-footer-bg: #F3F4F5;
     --rfdg-border-color-base: #D2D5D9;
+    --rfdg-border-radius: 4px;
     --rfdg-row-selector-color: #ffffff;
     --rfdg-body-bg: #ffffff;
     --rfdg-body-hover-bg: #F3F4F5;

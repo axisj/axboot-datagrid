@@ -9,6 +9,7 @@ import TableFooter from './TableFooter';
 import Loading from './Loading';
 import { RFDGDataItem, RFDGPage, RFDGSortParam } from '../types';
 import { getFrozenColumnsWidth } from '../utils';
+import { css } from '@emotion/react';
 
 interface Props<T> {
   width?: number;
@@ -236,7 +237,7 @@ function Table<T>(props: Props<T>) {
         </Header>
       </HeaderContainer>
 
-      <BodyContainer style={{ height: contentBodyHeight }}>
+      <BodyContainer style={{ height: contentBodyHeight }} isLast={!page}>
         {frozenColumnsWidth > 0 && (
           <FrozenScrollContent
             ref={frozenScrollContainerRef}
@@ -279,6 +280,7 @@ function Table<T>(props: Props<T>) {
 const Container = styled.div`
   border-color: var(--rfdg-border-color-base);
   border-style: solid;
+  border-radius: var(--rfdg-border-radius);
   box-sizing: border-box;
   position: relative;
 `;
@@ -288,6 +290,8 @@ const HeaderContainer = styled.div`
   position: relative;
   min-width: 100%;
   overflow: hidden;
+  border-top-left-radius: var(--rfdg-border-radius);
+  border-top-right-radius: var(--rfdg-border-radius);
 `;
 
 const Header = styled.div`
@@ -302,7 +306,7 @@ const FrozenHeader = styled.div`
   z-index: 3;
 `;
 
-const BodyContainer = styled.div`
+const BodyContainer = styled.div<{ isLast: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -310,6 +314,15 @@ const BodyContainer = styled.div`
   align-content: stretch;
   background-color: var(--rfdg-scroll-track-bg);
   overflow: hidden;
+
+  ${({ isLast }) => {
+    if (isLast) {
+      return css`
+        border-bottom-left-radius: var(--rfdg-border-radius);
+        border-bottom-right-radius: var(--rfdg-border-radius);
+      `;
+    }
+  }}
 `;
 
 const ScrollContainer = styled.div`
@@ -346,7 +359,7 @@ const ScrollContainer = styled.div`
   }
 
   &::-webkit-scrollbar-corner {
-    background-color: var(--rfdg-scroll-track-corner-bg);
+    //background-color: var(--rfdg-scroll-track-corner-bg);
   }
 `;
 
@@ -371,6 +384,9 @@ const FooterContainer = styled.div`
   overflow: hidden;
   background: var(--rfdg-footer-bg);
   border-top: 1px solid var(--rfdg-border-color-base);
+
+  border-bottom-left-radius: var(--rfdg-border-radius);
+  border-bottom-right-radius: var(--rfdg-border-radius);
 `;
 
 export default Table;
