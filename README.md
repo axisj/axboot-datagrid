@@ -32,6 +32,8 @@ Add the code below to your project.
 [role="react-frame-datagrid"] {
     --rfdg-primary-color: #3B82F6;
     --rfdg-header-bg: #F3F4F5;
+    --rfdg-header-color: #222;
+    --rfdg-header-font-weight: 500;
     --rfdg-header-hover-bg: #e2e5e5;
     --rfdg-header-group-bg: #e9e9e9;
     --rfdg-footer-bg: #F3F4F5;
@@ -40,10 +42,10 @@ Add the code below to your project.
     --rfdg-row-selector-color: #ffffff;
     --rfdg-body-bg: #ffffff;
     --rfdg-body-hover-bg: #F3F4F5;
+    --rfdg-body-color: #444;
 
     --rfdg-scroll-size: 11px;
     --rfdg-scroll-track-bg: #F9F9F9;
-    --rfdg-scroll-track-corner-bg: #D2D5D9;
     --rfdg-scroll-thumb-radius: 6px;
     --rfdg-scroll-thumb-bg: #c0c1c5;
     --rfdg-scroll-thumb-hover-bg: #a1a3a6;
@@ -52,6 +54,7 @@ Add the code below to your project.
     --rfdg-loading-color: rgba(0, 0, 0, 0.1);
     --rfdg-loading-second-color: #767676;
 }
+
 ```
 
 ## USE
