@@ -24,7 +24,7 @@ function TableHeadFrozen({ container }: Props) {
   const toggleColumnSort = useAppStore(s => s.toggleColumnSort);
 
   return (
-    <HeadTableFrozen headerHeight={headerHeight}>
+    <HeadTable headerHeight={headerHeight}>
       <TableColGroupFrozen />
       <tbody role={'rfdg-head-frozen'}>
         {frozenColumnsGroup.length > 0 && (
@@ -86,10 +86,8 @@ function TableHeadFrozen({ container }: Props) {
           ))}
         </tr>
       </tbody>
-    </HeadTableFrozen>
+    </HeadTable>
   );
 }
-
-const HeadTableFrozen = styled(HeadTable)``;
 
 export default TableHeadFrozen;

@@ -64,6 +64,7 @@ export const BodyTable = styled.table`
   border-collapse: collapse;
   border-spacing: 0;
   background-color: var(--rfdg-body-bg);
+  color: var(--rfdg-body-color);
 
   > tbody > tr {
     border-width: 1px;
