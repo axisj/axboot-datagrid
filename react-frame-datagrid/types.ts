@@ -127,6 +127,8 @@ export interface AppActions<T> {
   setScrollTop: (scrollTop: number) => void;
   setScrollLeft: (scrollLeft: number) => void;
   setScroll: (scrollTop: number, scrollLeft: number) => void;
+  setColumns: (columns: RFDGColumn<T>[]) => void;
+  setColumnsGroup: (columnsGroup: RFDGColumnGroup[]) => void;
   setData: (data: RFDGDataItem<T>[]) => void;
   setSelectedIds: (ids: number[]) => void;
   setSelectedAll: (selectedAll: SelectedAll) => void;

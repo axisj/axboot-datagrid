@@ -75,11 +75,12 @@ function PropsChangeExample(props: Props) {
   const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
   const [sortParams, setSortParams] = React.useState<RFDGSortParam[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>(columnsFirst);
+  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>([]);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    setColumns(columnsFirst);
     if (containerRef.current) {
       setWidth(containerRef.current.clientWidth);
     }

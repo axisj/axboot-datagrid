@@ -143,6 +143,8 @@ export function RFDataGrid<T = Record<string, any>>({
     >
       <Table
         {...{
+          columns,
+          columnsGroup,
           width,
           height,
           loading,

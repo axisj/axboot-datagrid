@@ -7,7 +7,7 @@ import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
-import { RFDGDataItem, RFDGPage, RFDGSortParam } from '../types';
+import { RFDGColumn, RFDGColumnGroup, RFDGDataItem, RFDGPage, RFDGSortParam } from '../types';
 import { getFrozenColumnsWidth } from '../utils';
 import { css } from '@emotion/react';
 
@@ -27,6 +27,8 @@ interface Props<T> {
 
   selectedIdsMap?: Map<number, any>;
   sortParams?: Record<string, RFDGSortParam>;
+  columns: RFDGColumn<T>[];
+  columnsGroup: RFDGColumnGroup[];
   page?: RFDGPage;
   data?: RFDGDataItem<T>[];
 }
@@ -73,6 +75,8 @@ function Table<T>(props: Props<T>) {
   const setFrozenColumnsWidth = useAppStore(s => s.setFrozenColumnsWidth);
   const setPage = useAppStore(s => s.setPage);
   const setData = useAppStore(s => s.setData);
+  const setColumns = useAppStore(s => s.setColumns);
+  const setColumnsGroup = useAppStore(s => s.setColumnsGroup);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -188,6 +192,12 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.data !== undefined) setData(props.data);
   }, [setData, props.data]);
+  React.useEffect(() => {
+    if (props.columns !== undefined) setColumns(props.columns);
+  }, [setColumns, props.columns]);
+  React.useEffect(() => {
+    if (props.columnsGroup !== undefined) setColumnsGroup(props.columnsGroup);
+  }, [setColumnsGroup, props.columnsGroup]);
 
   //setInitialized
   React.useEffect(() => {
