@@ -106,7 +106,6 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   },
   setPage: page => {
     set({ page });
-    page?.onChange?.(page.currentPage, page?.pageSize);
   },
   setHoverItemIndex: hoverItemIndex => set({ hoverItemIndex }),
   handleClick: (itemIndex, columnIndex) => {
