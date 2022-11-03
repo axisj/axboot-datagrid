@@ -1,10 +1,10 @@
-import { RFDGColumn, RFDGRowSelection } from '../types';
+import { AXFDGColumn, AXFDGRowSelection } from '../types';
 
 interface Props<T> {
-  rowSelection?: RFDGRowSelection;
+  rowSelection?: AXFDGRowSelection;
   itemHeight: number;
   frozenColumnIndex: number;
-  columns: RFDGColumn<T>[];
+  columns: AXFDGColumn<T>[];
 }
 
 export function getFrozenColumnsWidth<T>({ rowSelection, itemHeight, frozenColumnIndex, columns }: Props<T>) {

@@ -13,12 +13,12 @@ function Nav(props: Props) {
   return (
     <Container>
       <Header>
-        <h1>react-frame-datagrid</h1>
+        <h1>@axframe/datagrid</h1>
         <Version>{pkg.version}</Version>
 
         <GithubFilled
           style={{ fontSize: 20 }}
-          onClick={() => window.open('https://github.com/thomasjang/react-frame-datagrid')}
+          onClick={() => window.open('https://github.com/axisj/axframe-datagrid')}
         />
       </Header>
       <Tabs

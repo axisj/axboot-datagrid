@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFDataGrid, RFDGColumn, RFDGDataItem, RFDGSortParam } from '../react-frame-datagrid';
+import { AXFDataGrid, AXFDGColumn, AXFDGDataItem, AXFDGSortParam } from '../@axframe-datagrid';
 import { Button, Checkbox, Col, Divider, Form, Input, InputNumber, Row, Select, Switch } from 'antd';
-import { delay } from '../react-frame-datagrid/utils';
+import { delay } from '../@axframe-datagrid/utils';
 
 interface Props {}
 
@@ -13,7 +13,7 @@ interface IListItem {
   createAt: string;
 }
 
-const listFirst: RFDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) => ({
+const listFirst: AXFDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) => ({
   values: {
     id: `FIRST_${i}`,
     title: `F title_${i}`,
@@ -22,7 +22,7 @@ const listFirst: RFDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) =
   },
 }));
 
-const listSecond: RFDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i) => ({
+const listSecond: AXFDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i) => ({
   values: {
     id: `SECOND ID_${i}`,
     title: `S title_${i}`,
@@ -31,7 +31,7 @@ const listSecond: RFDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i) 
   },
 }));
 
-const columnsFirst: RFDGColumn<IListItem>[] = [
+const columnsFirst: AXFDGColumn<IListItem>[] = [
   {
     key: 'id',
     label: '아이디 IS LONG !',
@@ -73,9 +73,9 @@ function PropsChangeExample(props: Props) {
   const [itemPadding, setItemPadding] = React.useState(7);
   const [frozenColumnIndex, setFrozenColumnIndex] = React.useState(0);
   const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
-  const [sortParams, setSortParams] = React.useState<RFDGSortParam[]>([]);
+  const [sortParams, setSortParams] = React.useState<AXFDGSortParam[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>([]);
+  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([]);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -88,7 +88,7 @@ function PropsChangeExample(props: Props) {
 
   return (
     <Container ref={containerRef}>
-      <RFDataGrid<IListItem>
+      <AXFDataGrid<IListItem>
         width={width}
         height={height}
         headerHeight={headerHeight}

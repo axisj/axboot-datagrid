@@ -30,7 +30,7 @@
     "node_modules/@types"
   ],
   "include": [
-    "react-frame-datagrid"
+    "@axframe-datagrid"
   ],
   "exclude": [
     "node_modules"

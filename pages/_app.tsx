@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import '../react-frame-datagrid/style.css';
+import '../@axframe-datagrid/style.css';
 import 'antd/dist/antd.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';

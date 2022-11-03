@@ -71,8 +71,8 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
   border-collapse: separate;
   border-spacing: 0;
   height: ${p => p.headerHeight}px;
-  color: var(--rfdg-header-color);
-  font-weight: var(--rfdg-header-font-weight);
+  color: var(--axfdg-header-color);
+  font-weight: var(--axfdg-header-font-weight);
 
   tbody {
     height: ${p => p.headerHeight}px;
@@ -83,14 +83,14 @@ export const HeadTable = styled.table<{ headerHeight: number }>`
 export const HeadGroupTd = styled.td`
   padding: 0 7px;
   border-bottom-style: solid;
-  border-bottom-color: var(--rfdg-border-color-base);
+  border-bottom-color: var(--axfdg-border-color-base);
   border-bottom-width: 1px;
-  background-color: var(--rfdg-header-group-bg);
+  background-color: var(--axfdg-header-group-bg);
 
   &[rowSpan='2'] {
     background-color: transparent;
     border-right-style: solid;
-    border-right-color: var(--rfdg-border-color-base);
+    border-right-color: var(--axfdg-border-color-base);
     border-right-width: 1px;
   }
 `;
@@ -99,7 +99,7 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
   position: relative;
   padding: 0 7px;
   border-bottom-style: solid;
-  border-bottom-color: var(--rfdg-border-color-base);
+  border-bottom-color: var(--axfdg-border-color-base);
   border-bottom-width: 1px;
 
   ${({ hasOnClick, columnResizing }) => {
@@ -108,7 +108,7 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
         cursor: pointer;
 
         &:hover {
-          background: var(--rfdg-header-hover-bg);
+          background: var(--axfdg-header-hover-bg);
         }
       `;
     }

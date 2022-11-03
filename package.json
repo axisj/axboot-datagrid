@@ -1,5 +1,5 @@
 {
-  "name": "react-frame-datagrid",
+  "name": "@axframe/datagrid",
   "version": "0.1.6",
   "jsnext:main": "dist/es6/index.js",
   "module": "dist/es6/index.js",
@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:common": "ncp react-frame-datagrid/style.css ./dist/style.css",
+    "build:common": "ncp @axframe-datagrid/style.css ./dist/style.css",
     "build:es5": "rimraf ./dist/commonjs && tsc --p tsconfigs/tsconfig.es5.json",
     "build:es6": "rimraf ./dist/es6 && tsc --p tsconfigs/tsconfig.es6.json",
     "build:library": "npm run build:common && npm run build:es5 && npm run build:es6",

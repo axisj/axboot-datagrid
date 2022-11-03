@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { AppStoreProvider, getAppStoreActions } from './store';
 import Table from './components/Table';
-import { AppStore, RFDGColumnGroup, RFDGProps, RFDGSortParam } from './types';
+import { AppStore, AXFDGColumnGroup, AXFDGProps, AXFDGSortParam } from './types';
 import create from 'zustand';
 import { getFrozenColumnsWidth } from './utils';
 
-export function RFDataGrid<T = Record<string, any>>({
+export function AXFDataGrid<T = Record<string, any>>({
   width,
   height,
   headerHeight = 30,
@@ -26,15 +26,15 @@ export function RFDataGrid<T = Record<string, any>>({
   onClick,
   loading = false,
   spinning,
-}: RFDGProps<T>) {
+}: AXFDGProps<T>) {
   const selectedIdsMap: Map<number, any> = React.useMemo(
     () => new Map(rowSelection?.selectedIds.map(id => [id, true])),
     [rowSelection?.selectedIds],
   );
 
   const columnGroups = React.useMemo(() => {
-    const leftGroups: RFDGColumnGroup[] = [];
-    const rightGroups: RFDGColumnGroup[] = [];
+    const leftGroups: AXFDGColumnGroup[] = [];
+    const rightGroups: AXFDGColumnGroup[] = [];
     const cgs = columnsGroup
       ?.map(({ label, align, colspan }, groupIndex) => {
         return Array.from({ length: colspan }).map((_, i) => ({
@@ -92,7 +92,7 @@ export function RFDataGrid<T = Record<string, any>>({
         cur.index = currentIndex;
         if (cur.key) acc[cur.key] = cur;
         return acc;
-      }, {} as Record<string, RFDGSortParam>);
+      }, {} as Record<string, AXFDGSortParam>);
     }
 
     return {};

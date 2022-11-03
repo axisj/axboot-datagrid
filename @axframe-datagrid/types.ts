@@ -2,7 +2,7 @@ import React from 'react';
 
 type Direction = 'left' | 'center' | 'right';
 
-export interface RFDGColumn<T> {
+export interface AXFDGColumn<T> {
   key: string | string[];
   label: string;
   width: number;
@@ -12,19 +12,19 @@ export interface RFDGColumn<T> {
   itemRender?: (item: T) => React.ReactNode;
 }
 
-export interface RFDGColumnGroup {
+export interface AXFDGColumnGroup {
   label: string;
   colspan: number;
   align?: Direction;
 }
 
-export type RFDGDataItem<T> = {
+export type AXFDGDataItem<T> = {
   values: T;
   status?: string;
   parentItemIndex?: number;
 };
 
-export interface RFDGPage {
+export interface AXFDGPage {
   currentPage: number;
   pageSize?: number;
   totalPages: number;
@@ -36,44 +36,44 @@ export interface RFDGPage {
   paginationRender?: () => void;
 }
 
-export interface RFDGRowSelection {
+export interface AXFDGRowSelection {
   selectedIds: number[];
   onChange: (selectedKeys: number[], selectedAll?: SelectedAll) => void;
 }
 
-export interface RFDGSortParam {
+export interface AXFDGSortParam {
   key?: string;
   index?: number;
   orderBy: 'asc' | 'desc';
 }
 
-export interface RFDGSortInfo {
+export interface AXFDGSortInfo {
   multiSort?: boolean;
-  sortParams: RFDGSortParam[];
-  onChange: (sortParams: RFDGSortParam[]) => void;
+  sortParams: AXFDGSortParam[];
+  onChange: (sortParams: AXFDGSortParam[]) => void;
 }
 
-export interface RFDGClickParams<T> {
+export interface AXFDGClickParams<T> {
   itemIndex: number;
   columnIndex: number;
   item: T;
-  column: RFDGColumn<T>;
+  column: AXFDGColumn<T>;
 }
 
-export interface RFDGProps<T> {
+export interface AXFDGProps<T> {
   width: number;
   height: number;
   headerHeight?: number;
   footerHeight?: number;
   itemHeight?: number;
   itemPadding?: number;
-  columns: RFDGColumn<T>[];
-  columnsGroup?: RFDGColumnGroup[];
-  onChangeColumns?: (columnIndex: number, width: number, columns: RFDGColumn<T>[]) => void;
+  columns: AXFDGColumn<T>[];
+  columnsGroup?: AXFDGColumnGroup[];
+  onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
   frozenColumnIndex?: number;
-  data?: RFDGDataItem<T>[];
+  data?: AXFDGDataItem<T>[];
 
-  page?: RFDGPage;
+  page?: AXFDGPage;
   enableLoadMore?: boolean;
   onLoadMore?: (params: { scrollLeft: number; scrollTop: number }) => void;
   endLoadMoreRender?: () => React.ReactNode;
@@ -86,9 +86,9 @@ export interface RFDGProps<T> {
   scrollTop?: number;
   scrollLeft?: number;
 
-  rowSelection?: RFDGRowSelection;
-  sort?: RFDGSortInfo;
-  onClick?: (params: RFDGClickParams<T>) => void;
+  rowSelection?: AXFDGRowSelection;
+  sort?: AXFDGSortInfo;
+  onClick?: (params: AXFDGClickParams<T>) => void;
 
   msg?: {
     emptyList?: string;
@@ -97,7 +97,7 @@ export interface RFDGProps<T> {
 
 export type SelectedAll = true | false | 'indeterminate';
 
-export interface AppModel<T> extends RFDGProps<T> {
+export interface AppModel<T> extends AXFDGProps<T> {
   initialized: boolean;
   headerHeight: number;
   footerHeight: number;
@@ -105,9 +105,9 @@ export interface AppModel<T> extends RFDGProps<T> {
   itemPadding: number;
   frozenColumnIndex: number;
   frozenColumnsWidth: number;
-  frozenColumnsGroup: RFDGColumnGroup[];
-  columnsGroup: RFDGColumnGroup[];
-  data: RFDGDataItem<T>[];
+  frozenColumnsGroup: AXFDGColumnGroup[];
+  columnsGroup: AXFDGColumnGroup[];
+  data: AXFDGDataItem<T>[];
   columnResizing: boolean;
   containerBorderWidth: number;
   contentBodyHeight: number;
@@ -116,7 +116,7 @@ export interface AppModel<T> extends RFDGProps<T> {
   scrollLeft: number;
   selectedIdsMap: Map<number, any>;
   selectedAll: SelectedAll;
-  sortParams: Record<string, RFDGSortParam>;
+  sortParams: Record<string, AXFDGSortParam>;
   displayPaginationLength: number;
   hoverItemIndex?: number;
   loading: boolean;
@@ -127,15 +127,15 @@ export interface AppActions<T> {
   setScrollTop: (scrollTop: number) => void;
   setScrollLeft: (scrollLeft: number) => void;
   setScroll: (scrollTop: number, scrollLeft: number) => void;
-  setColumns: (columns: RFDGColumn<T>[]) => void;
-  setColumnsGroup: (columnsGroup: RFDGColumnGroup[]) => void;
-  setData: (data: RFDGDataItem<T>[]) => void;
+  setColumns: (columns: AXFDGColumn<T>[]) => void;
+  setColumnsGroup: (columnsGroup: AXFDGColumnGroup[]) => void;
+  setData: (data: AXFDGDataItem<T>[]) => void;
   setSelectedIds: (ids: number[]) => void;
   setSelectedAll: (selectedAll: SelectedAll) => void;
   setColumnWidth: (columnIndex: number, width?: number) => void;
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
-  setPage: (page: RFDGPage) => void;
+  setPage: (page: AXFDGPage) => void;
   setHoverItemIndex: (hoverItemIndex?: number) => void;
   handleClick: (itemIndex: number, columnIndex: number) => void;
   setWidth: (width: number) => void;
@@ -150,7 +150,7 @@ export interface AppActions<T> {
   setItemPadding: (itemPadding: number) => void;
   setFrozenColumnIndex: (frozenColumnIndex: number) => void;
   setSelectedIdsMap: (selectedIdsMap: Map<number, any>) => void;
-  setSortParams: (sortParams: Record<string, RFDGSortParam>) => void;
+  setSortParams: (sortParams: Record<string, AXFDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
 }
 

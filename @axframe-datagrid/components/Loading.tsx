@@ -38,7 +38,7 @@ const Container = styled.div<Props>`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--rfdg-loading-bg);
+  background-color: var(--axfdg-loading-bg);
 
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@ const Container = styled.div<Props>`
       if (size === 'normal') {
         return css`
           padding: 10px 14px;
-          background-color: var(--rfdg-body-bg);
+          background-color: var(--axfdg-body-bg);
         `;
       }
     }}
@@ -92,7 +92,7 @@ const Container = styled.div<Props>`
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border: 0.3em solid var(--rfdg-loading-color);
+      border: 0.3em solid var(--axfdg-loading-color);
     }
 
     &:after {
@@ -104,7 +104,7 @@ const Container = styled.div<Props>`
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      border-color: var(--rfdg-loading-second-color) transparent transparent;
+      border-color: var(--axfdg-loading-second-color) transparent transparent;
       border-style: solid;
       border-width: 0.3em;
       -webkit-box-shadow: 0 0 0 1px transparent;

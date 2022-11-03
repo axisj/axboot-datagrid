@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFDataGrid, RFDGColumn } from '../react-frame-datagrid';
+import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
 import { Button, Divider, Space } from 'antd';
 
 interface Props {}
@@ -26,7 +26,7 @@ function LoadingExample(props: Props) {
   const [spinning, setSpinning] = React.useState(false);
   const [width, setWidth] = React.useState(800);
   const [height, setHeight] = React.useState(300);
-  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: '아이디 IS LONG !',
@@ -66,7 +66,7 @@ function LoadingExample(props: Props) {
 
   return (
     <Container ref={containerRef}>
-      <RFDataGrid<IListItem>
+      <AXFDataGrid<IListItem>
         width={width}
         height={height}
         headerHeight={35}

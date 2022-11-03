@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFDGColumn } from '../types';
+import { AXFDGColumn } from '../types';
 import { useAppStore } from '../store';
 import { css } from '@emotion/react';
 
 interface Props<T> {
-  column: RFDGColumn<T>;
+  column: AXFDGColumn<T>;
 }
 
 interface SorterProps {
@@ -73,12 +73,12 @@ const ColumnSorter = styled.span<SorterProps>`
     left: 2px;
     border-left: 3.6px solid #0000;
     border-right: 3.6px solid #0000;
-    border-top: 4.5px solid var(--rfdg-border-color-base);
+    border-top: 4.5px solid var(--axfdg-border-color-base);
 
     ${({ sort }) => {
       if (sort === 'desc') {
         return css`
-          border-top: 4.5px solid var(--rfdg-primary-color);
+          border-top: 4.5px solid var(--axfdg-primary-color);
         `;
       }
     }}
@@ -90,12 +90,12 @@ const ColumnSorter = styled.span<SorterProps>`
     left: 2px;
     border-left: 3.6px solid #0000;
     border-right: 3.6px solid #0000;
-    border-bottom: 4.5px solid var(--rfdg-border-color-base);
+    border-bottom: 4.5px solid var(--axfdg-border-color-base);
 
     ${({ sort }) => {
       if (sort === 'asc') {
         return css`
-          border-bottom: 4.5px solid var(--rfdg-primary-color);
+          border-bottom: 4.5px solid var(--axfdg-primary-color);
         `;
       }
     }}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { RFDataGrid } from '../react-frame-datagrid';
+import { AXFDataGrid } from '../@axframe-datagrid';
 
 interface Props {}
 
@@ -32,7 +32,7 @@ function ColumnsGroupExample(props: Props) {
 
   return (
     <Container ref={containerRef}>
-      <RFDataGrid<IListItem>
+      <AXFDataGrid<IListItem>
         width={width}
         height={700}
         data={list}

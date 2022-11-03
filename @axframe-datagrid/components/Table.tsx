@@ -7,7 +7,7 @@ import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
-import { RFDGColumn, RFDGColumnGroup, RFDGDataItem, RFDGPage, RFDGSortParam } from '../types';
+import { AXFDGColumn, AXFDGColumnGroup, AXFDGDataItem, AXFDGPage, AXFDGSortParam } from '../types';
 import { getFrozenColumnsWidth } from '../utils';
 import { css } from '@emotion/react';
 
@@ -26,11 +26,11 @@ interface Props<T> {
   frozenColumnIndex?: number;
 
   selectedIdsMap?: Map<number, any>;
-  sortParams?: Record<string, RFDGSortParam>;
-  columns: RFDGColumn<T>[];
-  columnsGroup: RFDGColumnGroup[];
-  page?: RFDGPage;
-  data?: RFDGDataItem<T>[];
+  sortParams?: Record<string, AXFDGSortParam>;
+  columns: AXFDGColumn<T>[];
+  columnsGroup: AXFDGColumnGroup[];
+  page?: AXFDGPage;
+  data?: AXFDGDataItem<T>[];
 }
 
 function Table<T>(props: Props<T>) {
@@ -288,20 +288,20 @@ function Table<T>(props: Props<T>) {
 }
 
 const Container = styled.div`
-  border-color: var(--rfdg-border-color-base);
+  border-color: var(--axfdg-border-color-base);
   border-style: solid;
-  border-radius: var(--rfdg-border-radius);
+  border-radius: var(--axfdg-border-radius);
   box-sizing: border-box;
   position: relative;
 `;
 
 const HeaderContainer = styled.div`
-  background: var(--rfdg-header-bg);
+  background: var(--axfdg-header-bg);
   position: relative;
   min-width: 100%;
   overflow: hidden;
-  border-top-left-radius: var(--rfdg-border-radius);
-  border-top-right-radius: var(--rfdg-border-radius);
+  border-top-left-radius: var(--axfdg-border-radius);
+  border-top-right-radius: var(--axfdg-border-radius);
 `;
 
 const Header = styled.div`
@@ -310,9 +310,9 @@ const Header = styled.div`
 
 const FrozenHeader = styled.div`
   position: absolute;
-  background-color: var(--rfdg-header-bg);
-  border-right: 1px solid var(--rfdg-border-color-base);
-  box-shadow: 0 0 3px var(--rfdg-border-color-base);
+  background-color: var(--axfdg-header-bg);
+  border-right: 1px solid var(--axfdg-border-color-base);
+  box-shadow: 0 0 3px var(--axfdg-border-color-base);
   z-index: 3;
 `;
 
@@ -322,14 +322,14 @@ const BodyContainer = styled.div<{ isLast: boolean }>`
   align-items: stretch;
   justify-content: stretch;
   align-content: stretch;
-  background-color: var(--rfdg-scroll-track-bg);
+  background-color: var(--axfdg-scroll-track-bg);
   overflow: hidden;
 
   ${({ isLast }) => {
     if (isLast) {
       return css`
-        border-bottom-left-radius: var(--rfdg-border-radius);
-        border-bottom-right-radius: var(--rfdg-border-radius);
+        border-bottom-left-radius: var(--axfdg-border-radius);
+        border-bottom-right-radius: var(--axfdg-border-radius);
       `;
     }
   }}
@@ -341,35 +341,35 @@ const ScrollContainer = styled.div`
   flex: 1;
 
   &::-webkit-scrollbar {
-    width: var(--rfdg-scroll-size);
-    height: var(--rfdg-scroll-size);
+    width: var(--axfdg-scroll-size);
+    height: var(--axfdg-scroll-size);
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: var(--rfdg-scroll-thumb-bg);
-    border-radius: var(--rfdg-scroll-thumb-radius);
-    border: 2px solid var(--rfdg-scroll-track-bg);
+    background-color: var(--axfdg-scroll-thumb-bg);
+    border-radius: var(--axfdg-scroll-thumb-radius);
+    border: 2px solid var(--axfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background-color: var(--rfdg-scroll-thumb-hover-bg);
-    border: 1px solid var(--rfdg-scroll-track-bg);
+    background-color: var(--axfdg-scroll-thumb-hover-bg);
+    border: 1px solid var(--axfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track {
-    background-color: var(--rfdg-scroll-track-bg);
+    background-color: var(--axfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track:vertical {
-    background-color: var(--rfdg-scroll-track-bg);
+    background-color: var(--axfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track:horizontal {
-    background-color: var(--rfdg-scroll-track-bg);
+    background-color: var(--axfdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-corner {
-    //background-color: var(--rfdg-scroll-track-corner-bg);
+    //background-color: var(--axfdg-scroll-track-corner-bg);
   }
 `;
 
@@ -381,8 +381,8 @@ const ScrollContent = styled.div`
 
 const FrozenScrollContent = styled.div`
   flex: none;
-  border-right: 1px solid var(--rfdg-border-color-base);
-  box-shadow: 0 0 3px var(--rfdg-border-color-base);
+  border-right: 1px solid var(--axfdg-border-color-base);
+  box-shadow: 0 0 3px var(--axfdg-border-color-base);
   z-index: 2;
   overflow: hidden;
   position: relative;
@@ -392,11 +392,11 @@ const FooterContainer = styled.div`
   position: relative;
   min-width: 100%;
   overflow: hidden;
-  background: var(--rfdg-footer-bg);
-  border-top: 1px solid var(--rfdg-border-color-base);
+  background: var(--axfdg-footer-bg);
+  border-top: 1px solid var(--axfdg-border-color-base);
 
-  border-bottom-left-radius: var(--rfdg-border-radius);
-  border-bottom-right-radius: var(--rfdg-border-radius);
+  border-bottom-left-radius: var(--axfdg-border-radius);
+  border-bottom-right-radius: var(--axfdg-border-radius);
 `;
 
 export default Table;

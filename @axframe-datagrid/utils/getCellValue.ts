@@ -1,6 +1,6 @@
-import { RFDGColumn, RFDGDataItem } from '../types';
+import { AXFDGColumn, AXFDGDataItem } from '../types';
 
-export function getCellValue<T>(column: RFDGColumn<T>, item: RFDGDataItem<any>) {
+export function getCellValue<T>(column: AXFDGColumn<T>, item: AXFDGDataItem<any>) {
   if (column.itemRender) {
     return column.itemRender(item.values as T);
   } else if (Array.isArray(column.key)) {

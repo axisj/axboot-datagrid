@@ -1,12 +1,12 @@
-# React Frame Data Grid
+# axFrame Data Grid
 
-[![npm version](https://badge.fury.io/js/react-frame-datagrid.svg)](https://badge.fury.io/js/react-frame-datagrid)
-[![](https://img.shields.io/npm/dm/react-frame-datagrid.svg)](https://www.npmjs.com/package/react-frame-datagrid)
+[![npm version](https://badge.fury.io/js/@axframe/datagrid.svg)](https://badge.fury.io/js/@axframe/datagrid)
+[![](https://img.shields.io/npm/dm/@axframe/datagrid.svg)](https://www.npmjs.com/package/@axframe/datagrid)
 
 ## Install
 
 ```bash
-npm i react-frame-datagrid
+npm i @axframe/datagrid
 ```
 
 ## Development
@@ -21,7 +21,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Styling
 
 ```typescript jsx
-import 'react-frame-datagrid/style.css';
+import '@axframe/datagrid/style.css';
 ```
 
 or
@@ -29,32 +29,31 @@ or
 Add the code below to your project.
 
 ```css
-[role="react-frame-datagrid"] {
-    --rfdg-primary-color: #3B82F6;
-    --rfdg-header-bg: #F3F4F5;
-    --rfdg-header-color: #222;
-    --rfdg-header-font-weight: 500;
-    --rfdg-header-hover-bg: #e2e5e5;
-    --rfdg-header-group-bg: #e9e9e9;
-    --rfdg-footer-bg: #F3F4F5;
-    --rfdg-border-color-base: #D2D5D9;
-    --rfdg-border-radius: 4px;
-    --rfdg-row-selector-color: #ffffff;
-    --rfdg-body-bg: #ffffff;
-    --rfdg-body-hover-bg: #F3F4F5;
-    --rfdg-body-color: #444;
+[role='axframe-datagrid'] {
+  --axfdg-primary-color: #3b82f6;
+  --axfdg-header-bg: #f3f4f5;
+  --axfdg-header-color: #222;
+  --axfdg-header-font-weight: 500;
+  --axfdg-header-hover-bg: #e2e5e5;
+  --axfdg-header-group-bg: #e9e9e9;
+  --axfdg-footer-bg: #f3f4f5;
+  --axfdg-border-color-base: #d2d5d9;
+  --axfdg-border-radius: 4px;
+  --axfdg-row-selector-color: #ffffff;
+  --axfdg-body-bg: #ffffff;
+  --axfdg-body-hover-bg: #f3f4f5;
+  --axfdg-body-color: #444;
 
-    --rfdg-scroll-size: 11px;
-    --rfdg-scroll-track-bg: #F9F9F9;
-    --rfdg-scroll-thumb-radius: 6px;
-    --rfdg-scroll-thumb-bg: #c0c1c5;
-    --rfdg-scroll-thumb-hover-bg: #a1a3a6;
+  --axfdg-scroll-size: 11px;
+  --axfdg-scroll-track-bg: #f9f9f9;
+  --axfdg-scroll-thumb-radius: 6px;
+  --axfdg-scroll-thumb-bg: #c0c1c5;
+  --axfdg-scroll-thumb-hover-bg: #a1a3a6;
 
-    --rfdg-loading-bg: rgba(163, 163, 163, 0.1);
-    --rfdg-loading-color: rgba(0, 0, 0, 0.1);
-    --rfdg-loading-second-color: #767676;
+  --axfdg-loading-bg: rgba(163, 163, 163, 0.1);
+  --axfdg-loading-color: rgba(0, 0, 0, 0.1);
+  --axfdg-loading-second-color: #767676;
 }
-
 ```
 
 ## USE
@@ -62,10 +61,9 @@ Add the code below to your project.
 ```typescript jsx
 import * as React from 'react';
 import styled from '@emotion/styled';
-import {RFDataGrid, RFDGColumn} from 'react-frame-datagrid';
+import { AXFDataGrid, AXFDGColumn } from '@axframe/datagrid';
 
-interface Props {
-}
+interface Props {}
 
 interface IListItem {
   id: string;
@@ -84,7 +82,7 @@ const list = Array.from(Array(1000)).map((v, i) => ({
 }));
 
 function BasicExample(props: Props) {
-  const [columns, setColumns] = React.useState<RFDGColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: '아이디 IS LONG !',
@@ -135,7 +133,7 @@ function BasicExample(props: Props) {
 
   return (
     <Container>
-      <RFDataGrid<IListItem>
+      <AXFDataGrid<IListItem>
         width={600}
         height={400}
         data={list}

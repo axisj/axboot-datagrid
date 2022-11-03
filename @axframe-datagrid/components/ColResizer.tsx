@@ -107,12 +107,12 @@ const Container = styled.div<StyledProps>`
         width: 1px;
         height: 0.8em;
         transform: translateY(-50%);
-        background: var(--rfdg-border-color-base);
+        background: var(--axfdg-border-color-base);
       }
 
       &:hover {
         &:after {
-          background: var(--rfdg-primary-color);
+          background: var(--axfdg-primary-color);
         }
       }
     `;
