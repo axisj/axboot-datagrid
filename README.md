@@ -1,7 +1,9 @@
-# axFrame Data Grid
+# @axframe/datagrid
 
-[![npm version](https://badge.fury.io/js/@axframe/datagrid.svg)](https://badge.fury.io/js/@axframe/datagrid)
-[![](https://img.shields.io/npm/dm/@axframe/datagrid.svg)](https://www.npmjs.com/package/@axframe/datagrid)
+DataGrid, DataSheet for React
+
+[![NPM version](https://img.shields.io/npm/v/@axframe/datagrid.svg?style=flat)](https://npmjs.org/package/@axframe/datagrid)
+[![NPM downloads](http://img.shields.io/npm/dm/@axframe/datagrid.svg?style=flat)](https://npmjs.org/package/@axframe/datagrid)
 
 ## Install
 
