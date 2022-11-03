@@ -227,7 +227,7 @@ function Table<T>(props: Props<T>) {
   return (
     <Container
       ref={containerRef}
-      role={'react-frame-datagrid'}
+      role={'axframe-datagrid'}
       style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
       className={className}
     >
