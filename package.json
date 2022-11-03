@@ -4,6 +4,8 @@
   "jsnext:main": "dist/es6/index.js",
   "module": "dist/es6/index.js",
   "main": "dist/commonjs/index.js",
+  "repository": "https://github.com/axisj/axframe-datagrid",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
