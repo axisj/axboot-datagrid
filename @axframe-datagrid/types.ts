@@ -152,6 +152,7 @@ export interface AppActions<T> {
   setSelectedIdsMap: (selectedIdsMap: Map<number, any>) => void;
   setSortParams: (sortParams: Record<string, AXFDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
+  setOnClick: (onClick: AXFDGProps<T>['onClick']) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}

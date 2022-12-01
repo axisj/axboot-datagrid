@@ -130,4 +130,5 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setFrozenColumnIndex: frozenColumnIndex => set({ frozenColumnIndex }),
   setSortParams: sortParams => set({ sortParams }),
   setFrozenColumnsWidth: frozenColumnsWidth => set({ frozenColumnsWidth }),
+  setOnClick: onClick => set({ onClick }),
 });

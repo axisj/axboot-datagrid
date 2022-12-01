@@ -96,6 +96,7 @@ function BasicExample(props: Props) {
             console.log('onChange rowSelection', ids, selectedAll);
           },
         }}
+        onClick={item => console.log(item)}
       />
     </Container>
   );

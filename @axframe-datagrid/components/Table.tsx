@@ -7,7 +7,7 @@ import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
-import { AXFDGColumn, AXFDGColumnGroup, AXFDGDataItem, AXFDGPage, AXFDGSortParam } from '../types';
+import { AXFDGColumn, AXFDGColumnGroup, AXFDGDataItem, AXFDGPage, AXFDGProps, AXFDGSortParam } from '../types';
 import { getFrozenColumnsWidth } from '../utils';
 import { css } from '@emotion/react';
 
@@ -31,6 +31,7 @@ interface Props<T> {
   columnsGroup: AXFDGColumnGroup[];
   page?: AXFDGPage;
   data?: AXFDGDataItem<T>[];
+  onClick?: AXFDGProps<T>['onClick'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -77,6 +78,7 @@ function Table<T>(props: Props<T>) {
   const setData = useAppStore(s => s.setData);
   const setColumns = useAppStore(s => s.setColumns);
   const setColumnsGroup = useAppStore(s => s.setColumnsGroup);
+  const setOnClick = useAppStore(s => s.setOnClick);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -198,6 +200,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.columnsGroup !== undefined) setColumnsGroup(props.columnsGroup);
   }, [setColumnsGroup, props.columnsGroup]);
+  React.useEffect(() => {
+    if (props.onClick !== undefined) setOnClick(props.onClick);
+  }, [setOnClick, props.onClick]);
 
   //setInitialized
   React.useEffect(() => {

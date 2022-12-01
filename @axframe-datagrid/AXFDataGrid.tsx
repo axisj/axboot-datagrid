@@ -160,6 +160,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           sortParams,
           page,
           data,
+          onClick,
         }}
       />
     </AppStoreProvider>
