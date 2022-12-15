@@ -1,6 +1,6 @@
 import * as React from 'react';
 import RowSelector from './RowSelector';
-import { getCellValue } from '../utils';
+import { getCellValue, getCellValueByRowKey } from '../utils';
 import { BodyTable, TableBodyTr } from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
@@ -26,6 +26,8 @@ function TableBodyFrozen(props: Props) {
   const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
   const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
   const handleClick = useAppStore(s => s.handleClick);
+  const rowKey = useAppStore(s => s.rowKey);
+  const selectedRowKey = useAppStore(s => s.selectedRowKey);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -59,6 +61,7 @@ function TableBodyFrozen(props: Props) {
               itemHeight={itemHeight}
               itemPadding={itemPadding}
               hover={hoverItemIndex === ri}
+              active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
               onMouseOver={() => setHoverItemIndex(ri)}
               onMouseOut={() => setHoverItemIndex(undefined)}
             >

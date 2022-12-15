@@ -18,7 +18,7 @@ function TableBody() {
   const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
   const handleClick = useAppStore(s => s.handleClick);
   const rowKey = useAppStore(s => s.rowKey);
-  const focusedRowKey = useAppStore(s => s.selectedRowKey);
+  const selectedRowKey = useAppStore(s => s.selectedRowKey);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -40,7 +40,7 @@ function TableBody() {
               itemHeight={itemHeight}
               itemPadding={itemPadding}
               hover={hoverItemIndex === ri}
-              active={rowKey ? getCellValueByRowKey(rowKey, item) === focusedRowKey : false}
+              active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
               onMouseOver={() => setHoverItemIndex(ri)}
               onMouseOut={() => setHoverItemIndex(undefined)}
             >
@@ -104,7 +104,7 @@ export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; 
   ${({ active }) => {
     if (active) {
       return css`
-        background-color: var(--axfdg-body-hover-bg);
+        background-color: var(--axfdg-body-active-bg);
       `;
     }
   }}

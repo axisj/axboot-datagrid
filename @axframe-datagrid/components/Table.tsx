@@ -34,7 +34,7 @@ interface Props<T> {
   onClick?: AXFDGProps<T>['onClick'];
 
   rowKey?: string | string[];
-  focusedRowKey?: string | string[];
+  selectedRowKey?: string | string[];
 }
 
 function Table<T>(props: Props<T>) {
@@ -212,8 +212,8 @@ function Table<T>(props: Props<T>) {
     if (props.rowKey !== undefined) setRowKey(props.rowKey);
   }, [setRowKey, props.rowKey]);
   React.useEffect(() => {
-    if (props.focusedRowKey !== undefined) setFocusedRowKey(props.focusedRowKey);
-  }, [setFocusedRowKey, props.focusedRowKey]);
+    if (props.selectedRowKey !== undefined) setFocusedRowKey(props.selectedRowKey);
+  }, [setFocusedRowKey, props.selectedRowKey]);
 
   //setInitialized
   React.useEffect(() => {
