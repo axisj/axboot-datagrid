@@ -7,6 +7,7 @@ export interface AXFDGColumn<T> {
   label: string;
   width: number;
   align?: Direction;
+  headerAlign?: Direction;
   sortDisable?: boolean;
   className?: string;
   itemRender?: (item: T) => React.ReactNode;
@@ -16,6 +17,7 @@ export interface AXFDGColumnGroup {
   label: string;
   colspan: number;
   align?: Direction;
+  headerAlign?: Direction;
 }
 
 export type AXFDGDataItem<T> = {
@@ -36,9 +38,10 @@ export interface AXFDGPage {
   paginationRender?: () => void;
 }
 
-export interface AXFDGRowSelection {
-  selectedIds: number[];
-  onChange: (selectedKeys: number[], selectedAll?: SelectedAll) => void;
+export interface AXFDGRowChecked {
+  checkedIndexes?: number[];
+  checkedRowKeys?: React.Key[];
+  onChange: (checkedIndexes: number[], checkedRowKeys: React.Key[], checkedAll?: CheckedAll) => void;
 }
 
 export interface AXFDGSortParam {
@@ -86,16 +89,19 @@ export interface AXFDGProps<T> {
   scrollTop?: number;
   scrollLeft?: number;
 
-  rowSelection?: AXFDGRowSelection;
+  rowChecked?: AXFDGRowChecked;
   sort?: AXFDGSortInfo;
   onClick?: (params: AXFDGClickParams<T>) => void;
 
   msg?: {
     emptyList?: string;
   };
+
+  rowKey?: string | string[];
+  selectedRowKey?: string | string[];
 }
 
-export type SelectedAll = true | false | 'indeterminate';
+export type CheckedAll = true | false | 'indeterminate';
 
 export interface AppModel<T> extends AXFDGProps<T> {
   initialized: boolean;
@@ -114,8 +120,8 @@ export interface AppModel<T> extends AXFDGProps<T> {
   displayItemCount: number;
   scrollTop: number;
   scrollLeft: number;
-  selectedIdsMap: Map<number, any>;
-  selectedAll: SelectedAll;
+  checkedIndexesMap: Map<number, any>;
+  checkedAll: CheckedAll;
   sortParams: Record<string, AXFDGSortParam>;
   displayPaginationLength: number;
   hoverItemIndex?: number;
@@ -130,8 +136,8 @@ export interface AppActions<T> {
   setColumns: (columns: AXFDGColumn<T>[]) => void;
   setColumnsGroup: (columnsGroup: AXFDGColumnGroup[]) => void;
   setData: (data: AXFDGDataItem<T>[]) => void;
-  setSelectedIds: (ids: number[]) => void;
-  setSelectedAll: (selectedAll: SelectedAll) => void;
+  setCheckedIndexes: (ids: number[]) => void;
+  setCheckedAll: (checkedAll: CheckedAll) => void;
   setColumnWidth: (columnIndex: number, width?: number) => void;
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
@@ -149,10 +155,12 @@ export interface AppActions<T> {
   setItemHeight: (itemHeight: number) => void;
   setItemPadding: (itemPadding: number) => void;
   setFrozenColumnIndex: (frozenColumnIndex: number) => void;
-  setSelectedIdsMap: (selectedIdsMap: Map<number, any>) => void;
+  setCheckedIndexesMap: (checkedIndexesMap: Map<number, any>) => void;
   setSortParams: (sortParams: Record<string, AXFDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
   setOnClick: (onClick: AXFDGProps<T>['onClick']) => void;
+  setRowKey: (rowKey: string | string[]) => void;
+  setSelectedRowKey: (rowKey: string | string[]) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}

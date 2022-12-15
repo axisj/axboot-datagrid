@@ -30,6 +30,7 @@ function Nav(props: Props) {
           { label: `Sort`, key: '/sort' },
           { label: `Paging`, key: '/paging' },
           { label: `Loading`, key: '/loading' },
+          { label: `Focus`, key: '/focus' },
           { label: `Props Change`, key: '/propsChange' },
         ]}
         onTabClick={async activeKey => {

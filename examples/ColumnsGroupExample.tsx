@@ -94,8 +94,8 @@ function ColumnsGroupExample(props: Props) {
           { label: '구분2', colspan: 2 },
           { label: '구분3', colspan: 4 },
         ]}
-        rowSelection={{
-          selectedIds: [],
+        rowChecked={{
+          checkedIndexes: [],
           onChange: (ids, selectedAll) => {
             console.log('onChange rowSelection', ids, selectedAll);
           },

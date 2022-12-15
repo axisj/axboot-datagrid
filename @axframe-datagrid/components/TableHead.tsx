@@ -30,7 +30,7 @@ function TableHead({ container }: Props) {
                 key={index}
                 colSpan={cg.colspan}
                 style={{
-                  textAlign: cg.align,
+                  textAlign: cg.headerAlign ?? cg.align,
                 }}
               >
                 {cg.label}
@@ -45,7 +45,7 @@ function TableHead({ container }: Props) {
               data-column-index={frozenColumnIndex + index}
               key={index}
               style={{
-                textAlign: c.align,
+                textAlign: c.headerAlign ?? c.align,
               }}
               hasOnClick={sort && !c.sortDisable}
               columnResizing={columnResizing}

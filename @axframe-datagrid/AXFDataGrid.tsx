@@ -3,7 +3,7 @@ import { AppStoreProvider, getAppStoreActions } from './store';
 import Table from './components/Table';
 import { AppStore, AXFDGColumnGroup, AXFDGProps, AXFDGSortParam } from './types';
 import create from 'zustand';
-import { getFrozenColumnsWidth } from './utils';
+import { getCellValueByRowKey, getFrozenColumnsWidth } from './utils';
 
 export function AXFDataGrid<T = Record<string, any>>({
   width,
@@ -21,16 +21,32 @@ export function AXFDataGrid<T = Record<string, any>>({
   scrollTop = 0,
   scrollLeft = 0,
   className,
-  rowSelection,
+  rowChecked,
   sort,
   onClick,
   loading = false,
   spinning,
+  rowKey,
+  selectedRowKey,
 }: AXFDGProps<T>) {
-  const selectedIdsMap: Map<number, any> = React.useMemo(
-    () => new Map(rowSelection?.selectedIds.map(id => [id, true])),
-    [rowSelection?.selectedIds],
-  );
+  const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
+    if (rowChecked?.checkedRowKeys && rowKey) {
+      const checkedIndexesMap: Map<number, any> = new Map();
+      rowChecked.checkedRowKeys.forEach(key => {
+        const fIndex = data?.findIndex((value, index, obj) => {
+          return getCellValueByRowKey(rowKey, value) === key;
+        });
+        if (fIndex > -1) {
+          checkedIndexesMap.set(fIndex, true);
+        }
+      });
+      return checkedIndexesMap;
+    }
+    if (rowChecked?.checkedIndexes) {
+      return new Map(rowChecked?.checkedIndexes.map(id => [id, true]));
+    }
+    return new Map();
+  }, [data, rowChecked?.checkedIndexes, rowChecked?.checkedRowKeys, rowKey]);
 
   const columnGroups = React.useMemo(() => {
     const leftGroups: AXFDGColumnGroup[] = [];
@@ -78,12 +94,12 @@ export function AXFDataGrid<T = Record<string, any>>({
   const frozenColumnsWidth = React.useMemo(
     () =>
       getFrozenColumnsWidth({
-        rowSelection,
+        rowChecked,
         itemHeight,
         frozenColumnIndex,
         columns,
       }),
-    [columns, frozenColumnIndex, itemHeight, rowSelection],
+    [columns, frozenColumnIndex, itemHeight, rowChecked],
   );
 
   const sortParams = React.useMemo(() => {
@@ -128,15 +144,17 @@ export function AXFDataGrid<T = Record<string, any>>({
           contentBodyHeight: 0,
           displayItemCount: 0,
           className,
-          rowSelection,
-          selectedIdsMap,
-          selectedAll: false,
+          rowChecked,
+          checkedIndexesMap,
+          checkedAll: false,
           frozenColumnsWidth,
           sort,
           sortParams,
           onClick,
           loading,
           spinning,
+          rowKey,
+          selectedRowKey,
           ...getAppStoreActions(set, get),
         }))
       }
@@ -156,11 +174,13 @@ export function AXFDataGrid<T = Record<string, any>>({
           itemHeight,
           itemPadding,
           frozenColumnIndex,
-          selectedIdsMap,
+          checkedIndexesMap,
           sortParams,
           page,
           data,
           onClick,
+          rowKey,
+          selectedRowKey,
         }}
       />
     </AppStoreProvider>

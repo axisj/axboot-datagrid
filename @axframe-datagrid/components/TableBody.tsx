@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
-import { getCellValue } from '../utils';
+import { getCellValue, getCellValueByRowKey } from '../utils';
 import { css } from '@emotion/react';
 
 function TableBody() {
@@ -17,6 +17,8 @@ function TableBody() {
   const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
   const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
   const handleClick = useAppStore(s => s.handleClick);
+  const rowKey = useAppStore(s => s.rowKey);
+  const focusedRowKey = useAppStore(s => s.selectedRowKey);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -38,12 +40,19 @@ function TableBody() {
               itemHeight={itemHeight}
               itemPadding={itemPadding}
               hover={hoverItemIndex === ri}
+              active={rowKey ? getCellValueByRowKey(rowKey, item) === focusedRowKey : false}
               onMouseOver={() => setHoverItemIndex(ri)}
               onMouseOut={() => setHoverItemIndex(undefined)}
             >
               {columns.slice(frozenColumnIndex).map((column, idx) => {
                 return (
-                  <td key={idx} onClick={() => handleClick(ri, frozenColumnIndex + idx)}>
+                  <td
+                    key={idx}
+                    style={{
+                      textAlign: column.align,
+                    }}
+                    onClick={() => handleClick(ri, frozenColumnIndex + idx)}
+                  >
                     {getCellValue(column, item)}
                   </td>
                 );
@@ -82,11 +91,18 @@ export const BodyTable = styled.table`
   }
 `;
 
-export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; hover?: boolean }>`
+export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; hover?: boolean; active?: boolean }>`
   cursor: pointer;
 
   ${({ hover }) => {
     if (hover) {
+      return css`
+        background-color: var(--axfdg-body-hover-bg);
+      `;
+    }
+  }}
+  ${({ active }) => {
+    if (active) {
       return css`
         background-color: var(--axfdg-body-hover-bg);
       `;

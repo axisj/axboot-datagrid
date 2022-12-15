@@ -17,10 +17,10 @@ function TableBodyFrozen(props: Props) {
   const trHeight = itemHeight + itemPadding * 2 + 1;
   const displayItemCount = useAppStore(s => s.displayItemCount);
   const data = useAppStore(s => s.data);
-  const selectedKeyMap = useAppStore(s => s.selectedIdsMap);
-  const setSelectedKeys = useAppStore(s => s.setSelectedIds);
-  const selectedAll = useAppStore(s => s.selectedAll);
-  const hasRowSelection = useAppStore(s => !!s.rowSelection);
+  const selectedKeyMap = useAppStore(s => s.checkedIndexesMap);
+  const setSelectedKeys = useAppStore(s => s.setCheckedIndexes);
+  const selectedAll = useAppStore(s => s.checkedAll);
+  const hasRowChecked = useAppStore(s => !!s.rowChecked);
   const columns = useAppStore(s => s.columns);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
   const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
@@ -62,7 +62,7 @@ function TableBodyFrozen(props: Props) {
               onMouseOver={() => setHoverItemIndex(ri)}
               onMouseOut={() => setHoverItemIndex(undefined)}
             >
-              {hasRowSelection && (
+              {hasRowChecked && (
                 <td>
                   <RowSelector
                     checked={selectedAll === true || selectedKeyMap.get(ri)}
@@ -72,7 +72,13 @@ function TableBodyFrozen(props: Props) {
               )}
               {columns.slice(0, frozenColumnIndex).map((column, idx) => {
                 return (
-                  <td key={idx} onClick={() => handleClick(ri, idx)}>
+                  <td
+                    key={idx}
+                    style={{
+                      textAlign: column.align,
+                    }}
+                    onClick={() => handleClick(ri, idx)}
+                  >
                     {getCellValue(column, item)}
                   </td>
                 );

@@ -1,5 +1,5 @@
-import { SelectedAll, StoreActions } from '../types';
-import { getFrozenColumnsWidth } from '../utils';
+import { CheckedAll, StoreActions } from '../types';
+import { getCellValueByRowKey, getFrozenColumnsWidth } from '../utils';
 
 export const getAppStoreActions: StoreActions = (set, get) => ({
   setInitialized: initialized => set({ initialized }),
@@ -9,33 +9,59 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setColumns: columns => set({ columns }),
   setColumnsGroup: columnsGroup => set({ columnsGroup }),
   setData: data => set({ data }),
-  setSelectedIds: keys => {
-    const selectedIdsMap = get().selectedIdsMap;
-    selectedIdsMap.clear();
-    keys.forEach(key => selectedIdsMap.set(key, true));
+  setCheckedIndexes: keys => {
+    const rowKey = get().rowKey;
+    const data = get().data;
+    const checkedIndexesMap = get().checkedIndexesMap;
+    const checkedIndexes: number[] = [];
+    const checkedRowKeys: (string | number)[] = [];
 
-    const selectedAll: SelectedAll =
-      selectedIdsMap.size > 0 && selectedIdsMap.size !== get().data.length
+    checkedIndexesMap.clear();
+    keys.forEach(key => checkedIndexesMap.set(key, true));
+    keys.forEach(key => {
+      checkedIndexesMap.set(key, true);
+      const item = data[key];
+      checkedIndexes.push(key);
+      if (rowKey) {
+        checkedRowKeys.push(getCellValueByRowKey(rowKey, item));
+      }
+    });
+
+    const checkedAll: CheckedAll =
+      checkedIndexesMap.size > 0 && checkedIndexesMap.size !== get().data.length
         ? 'indeterminate'
-        : selectedIdsMap.size !== 0;
+        : checkedIndexesMap.size !== 0;
 
-    set({ selectedIdsMap: new Map([...selectedIdsMap]), selectedAll });
-    get().rowSelection?.onChange([...get().selectedIdsMap.keys()].sort(), selectedAll);
+    set({ checkedIndexesMap: new Map([...checkedIndexesMap]), checkedAll });
+    get().rowChecked?.onChange(checkedIndexes, checkedRowKeys, checkedAll);
   },
-  setSelectedAll: selectedAll => {
-    const selectedIdsMap: Map<number, any> =
-      selectedAll === true ? new Map(get().data.map((v, i) => [i, true])) : new Map();
-    set({ selectedIdsMap, selectedAll });
-
-    get().rowSelection?.onChange([...selectedIdsMap.keys()], selectedAll);
+  setCheckedAll: checkedAll => {
+    const rowKey = get().rowKey;
+    if (checkedAll === true) {
+      const checkedIndexesMap: Map<number, any> = new Map();
+      const checkedIndexes: number[] = [];
+      const checkedRowKeys: (string | number)[] = [];
+      get().data.forEach((v, i) => {
+        checkedIndexesMap.set(i, true);
+        checkedIndexes.push(i);
+        if (rowKey) {
+          checkedRowKeys.push(getCellValueByRowKey(rowKey, v));
+        }
+      });
+      set({ checkedIndexesMap, checkedAll });
+      get().rowChecked?.onChange(checkedIndexes, checkedRowKeys, checkedAll);
+    } else {
+      set({ checkedIndexesMap: new Map(), checkedAll });
+      get().rowChecked?.onChange([], [], checkedAll);
+    }
   },
-  setSelectedIdsMap: selectedIdsMap => {
-    const selectedAll: SelectedAll =
-      selectedIdsMap.size > 0 && selectedIdsMap.size !== get().data.length
+  setCheckedIndexesMap: checkedIndexesMap => {
+    const checkedAll: CheckedAll =
+      checkedIndexesMap.size > 0 && checkedIndexesMap.size !== get().data.length
         ? 'indeterminate'
-        : selectedIdsMap.size !== 0;
+        : checkedIndexesMap.size !== 0;
 
-    set({ selectedIdsMap, selectedAll });
+    set({ checkedIndexesMap, checkedAll });
   },
   setColumnWidth: (columnIndex, width) => {
     const columns = get().columns;
@@ -47,7 +73,7 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
 
         if (columnIndex < frozenColumnIndex) {
           const frozenColumnsWidth = getFrozenColumnsWidth({
-            rowSelection: get().rowSelection,
+            rowChecked: get().rowChecked,
             itemHeight: get().itemHeight,
             frozenColumnIndex: get().frozenColumnIndex,
             columns,
@@ -131,4 +157,6 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setSortParams: sortParams => set({ sortParams }),
   setFrozenColumnsWidth: frozenColumnsWidth => set({ frozenColumnsWidth }),
   setOnClick: onClick => set({ onClick }),
+  setRowKey: rowKey => set({ rowKey }),
+  setSelectedRowKey: selectedRowKey => set({ selectedRowKey }),
 });

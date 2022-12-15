@@ -72,7 +72,7 @@ function PropsChangeExample(props: Props) {
   const [itemHeight, setItemHeight] = React.useState(15);
   const [itemPadding, setItemPadding] = React.useState(7);
   const [frozenColumnIndex, setFrozenColumnIndex] = React.useState(0);
-  const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
+  const [checkedIndexes, setCheckedIndexes] = React.useState<number[]>([]);
   const [sortParams, setSortParams] = React.useState<AXFDGSortParam[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([]);
@@ -102,8 +102,8 @@ function PropsChangeExample(props: Props) {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
-        rowSelection={{
-          selectedIds,
+        rowChecked={{
+          checkedIndexes,
           onChange: (ids, selectedAll) => {
             console.log('onChange rowSelection', ids, selectedAll);
           },
@@ -142,7 +142,7 @@ function PropsChangeExample(props: Props) {
           itemHeight,
           itemPadding,
           frozenColumnIndex,
-          selectedIds,
+          selectedIds: checkedIndexes,
           sortParams,
           currentPage,
           listName,
@@ -267,7 +267,7 @@ function PropsChangeExample(props: Props) {
               <Checkbox.Group
                 options={Array.from({ length: 10 }).map((_, i) => ({ label: i, value: i }))}
                 onChange={checkedValue => {
-                  setSelectedIds(checkedValue as number[]);
+                  setCheckedIndexes(checkedValue as number[]);
                 }}
               />
             </Form.Item>

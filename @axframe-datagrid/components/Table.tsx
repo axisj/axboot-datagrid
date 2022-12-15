@@ -25,13 +25,16 @@ interface Props<T> {
   itemPadding?: number;
   frozenColumnIndex?: number;
 
-  selectedIdsMap?: Map<number, any>;
+  checkedIndexesMap: Map<number, any>;
   sortParams?: Record<string, AXFDGSortParam>;
   columns: AXFDGColumn<T>[];
   columnsGroup: AXFDGColumnGroup[];
   page?: AXFDGPage;
   data?: AXFDGDataItem<T>[];
   onClick?: AXFDGProps<T>['onClick'];
+
+  rowKey?: string | string[];
+  focusedRowKey?: string | string[];
 }
 
 function Table<T>(props: Props<T>) {
@@ -54,7 +57,7 @@ function Table<T>(props: Props<T>) {
   const trHeight = itemHeight + itemPadding * 2 + 1;
   const paddingTop = Math.floor(scrollTop / trHeight) * trHeight;
   const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
-  const rowSelection = useAppStore(s => s.rowSelection);
+  const rowChecked = useAppStore(s => s.rowChecked);
   const page = useAppStore(s => s.page);
   const loading = useAppStore(s => s.loading);
   const spinning = useAppStore(s => s.spinning);
@@ -71,7 +74,7 @@ function Table<T>(props: Props<T>) {
   const setItemHeight = useAppStore(s => s.setItemHeight);
   const setItemPadding = useAppStore(s => s.setItemPadding);
   const setFrozenColumnIndex = useAppStore(s => s.setFrozenColumnIndex);
-  const setSelectedIdsMap = useAppStore(s => s.setSelectedIdsMap);
+  const setCheckedIndexesMap = useAppStore(s => s.setCheckedIndexesMap);
   const setSortParams = useAppStore(s => s.setSortParams);
   const setFrozenColumnsWidth = useAppStore(s => s.setFrozenColumnsWidth);
   const setPage = useAppStore(s => s.setPage);
@@ -79,6 +82,8 @@ function Table<T>(props: Props<T>) {
   const setColumns = useAppStore(s => s.setColumns);
   const setColumnsGroup = useAppStore(s => s.setColumnsGroup);
   const setOnClick = useAppStore(s => s.setOnClick);
+  const setRowKey = useAppStore(s => s.setRowKey);
+  const setFocusedRowKey = useAppStore(s => s.setSelectedRowKey);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -163,7 +168,7 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.frozenColumnIndex !== undefined) {
       const frozenColumnsWidth = getFrozenColumnsWidth({
-        rowSelection,
+        rowChecked,
         itemHeight,
         frozenColumnIndex: props.frozenColumnIndex,
         columns,
@@ -171,10 +176,10 @@ function Table<T>(props: Props<T>) {
       setFrozenColumnsWidth(frozenColumnsWidth);
       setFrozenColumnIndex(props.frozenColumnIndex);
     }
-  }, [setFrozenColumnIndex, props.frozenColumnIndex, rowSelection, itemHeight, columns, setFrozenColumnsWidth]);
+  }, [setFrozenColumnIndex, props.frozenColumnIndex, rowChecked, itemHeight, columns, setFrozenColumnsWidth]);
   React.useEffect(() => {
-    if (props.selectedIdsMap !== undefined) setSelectedIdsMap(props.selectedIdsMap);
-  }, [setSelectedIdsMap, props.selectedIdsMap]);
+    if (props.checkedIndexesMap !== undefined) setCheckedIndexesMap(props.checkedIndexesMap);
+  }, [setCheckedIndexesMap, props.checkedIndexesMap]);
   React.useEffect(() => {
     if (props.sortParams !== undefined) setSortParams(props.sortParams);
   }, [setSortParams, props.sortParams]);
@@ -203,6 +208,12 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.onClick !== undefined) setOnClick(props.onClick);
   }, [setOnClick, props.onClick]);
+  React.useEffect(() => {
+    if (props.rowKey !== undefined) setRowKey(props.rowKey);
+  }, [setRowKey, props.rowKey]);
+  React.useEffect(() => {
+    if (props.focusedRowKey !== undefined) setFocusedRowKey(props.focusedRowKey);
+  }, [setFocusedRowKey, props.focusedRowKey]);
 
   //setInitialized
   React.useEffect(() => {
