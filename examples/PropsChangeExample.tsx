@@ -19,6 +19,9 @@ const listFirst: AXFDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) 
     title: `F title_${i}`,
     writer: `F writer_${i}`,
     createAt: `2022-09-08`,
+    group: {
+      k: `K${i}`,
+    },
   },
 }));
 
@@ -28,10 +31,18 @@ const listSecond: AXFDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i)
     title: `S title_${i}`,
     writer: `S writer_${i}`,
     createAt: `2022-09-08`,
+    group: {
+      k: `K${i}`,
+    },
   },
 }));
 
 const columnsFirst: AXFDGColumn<IListItem>[] = [
+  {
+    key: ['group', 'k'],
+    label: 'PK',
+    width: 80,
+  },
   {
     key: 'id',
     label: '아이디 IS LONG !',
@@ -72,10 +83,12 @@ function PropsChangeExample(props: Props) {
   const [itemHeight, setItemHeight] = React.useState(15);
   const [itemPadding, setItemPadding] = React.useState(7);
   const [frozenColumnIndex, setFrozenColumnIndex] = React.useState(0);
-  const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
+  const [checkedIndexes, setCheckedIndexes] = React.useState<number[]>([]);
+  const [checkedRowKeys, setCheckedRowKeys] = React.useState<string[]>([]);
   const [sortParams, setSortParams] = React.useState<AXFDGSortParam[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([]);
+  const [selectedRowKey, setSelectedRowKey] = React.useState<string>();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -102,10 +115,11 @@ function PropsChangeExample(props: Props) {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
-        rowSelection={{
-          selectedIds,
-          onChange: (ids, selectedAll) => {
-            console.log('onChange rowSelection', ids, selectedAll);
+        rowChecked={{
+          // checkedIndexes,
+          checkedRowKeys,
+          onChange: (checkedIndexes, checkedRowKeys, checkedAll) => {
+            console.log('onChange rowSelection', checkedIndexes, checkedRowKeys, checkedAll);
           },
         }}
         page={{
@@ -128,6 +142,8 @@ function PropsChangeExample(props: Props) {
         }}
         loading={loading}
         spinning={spinning}
+        rowKey={['group', 'k']}
+        selectedRowKey={selectedRowKey}
       />
 
       <Divider />
@@ -142,7 +158,7 @@ function PropsChangeExample(props: Props) {
           itemHeight,
           itemPadding,
           frozenColumnIndex,
-          selectedIds,
+          selectedIds: checkedIndexes,
           sortParams,
           currentPage,
           listName,
@@ -263,11 +279,11 @@ function PropsChangeExample(props: Props) {
         </Row>
         <Row gutter={20}>
           <Col xs={12} sm={12}>
-            <Form.Item name={'selectedIds'} label={'Selected ID'}>
+            <Form.Item name={'checkedIndexes'} label={'checkedIndexes'}>
               <Checkbox.Group
                 options={Array.from({ length: 10 }).map((_, i) => ({ label: i, value: i }))}
                 onChange={checkedValue => {
-                  setSelectedIds(checkedValue as number[]);
+                  setCheckedIndexes(checkedValue as number[]);
                 }}
               />
             </Form.Item>
@@ -289,6 +305,14 @@ function PropsChangeExample(props: Props) {
                     }),
                   );
                 }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Form.Item name={'selectedRowKey'} label={'SelectedRowKey'}>
+              <Select
+                onChange={value => setSelectedRowKey(value)}
+                options={Array.from({ length: 10 }).map((_, i) => ({ label: `K${i + 1}`, value: `K${i + 1}` }))}
               />
             </Form.Item>
           </Col>

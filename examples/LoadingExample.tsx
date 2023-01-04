@@ -76,8 +76,8 @@ function LoadingExample(props: Props) {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
-        rowSelection={{
-          selectedIds: [],
+        rowChecked={{
+          checkedIndexes: [],
           onChange: (ids, selectedAll) => {
             console.log('onChange rowSelection', ids, selectedAll);
           },

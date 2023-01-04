@@ -13,3 +13,14 @@ export function getCellValue<T>(column: AXFDGColumn<T>, item: AXFDGDataItem<any>
     return item.values[column.key];
   }
 }
+export function getCellValueByRowKey<T>(rowKey: string | string[], item: AXFDGDataItem<any>) {
+  if (Array.isArray(rowKey)) {
+    return rowKey.reduce((acc, cur) => {
+      if (!acc) return acc;
+      if (acc[cur]) return acc[cur];
+      return acc;
+    }, item.values);
+  } else {
+    return item.values[rowKey];
+  }
+}

@@ -21,7 +21,8 @@ const list = Array.from(Array(1000)).map((v, i) => ({
   },
 }));
 
-function SortExample(props: Props) {
+export default function FocusExample(props: Props) {
+  const [selectedRowKey, setSelectedRowKey] = React.useState('');
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
     {
       key: 'id',
@@ -72,19 +73,15 @@ function SortExample(props: Props) {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
-        rowChecked={{
-          checkedIndexes: [],
-          onChange: (ids, selectedAll) => {
-            console.log('onChange rowSelection', ids, selectedAll);
-          },
+        onClick={({ item }) => {
+          // console.log('item.id', item.id);
+          setSelectedRowKey(item.id);
         }}
-        sort={{
-          sortParams: [{ key: 'title', orderBy: 'desc' }],
-          onChange: sortParams => {
-            console.log('onChange: sortParams', sortParams);
-          },
-        }}
+        rowKey={'id'}
+        selectedRowKey={selectedRowKey}
       />
+      <br />
+      <b>selectedRowKey</b> : {selectedRowKey}
     </Container>
   );
 }
@@ -92,5 +89,3 @@ function SortExample(props: Props) {
 const Container = styled.div`
   font-size: 13px;
 `;
-
-export default SortExample;

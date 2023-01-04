@@ -13,12 +13,12 @@ interface Props {
 
 function TableHeadFrozen({ container }: Props) {
   const sort = useAppStore(s => s.sort);
-  const hasRowSelection = useAppStore(s => !!s.rowSelection);
+  const hasRowSelection = useAppStore(s => !!s.rowChecked);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
   const frozenColumnsGroup = useAppStore(s => s.frozenColumnsGroup);
-  const selectedAll = useAppStore(s => s.selectedAll);
-  const setSelectedAll = useAppStore(s => s.setSelectedAll);
+  const selectedAll = useAppStore(s => s.checkedAll);
+  const setSelectedAll = useAppStore(s => s.setCheckedAll);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
   const columnResizing = useAppStore(s => s.columnResizing);
   const toggleColumnSort = useAppStore(s => s.toggleColumnSort);
@@ -45,7 +45,7 @@ function TableHeadFrozen({ container }: Props) {
                 key={index}
                 colSpan={cg.colspan}
                 style={{
-                  textAlign: cg.align,
+                  textAlign: cg.headerAlign ?? cg.align,
                 }}
               >
                 {cg.label}
@@ -71,7 +71,7 @@ function TableHeadFrozen({ container }: Props) {
               data-column-index={index}
               key={index}
               style={{
-                textAlign: c.align,
+                textAlign: c.headerAlign ?? c.align,
               }}
               hasOnClick={sort && !c.sortDisable}
               columnResizing={columnResizing}

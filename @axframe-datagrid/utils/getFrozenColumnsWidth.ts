@@ -1,15 +1,15 @@
-import { AXFDGColumn, AXFDGRowSelection } from '../types';
+import { AXFDGColumn, AXFDGRowChecked } from '../types';
 
 interface Props<T> {
-  rowSelection?: AXFDGRowSelection;
+  rowChecked?: AXFDGRowChecked;
   itemHeight: number;
   frozenColumnIndex: number;
   columns: AXFDGColumn<T>[];
 }
 
-export function getFrozenColumnsWidth<T>({ rowSelection, itemHeight, frozenColumnIndex, columns }: Props<T>) {
+export function getFrozenColumnsWidth<T>({ rowChecked, itemHeight, frozenColumnIndex, columns }: Props<T>) {
   let frozenColumnsWidth: number = 0;
-  if (!!rowSelection) {
+  if (!!rowChecked) {
     frozenColumnsWidth += Math.min(itemHeight, 15) + 7 * 2;
   }
   if (frozenColumnIndex > 0) {
