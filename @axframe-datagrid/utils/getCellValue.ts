@@ -1,4 +1,5 @@
 import { AXFDGColumn, AXFDGDataItem } from '../types';
+import React from 'react';
 
 export function getCellValue<T>(column: AXFDGColumn<T>, item: AXFDGDataItem<any>) {
   if (column.itemRender) {
@@ -13,7 +14,7 @@ export function getCellValue<T>(column: AXFDGColumn<T>, item: AXFDGDataItem<any>
     return item.values[column.key];
   }
 }
-export function getCellValueByRowKey<T>(rowKey: string | string[], item: AXFDGDataItem<any>) {
+export function getCellValueByRowKey<T>(rowKey: React.Key | React.Key[], item: AXFDGDataItem<any>) {
   if (Array.isArray(rowKey)) {
     return rowKey.reduce((acc, cur) => {
       if (!acc) return acc;

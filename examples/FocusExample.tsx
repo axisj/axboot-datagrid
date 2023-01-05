@@ -6,6 +6,7 @@ import { Button } from 'antd';
 interface Props {}
 
 interface IListItem {
+  no: number;
   id: string;
   title: string;
   writer: string;
@@ -14,6 +15,7 @@ interface IListItem {
 
 const list = Array.from(Array(1000)).map((v, i) => ({
   values: {
+    no: i,
     id: `ID_${i}`,
     title: `title_${i}`,
     writer: `writer_${i}`,
@@ -22,7 +24,7 @@ const list = Array.from(Array(1000)).map((v, i) => ({
 }));
 
 export default function FocusExample(props: Props) {
-  const [selectedRowKey, setSelectedRowKey] = React.useState('');
+  const [selectedRowKey, setSelectedRowKey] = React.useState<number>();
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
     {
       key: 'id',
@@ -75,9 +77,9 @@ export default function FocusExample(props: Props) {
         }}
         onClick={({ item }) => {
           // console.log('item.id', item.id);
-          setSelectedRowKey(item.id);
+          setSelectedRowKey(item.no);
         }}
-        rowKey={'id'}
+        rowKey={'no'}
         selectedRowKey={selectedRowKey}
       />
       <br />

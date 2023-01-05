@@ -105,6 +105,7 @@ export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; 
     if (active) {
       return css`
         background-color: var(--axfdg-body-active-bg);
+        color: var(--axfdg-primary-color);
       `;
     }
   }}

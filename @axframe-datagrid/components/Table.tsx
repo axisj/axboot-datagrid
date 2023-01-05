@@ -33,8 +33,8 @@ interface Props<T> {
   data?: AXFDGDataItem<T>[];
   onClick?: AXFDGProps<T>['onClick'];
 
-  rowKey?: string | string[];
-  selectedRowKey?: string | string[];
+  rowKey?: React.Key | React.Key[];
+  selectedRowKey?: React.Key | React.Key[];
 }
 
 function Table<T>(props: Props<T>) {
