@@ -97,8 +97,8 @@ export interface AXFDGProps<T> {
     emptyList?: string;
   };
 
-  rowKey?: string | string[];
-  selectedRowKey?: string | string[];
+  rowKey?: React.Key | React.Key[];
+  selectedRowKey?: React.Key | React.Key[];
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -159,8 +159,8 @@ export interface AppActions<T> {
   setSortParams: (sortParams: Record<string, AXFDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
   setOnClick: (onClick: AXFDGProps<T>['onClick']) => void;
-  setRowKey: (rowKey: string | string[]) => void;
-  setSelectedRowKey: (rowKey: string | string[]) => void;
+  setRowKey: (rowKey: React.Key | React.Key[]) => void;
+  setSelectedRowKey: (rowKey: React.Key | React.Key[]) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}
