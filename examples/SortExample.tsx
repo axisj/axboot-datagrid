@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
-import { Button } from 'antd';
+import { useContainerSize } from '../hooks/useContainerSize';
+import ExampleContainer from '../components/ExampleContainer';
 
 interface Props {}
 
@@ -51,20 +52,15 @@ function SortExample(props: Props) {
       sortDisable: true,
     },
   ]);
-  const [width, setWidth] = React.useState(600);
-  const containerRef = React.useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
-    if (containerRef.current) {
-      setWidth(containerRef.current.clientWidth);
-    }
-  }, []);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
     <Container ref={containerRef}>
       <AXFDataGrid<IListItem>
-        width={width}
-        height={400}
+        width={containerWidth}
+        height={containerHeight}
         headerHeight={35}
         data={list}
         columns={columns}
@@ -89,8 +85,6 @@ function SortExample(props: Props) {
   );
 }
 
-const Container = styled.div`
-  font-size: 13px;
-`;
+const Container = styled(ExampleContainer)``;
 
 export default SortExample;

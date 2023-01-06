@@ -1,9 +1,11 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
-import SortExample from '../examples/SortExample';
 import BodyRoot from '../components/BodyRoot';
+import dynamic from 'next/dynamic';
+const Example = dynamic(() => import('../examples/SortExample'), {
+  ssr: false,
+});
 
 const Sort: NextPage = () => {
   return (
@@ -11,7 +13,7 @@ const Sort: NextPage = () => {
       <Container>
         <div>
           <h2>Sort</h2>
-          <SortExample />
+          <Example />
         </div>
       </Container>
     </PageContainer>

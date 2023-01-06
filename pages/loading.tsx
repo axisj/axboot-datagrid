@@ -1,10 +1,11 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
-import SortExample from '../examples/SortExample';
-import LoadingExample from '../examples/LoadingExample';
 import BodyRoot from '../components/BodyRoot';
+import dynamic from 'next/dynamic';
+const Example = dynamic(() => import('../examples/LoadingExample'), {
+  ssr: false,
+});
 
 const Loading: NextPage = () => {
   return (
@@ -12,7 +13,7 @@ const Loading: NextPage = () => {
       <Container>
         <div>
           <h2>Loading</h2>
-          <LoadingExample />
+          <Example />
         </div>
       </Container>
     </PageContainer>

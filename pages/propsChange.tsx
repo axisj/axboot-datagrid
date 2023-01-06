@@ -1,11 +1,12 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
-import SortExample from '../examples/SortExample';
-import LoadingExample from '../examples/LoadingExample';
-import PropsChangeExample from '../examples/PropsChangeExample';
 import BodyRoot from '../components/BodyRoot';
+import dynamic from 'next/dynamic';
+
+const Example = dynamic(() => import('../examples/PropsChangeExample'), {
+  ssr: false,
+});
 
 const PropsChange: NextPage = () => {
   return (
@@ -13,7 +14,7 @@ const PropsChange: NextPage = () => {
       <Container>
         <div>
           <h2>Props Change</h2>
-          <PropsChangeExample />
+          <Example />
         </div>
       </Container>
     </PageContainer>

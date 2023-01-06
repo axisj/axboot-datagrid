@@ -15,4 +15,6 @@ export const Container: React.FC<ContainerProps> = ({ children }) => {
   );
 };
 
-const SContainer = styled.div``;
+const SContainer = styled.div`
+  position: relative;
+`;

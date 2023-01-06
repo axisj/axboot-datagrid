@@ -1,7 +1,9 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
-import { Button, Divider, Space } from 'antd';
+import { Button, Space } from 'antd';
+import ExampleContainer from '../components/ExampleContainer';
+import { useContainerSize } from '../hooks/useContainerSize';
 
 interface Props {}
 
@@ -24,8 +26,6 @@ const list = Array.from(Array(1000)).map((v, i) => ({
 function LoadingExample(props: Props) {
   const [loading, setLoading] = React.useState(false);
   const [spinning, setSpinning] = React.useState(false);
-  const [width, setWidth] = React.useState(800);
-  const [height, setHeight] = React.useState(300);
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
     {
       key: 'id',
@@ -57,18 +57,13 @@ function LoadingExample(props: Props) {
   ]);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (containerRef.current) {
-      setWidth(containerRef.current.clientWidth);
-    }
-  }, []);
+  const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
     <Container ref={containerRef}>
       <AXFDataGrid<IListItem>
-        width={width}
-        height={height}
+        width={containerWidth}
+        height={containerHeight}
         headerHeight={35}
         data={list}
         columns={columns}
@@ -98,8 +93,6 @@ function LoadingExample(props: Props) {
   );
 }
 
-const Container = styled.div`
-  font-size: 13px;
-`;
+const Container = styled(ExampleContainer)``;
 
 export default LoadingExample;

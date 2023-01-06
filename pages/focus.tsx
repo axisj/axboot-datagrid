@@ -1,7 +1,10 @@
 import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
 import BodyRoot from '../components/BodyRoot';
-import FocusExample from '../examples/FocusExample';
+import dynamic from 'next/dynamic';
+const Example = dynamic(() => import('../examples/FocusExample'), {
+  ssr: false,
+});
 
 export default function Focus() {
   return (
@@ -9,7 +12,7 @@ export default function Focus() {
       <Container>
         <div>
           <h2>Focus</h2>
-          <FocusExample />
+          <Example />
         </div>
       </Container>
     </PageContainer>

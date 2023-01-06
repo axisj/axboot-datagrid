@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
+import { useContainerSize } from '../hooks/useContainerSize';
+import ExampleContainer from '../components/ExampleContainer';
 
 interface Props {}
 
@@ -70,20 +72,14 @@ function BasicExample(props: Props) {
     },
   ]);
 
-  const [width, setWidth] = React.useState(600);
   const containerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (containerRef.current) {
-      setWidth(containerRef.current.clientWidth);
-    }
-  }, []);
+  const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
     <Container ref={containerRef}>
       <AXFDataGrid<IListItem>
-        width={width}
-        height={400}
+        width={containerWidth}
+        height={containerHeight}
         data={list}
         columns={columns}
         onChangeColumns={(columnIndex, width, columns) => {
@@ -102,8 +98,6 @@ function BasicExample(props: Props) {
   );
 }
 
-const Container = styled.div`
-  font-size: 13px;
-`;
+const Container = styled(ExampleContainer)``;
 
 export default BasicExample;

@@ -13,7 +13,7 @@ interface IListItem {
   createAt: string;
 }
 
-const list = Array.from(Array(1000)).map((v, i) => ({
+const list = Array.from(Array(5)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
     title: `title_${i}`,
@@ -22,14 +22,12 @@ const list = Array.from(Array(1000)).map((v, i) => ({
   },
 }));
 
-function PagingExample(props: Props) {
-  const [currentPage, setCurrentPage] = React.useState(1);
+function EditorExample(props: Props) {
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: '아이디 IS LONG !',
       width: 100,
-      sortDisable: true,
     },
     {
       key: 'title',
@@ -49,10 +47,31 @@ function PagingExample(props: Props) {
     },
     {
       key: 'createAt',
-      label: '작성일',
+      label: '작성일A',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일B',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일C',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일D',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일E',
       width: 100,
     },
   ]);
+
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
@@ -61,24 +80,19 @@ function PagingExample(props: Props) {
       <AXFDataGrid<IListItem>
         width={containerWidth}
         height={containerHeight}
-        headerHeight={35}
         data={list}
         columns={columns}
-        page={{
-          currentPage: currentPage,
-          pageSize: 50,
-          totalPages: 10,
-          totalElements: 498,
-          loading: false,
-          onChange: (pageNo, pageSize) => {
-            console.log(pageNo, pageSize);
-            setCurrentPage(pageNo);
+        onChangeColumns={(columnIndex, width, columns) => {
+          console.log('onChangeColumnWidths', columnIndex, width, columns);
+          setColumns(columns);
+        }}
+        rowChecked={{
+          checkedIndexes: [],
+          onChange: (ids, selectedAll) => {
+            console.log('onChange rowSelection', ids, selectedAll);
           },
-          displayPaginationLength: 5,
         }}
-        onClick={({ item, itemIndex, columnIndex, column }) => {
-          console.log('click tr', item, itemIndex, columnIndex, column);
-        }}
+        onClick={item => console.log(item)}
       />
     </Container>
   );
@@ -86,4 +100,4 @@ function PagingExample(props: Props) {
 
 const Container = styled(ExampleContainer)``;
 
-export default PagingExample;
+export default EditorExample;

@@ -1,9 +1,11 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
-import BasicExample from '../examples/BasicExample';
 import BodyRoot from '../components/BodyRoot';
+import dynamic from 'next/dynamic';
+const Example = dynamic(() => import('../examples/BasicExample'), {
+  ssr: false,
+});
 
 const Home: NextPage = () => {
   return (
@@ -11,7 +13,7 @@ const Home: NextPage = () => {
       <Container>
         <div>
           <h2>Basic</h2>
-          <BasicExample />
+          <Example />
         </div>
       </Container>
     </PageContainer>
