@@ -1,103 +1,61 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
+import { AXFDataGrid, AXFDGDataItem } from '../@axframe-datagrid';
 import ExampleContainer from '../components/ExampleContainer';
 import { useContainerSize } from '../hooks/useContainerSize';
+import useEditorGrid, { Item } from './useEditorGrid';
+import { Button, Divider } from 'antd';
 
 interface Props {}
 
-interface IListItem {
-  id: string;
-  title: string;
-  writer: string;
-  createAt: string;
-}
-
-const list = Array.from(Array(5)).map((v, i) => ({
-  values: {
-    id: `ID_${i}`,
-    title: `title_${i}`,
-    writer: `writer_${i}`,
-    createAt: `2022-09-08`,
-  },
-}));
-
 function EditorExample(props: Props) {
-  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
-    {
-      key: 'id',
-      label: '아이디 IS LONG !',
-      width: 100,
-    },
-    {
-      key: 'title',
-      label: '제목',
-      width: 300,
-      itemRender: item => {
-        return `${item.writer}//${item.title}`;
-      },
-    },
-    {
-      key: 'writer',
-      label: '작성자',
-      width: 100,
-      itemRender: item => {
-        return `${item.writer}//A`;
-      },
-    },
-    {
-      key: 'createAt',
-      label: '작성일A',
-      width: 100,
-    },
-    {
-      key: 'createAt',
-      label: '작성일B',
-      width: 100,
-    },
-    {
-      key: 'createAt',
-      label: '작성일C',
-      width: 100,
-    },
-    {
-      key: 'createAt',
-      label: '작성일D',
-      width: 100,
-    },
-    {
-      key: 'createAt',
-      label: '작성일E',
-      width: 100,
-    },
-  ]);
-
+  const { columns, handleColumnsChange, list, handleAddList } = useEditorGrid();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
-    <Container ref={containerRef}>
-      <AXFDataGrid<IListItem>
-        width={containerWidth}
-        height={containerHeight}
-        data={list}
-        columns={columns}
-        onChangeColumns={(columnIndex, width, columns) => {
-          console.log('onChangeColumnWidths', columnIndex, width, columns);
-          setColumns(columns);
-        }}
-        rowChecked={{
-          checkedIndexes: [],
-          onChange: (ids, selectedAll) => {
-            console.log('onChange rowSelection', ids, selectedAll);
-          },
-        }}
-        onClick={item => console.log(item)}
-      />
-    </Container>
+    <Wrap>
+      <Buttons>
+        <Button size={'small'} type='primary' onClick={handleAddList}>
+          Add
+        </Button>
+        <Button size={'small'}>Remove</Button>
+        <Divider type='vertical' />
+        <Button size={'small'} type='default'>
+          Save
+        </Button>
+      </Buttons>
+
+      <Container ref={containerRef}>
+        <AXFDataGrid<Item>
+          width={containerWidth}
+          height={containerHeight}
+          data={list}
+          columns={columns}
+          onChangeColumns={handleColumnsChange}
+          rowChecked={{
+            checkedIndexes: [],
+            onChange: (ids, selectedAll) => {
+              console.log('onChange rowSelection', ids, selectedAll);
+            },
+          }}
+          onClick={item => console.log(item)}
+          editable
+        />
+      </Container>
+    </Wrap>
   );
 }
 
+const Wrap = styled.div``;
 const Container = styled(ExampleContainer)``;
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  padding: 10px 0;
+  justify-content: flex-start;
+  align-items: center;
+`;
 
 export default EditorExample;

@@ -19,6 +19,7 @@ function TableBody() {
   const handleClick = useAppStore(s => s.handleClick);
   const rowKey = useAppStore(s => s.rowKey);
   const selectedRowKey = useAppStore(s => s.selectedRowKey);
+  const editable = useAppStore(s => s.editable);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -34,26 +35,39 @@ function TableBody() {
             return null;
           }
 
+          const trProps = editable
+            ? {}
+            : {
+                hover: hoverItemIndex === ri,
+                onMouseOver: () => setHoverItemIndex(ri),
+                onMouseOut: () => setHoverItemIndex(undefined),
+              };
+
           return (
             <TableBodyTr
               key={ri}
               itemHeight={itemHeight}
               itemPadding={itemPadding}
-              hover={hoverItemIndex === ri}
               active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
-              onMouseOver={() => setHoverItemIndex(ri)}
-              onMouseOut={() => setHoverItemIndex(undefined)}
+              {...trProps}
             >
               {columns.slice(frozenColumnIndex).map((column, idx) => {
+                const tdProps: Record<string, any> = {};
+                if (editable) {
+                  tdProps.onDoubleClick = () => {};
+                } else {
+                  tdProps.onClick = () => handleClick(ri, idx);
+                }
+
                 return (
                   <td
                     key={idx}
                     style={{
                       textAlign: column.align,
                     }}
-                    onClick={() => handleClick(ri, frozenColumnIndex + idx)}
+                    {...tdProps}
                   >
-                    {getCellValue(column, item)}
+                    {getCellValue(ri, frozenColumnIndex + idx, column, item)}
                   </td>
                 );
               })}

@@ -2,6 +2,16 @@ import React from 'react';
 
 type Direction = 'left' | 'center' | 'right';
 
+export interface AXFDGItemRenderParams<T> {
+  column: AXFDGColumn<T>;
+  itemIndex: number;
+  columnIndex: number;
+  item: AXFDGDataItem<T>;
+  value: T;
+  editable?: boolean;
+  handleSave?: () => void;
+}
+
 export interface AXFDGColumn<T> {
   key: string | string[];
   label: string;
@@ -10,7 +20,8 @@ export interface AXFDGColumn<T> {
   headerAlign?: Direction;
   sortDisable?: boolean;
   className?: string;
-  itemRender?: (item: T) => React.ReactNode;
+  itemRender?: React.FC<AXFDGItemRenderParams<T>>;
+  editable?: boolean;
 }
 
 export interface AXFDGColumnGroup {
@@ -99,6 +110,7 @@ export interface AXFDGProps<T> {
 
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
+  editable?: boolean;
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -161,6 +173,7 @@ export interface AppActions<T> {
   setOnClick: (onClick: AXFDGProps<T>['onClick']) => void;
   setRowKey: (rowKey: React.Key | React.Key[]) => void;
   setSelectedRowKey: (rowKey: React.Key | React.Key[]) => void;
+  setEditable: (editable: boolean) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}

@@ -47,16 +47,20 @@ function ColumnsGroupExample(props: Props) {
             label: '제목',
             align: 'center',
             width: 120,
-            itemRender: item => {
-              return `${item.writer}//${item.title}`;
+            itemRender: ({ value }) => {
+              return (
+                <>
+                  {value.writer} / {value.title}
+                </>
+              );
             },
           },
           {
             key: 'writer',
             label: '작성자',
             width: 100,
-            itemRender: item => {
-              return `${item.writer}//A`;
+            itemRender: ({ value }) => {
+              return <>{value.writer} / A</>;
             },
           },
           {

@@ -1,9 +1,27 @@
 import { AXFDGColumn, AXFDGDataItem } from '../types';
 import React from 'react';
 
-export function getCellValue<T>(column: AXFDGColumn<T>, item: AXFDGDataItem<any>) {
+export function getCellValue<T>(
+  itemIndex: number,
+  columnIndex: number,
+  column: AXFDGColumn<T>,
+  item: AXFDGDataItem<any>,
+  handleSave?: () => void,
+  editable?: boolean,
+) {
   if (column.itemRender) {
-    return column.itemRender(item.values as T);
+    const Render = column.itemRender;
+    return (
+      <Render
+        item={item}
+        value={item.values}
+        column={column}
+        itemIndex={itemIndex}
+        columnIndex={columnIndex}
+        handleSave={handleSave}
+        editable={editable}
+      />
+    );
   } else if (Array.isArray(column.key)) {
     return column.key.reduce((acc, cur) => {
       if (!acc) return acc;
@@ -14,6 +32,7 @@ export function getCellValue<T>(column: AXFDGColumn<T>, item: AXFDGDataItem<any>
     return item.values[column.key];
   }
 }
+
 export function getCellValueByRowKey<T>(rowKey: React.Key | React.Key[], item: AXFDGDataItem<any>) {
   if (Array.isArray(rowKey)) {
     return rowKey.reduce((acc, cur) => {

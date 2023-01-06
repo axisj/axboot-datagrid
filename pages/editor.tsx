@@ -3,8 +3,10 @@ import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
 import BodyRoot from '../components/BodyRoot';
 import dynamic from 'next/dynamic';
+import { Spinner } from '../components/Spinner';
 const Example = dynamic(() => import('../examples/EditorExample'), {
   ssr: false,
+  loading: () => <Spinner />,
 });
 
 const Editor: NextPage = () => {

@@ -159,4 +159,5 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setOnClick: onClick => set({ onClick }),
   setRowKey: rowKey => set({ rowKey }),
   setSelectedRowKey: selectedRowKey => set({ selectedRowKey }),
+  setEditable: editable => set({ editable }),
 });

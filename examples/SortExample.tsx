@@ -33,17 +33,11 @@ function SortExample(props: Props) {
       key: 'title',
       label: '제목',
       width: 300,
-      itemRender: item => {
-        return `${item.writer}//${item.title}`;
-      },
     },
     {
       key: 'writer',
       label: '작성자',
       width: 100,
-      itemRender: item => {
-        return `${item.writer}//A`;
-      },
     },
     {
       key: 'createAt',

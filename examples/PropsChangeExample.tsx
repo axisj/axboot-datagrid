@@ -54,17 +54,11 @@ const columnsFirst: AXFDGColumn<IListItem>[] = [
     key: 'title',
     label: '제목',
     width: 300,
-    itemRender: item => {
-      return `${item.writer}//${item.title}`;
-    },
   },
   {
     key: 'writer',
     label: '작성자',
     width: 100,
-    itemRender: item => {
-      return `${item.writer}//A`;
-    },
   },
   {
     key: 'createAt',
@@ -117,8 +111,8 @@ function PropsChangeExample(props: Props) {
               setColumns(columns);
             }}
             rowChecked={{
-              // checkedIndexes,
-              checkedRowKeys,
+              checkedIndexes,
+              // checkedRowKeys,
               onChange: (checkedIndexes, checkedRowKeys, checkedAll) => {
                 console.log('onChange rowSelection', checkedIndexes, checkedRowKeys, checkedAll);
               },
@@ -315,7 +309,13 @@ function PropsChangeExample(props: Props) {
             <Form.Item name={'selectedRowKey'} label={'SelectedRowKey'}>
               <Select
                 onChange={value => setSelectedRowKey(value)}
-                options={Array.from({ length: 10 }).map((_, i) => ({ label: `K${i + 1}`, value: `K${i + 1}` }))}
+                options={[
+                  {
+                    label: '',
+                    value: '',
+                  },
+                  ...Array.from({ length: 10 }).map((_, i) => ({ label: `K${i}`, value: `K${i}` })),
+                ]}
               />
             </Form.Item>
           </Col>

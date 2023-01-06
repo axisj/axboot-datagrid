@@ -35,6 +35,7 @@ interface Props<T> {
 
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
+  editable?: boolean;
 }
 
 function Table<T>(props: Props<T>) {
@@ -84,6 +85,8 @@ function Table<T>(props: Props<T>) {
   const setOnClick = useAppStore(s => s.setOnClick);
   const setRowKey = useAppStore(s => s.setRowKey);
   const setFocusedRowKey = useAppStore(s => s.setSelectedRowKey);
+  const editable = useAppStore(s => s.editable);
+  const setEditable = useAppStore(s => s.setEditable);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -214,6 +217,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.selectedRowKey !== undefined) setFocusedRowKey(props.selectedRowKey);
   }, [setFocusedRowKey, props.selectedRowKey]);
+  React.useEffect(() => {
+    if (props.editable !== undefined) setEditable(props.editable);
+  }, [setEditable, props.editable]);
 
   //setInitialized
   React.useEffect(() => {

@@ -44,6 +44,7 @@ Add the code below to your project.
   --axfdg-row-selector-color: #ffffff;
   --axfdg-body-bg: #ffffff;
   --axfdg-body-hover-bg: #f3f4f5;
+  --axfdg-body-active-bg: #e6f6ff;
   --axfdg-body-color: #444;
 
   --axfdg-scroll-size: 11px;
@@ -94,16 +95,20 @@ function BasicExample(props: Props) {
       key: 'title',
       label: '제목',
       width: 300,
-      itemRender: item => {
-        return `${item.writer}//${item.title}`;
+      itemRender: ({ value }) => {
+        return (
+          <>
+            {value.writer} / {value.title}
+          </>
+        );
       },
     },
     {
       key: 'writer',
       label: '작성자',
       width: 100,
-      itemRender: item => {
-        return `${item.writer}//A`;
+      itemRender: ({ value }) => {
+        return <>{value.writer} / A</>;
       },
     },
     {
