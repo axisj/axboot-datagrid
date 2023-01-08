@@ -20,6 +20,9 @@ function TableBody() {
   const rowKey = useAppStore(s => s.rowKey);
   const selectedRowKey = useAppStore(s => s.selectedRowKey);
   const editable = useAppStore(s => s.editable);
+  const setEditItem = useAppStore(s => s.setEditItem);
+  const editItemIndex = useAppStore(s => s.editItemIndex);
+  const editItemColIndex = useAppStore(s => s.editItemColIndex);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -36,7 +39,9 @@ function TableBody() {
           }
 
           const trProps = editable
-            ? {}
+            ? {
+                editable: true,
+              }
             : {
                 hover: hoverItemIndex === ri,
                 onMouseOver: () => setHoverItemIndex(ri),
@@ -51,23 +56,30 @@ function TableBody() {
               active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
               {...trProps}
             >
-              {columns.slice(frozenColumnIndex).map((column, idx) => {
+              {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
                 const tdProps: Record<string, any> = {};
                 if (editable) {
-                  tdProps.onDoubleClick = () => {};
+                  tdProps.onClick = () => setEditItem(ri, columnIndex);
                 } else {
-                  tdProps.onClick = () => handleClick(ri, idx);
+                  tdProps.onClick = () => handleClick(ri, columnIndex);
                 }
 
                 return (
                   <td
-                    key={idx}
+                    key={columnIndex}
                     style={{
                       textAlign: column.align,
                     }}
                     {...tdProps}
                   >
-                    {getCellValue(ri, frozenColumnIndex + idx, column, item)}
+                    {getCellValue(
+                      ri,
+                      frozenColumnIndex + columnIndex,
+                      column,
+                      item,
+                      () => {},
+                      editable && editItemIndex === ri && editItemColIndex === columnIndex,
+                    )}
                   </td>
                 );
               })}
@@ -105,8 +117,23 @@ export const BodyTable = styled.table`
   }
 `;
 
-export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; hover?: boolean; active?: boolean }>`
-  cursor: pointer;
+export const TableBodyTr = styled.tr<{
+  itemHeight: number;
+  itemPadding: number;
+  hover?: boolean;
+  active?: boolean;
+  editable?: boolean;
+}>`
+  ${({ editable }) => {
+    if (editable) {
+      return css`
+        cursor: default;
+      `;
+    }
+    return css`
+      cursor: pointer;
+    `;
+  }}
 
   ${({ hover }) => {
     if (hover) {
@@ -115,6 +142,7 @@ export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; 
       `;
     }
   }}
+  
   ${({ active }) => {
     if (active) {
       return css`
@@ -123,6 +151,7 @@ export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; 
       `;
     }
   }}
+  
   > td {
     line-height: ${p => p.itemHeight}px; // - border
     padding: ${p => p.itemPadding}px 6.5px;

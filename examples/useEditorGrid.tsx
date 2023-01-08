@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { AXFDGColumn, AXFDGDataItem } from '../@axframe-datagrid';
+import { AXFDGColumn, AXFDGDataItem, AXFDGItemRenderProps } from '../@axframe-datagrid';
 import { v4 as uuidv4 } from 'uuid';
+import { useAppStore } from '../@axframe-datagrid/store';
 
 export interface Item {
   status: string;
@@ -9,13 +10,17 @@ export interface Item {
   codeValue?: string;
 }
 
-export const CellInputEditor = () => {
+export const CellInputEditor = ({ editable, handleSave }: AXFDGItemRenderProps<Item>) => {
+  if (editable) {
+    return <input />;
+  }
   return <div>CellInputEditor</div>;
 };
 
 export default function useEditorGrid() {
   const [list, setList] = React.useState<AXFDGDataItem<Item>[]>([]);
   const [colWidths, setColWidths] = React.useState<number[]>([]);
+  const [selectedKeys, setSelectedKeys] = React.useState<React.Key[]>([]);
 
   const handleColumnsChange = React.useCallback((columnIndex: number, width: number, columns: AXFDGColumn<Item>[]) => {
     setColWidths(columns.map(column => column.width));
@@ -32,6 +37,11 @@ export default function useEditorGrid() {
       },
     ]);
   }, [list]);
+
+  const handleRemoveList = React.useCallback(() => {
+    setList(list.filter(n => !selectedKeys.includes(n.values['uuid'])));
+    setSelectedKeys([]);
+  }, [list, selectedKeys]);
 
   const columns = React.useMemo(
     () =>
@@ -69,10 +79,12 @@ export default function useEditorGrid() {
     columns,
     list,
     handleAddList,
+    selectedKeys,
+    setSelectedKeys,
+    handleRemoveList,
   };
 }
 
-
 const FN: React.FC<{}> = () => {
-  return <div>ssss</div>
-}
+  return <div>ssss</div>;
+};

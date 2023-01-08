@@ -70,8 +70,8 @@ function PagingExample(props: Props) {
           },
           displayPaginationLength: 5,
         }}
-        onClick={({ item, itemIndex, columnIndex, column }) => {
-          console.log('click tr', item, itemIndex, columnIndex, column);
+        onClick={({ item, index, columnIndex, column }) => {
+          console.log('click tr', item, index, columnIndex, column);
         }}
       />
     </Container>

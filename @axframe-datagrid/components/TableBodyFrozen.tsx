@@ -28,16 +28,19 @@ function TableBodyFrozen(props: Props) {
   const rowKey = useAppStore(s => s.rowKey);
   const selectedRowKey = useAppStore(s => s.selectedRowKey);
   const editable = useAppStore(s => s.editable);
+  const setEditItem = useAppStore(s => s.setEditItem);
+  const editItemIndex = useAppStore(s => s.editItemIndex);
+  const editItemColIndex = useAppStore(s => s.editItemColIndex);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
 
   const handleChangeChecked = React.useCallback(
-    (itemIndex: number, checked: boolean) => {
+    (index: number, checked: boolean) => {
       if (checked) {
-        selectedKeyMap.set(itemIndex, true);
+        selectedKeyMap.set(index, true);
       } else {
-        selectedKeyMap.delete(itemIndex);
+        selectedKeyMap.delete(index);
       }
       setSelectedKeys([...selectedKeyMap.keys()]);
     },
@@ -78,22 +81,30 @@ function TableBodyFrozen(props: Props) {
                   />
                 </td>
               )}
-              {columns.slice(0, frozenColumnIndex).map((column, idx) => {
+              {columns.slice(0, frozenColumnIndex).map((column, columnIndex) => {
                 const tdProps: Record<string, any> = {};
                 if (editable) {
+                  tdProps.onClick = () => setEditItem(ri, columnIndex);
                 } else {
-                  tdProps.onClick = () => handleClick(ri, idx);
+                  tdProps.onClick = () => handleClick(ri, columnIndex);
                 }
 
                 return (
                   <td
-                    key={idx}
+                    key={columnIndex}
                     style={{
                       textAlign: column.align,
                     }}
                     {...tdProps}
                   >
-                    {getCellValue(ri, idx, column, item)}
+                    {getCellValue(
+                      ri,
+                      columnIndex,
+                      column,
+                      item,
+                      () => {},
+                      editable && editItemIndex === ri && editItemColIndex === columnIndex,
+                    )}
                   </td>
                 );
               })}

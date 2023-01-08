@@ -2,7 +2,7 @@ import { AXFDGColumn, AXFDGDataItem } from '../types';
 import React from 'react';
 
 export function getCellValue<T>(
-  itemIndex: number,
+  index: number,
   columnIndex: number,
   column: AXFDGColumn<T>,
   item: AXFDGDataItem<any>,
@@ -16,7 +16,7 @@ export function getCellValue<T>(
         item={item}
         value={item.values}
         column={column}
-        itemIndex={itemIndex}
+        index={index}
         columnIndex={columnIndex}
         handleSave={handleSave}
         editable={editable}
