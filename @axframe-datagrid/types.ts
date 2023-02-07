@@ -7,9 +7,10 @@ export interface AXFDGItemRenderProps<T> {
   index: number;
   columnIndex: number;
   item: AXFDGDataItem<T>;
-  value: T;
+  values: T;
   editable?: boolean;
-  handleSave?: () => void;
+  handleSave?: (value: any) => void;
+  handleCancel?: () => void;
 }
 
 export interface AXFDGColumn<T> {

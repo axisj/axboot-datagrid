@@ -103,6 +103,7 @@ function TableBodyFrozen(props: Props) {
                       column,
                       item,
                       () => {},
+                      () => {},
                       editable && editItemIndex === ri && editItemColIndex === columnIndex,
                     )}
                   </td>

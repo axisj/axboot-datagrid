@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { AXFDGColumn, AXFDGDataItem, AXFDGItemRenderProps } from '../@axframe-datagrid';
 import { v4 as uuidv4 } from 'uuid';
-import { useAppStore } from '../@axframe-datagrid/store';
+import { InputEditor } from './editors';
 
 export interface Item {
   status: string;
@@ -9,13 +9,6 @@ export interface Item {
   code?: string;
   codeValue?: string;
 }
-
-export const CellInputEditor = ({ editable, handleSave }: AXFDGItemRenderProps<Item>) => {
-  if (editable) {
-    return <input />;
-  }
-  return <div>CellInputEditor</div>;
-};
 
 export default function useEditorGrid() {
   const [list, setList] = React.useState<AXFDGDataItem<Item>[]>([]);
@@ -32,6 +25,7 @@ export default function useEditorGrid() {
       {
         values: {
           uuid: uuidv4(),
+          code: 'S0001',
           status: 'new',
         },
       },
@@ -52,7 +46,7 @@ export default function useEditorGrid() {
             key: 'code',
             label: 'Code',
             width: 150,
-            itemRender: CellInputEditor,
+            itemRender: InputEditor,
           },
           {
             key: 'codeValue',

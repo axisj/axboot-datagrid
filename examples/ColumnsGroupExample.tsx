@@ -47,7 +47,7 @@ function ColumnsGroupExample(props: Props) {
             label: '제목',
             align: 'center',
             width: 120,
-            itemRender: ({ value }) => {
+            itemRender: ({ values }) => {
               return (
                 <>
                   {value.writer} / {value.title}
@@ -59,8 +59,8 @@ function ColumnsGroupExample(props: Props) {
             key: 'writer',
             label: '작성자',
             width: 100,
-            itemRender: ({ value }) => {
-              return <>{value.writer} / A</>;
+            itemRender: ({ values: values }) => {
+              return <>{values.writer} / A</>;
             },
           },
           {

@@ -6,7 +6,8 @@ export function getCellValue<T>(
   columnIndex: number,
   column: AXFDGColumn<T>,
   item: AXFDGDataItem<any>,
-  handleSave?: () => void,
+  handleSave?: (value: any) => void,
+  handleCancel?: () => void,
   editable?: boolean,
 ) {
   if (column.itemRender) {
@@ -14,22 +15,17 @@ export function getCellValue<T>(
     return (
       <Render
         item={item}
-        value={item.values}
+        values={item.values}
         column={column}
         index={index}
         columnIndex={columnIndex}
         handleSave={handleSave}
+        handleCancel={handleCancel}
         editable={editable}
       />
     );
-  } else if (Array.isArray(column.key)) {
-    return column.key.reduce((acc, cur) => {
-      if (!acc) return acc;
-      if (acc[cur]) return acc[cur];
-      return acc;
-    }, item.values);
   } else {
-    return item.values[column.key];
+    return getCellValueByRowKey(column.key, item);
   }
 }
 

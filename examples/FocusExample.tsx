@@ -36,7 +36,7 @@ export default function FocusExample(props: Props) {
       key: 'title',
       label: '제목',
       width: 300,
-      itemRender: ({ value }) => {
+      itemRender: ({ values }) => {
         return (
           <>
             {value.writer} / {value.title}
@@ -48,8 +48,8 @@ export default function FocusExample(props: Props) {
       key: 'writer',
       label: '작성자',
       width: 100,
-      itemRender: ({ value }) => {
-        return <>{value.writer} / A</>;
+      itemRender: ({ values: values }) => {
+        return <>{values.writer} / A</>;
       },
     },
     {

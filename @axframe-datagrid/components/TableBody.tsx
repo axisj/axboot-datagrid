@@ -4,6 +4,7 @@ import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
 import { getCellValue, getCellValueByRowKey } from '../utils';
 import { css } from '@emotion/react';
+import { AXFDGColumn } from '../types';
 
 function TableBody() {
   const scrollTop = useAppStore(s => s.scrollTop);
@@ -23,9 +24,30 @@ function TableBody() {
   const setEditItem = useAppStore(s => s.setEditItem);
   const editItemIndex = useAppStore(s => s.editItemIndex);
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
+  const setData = useAppStore(s => s.setData);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
+
+  const setItemValue = React.useCallback(
+    (ri: number, column: AXFDGColumn<any>, newValue: any) => {
+      data[ri].status = 'edited';
+      let _values = data[ri].values;
+
+      if (Array.isArray(column.key)) {
+        column.key.forEach((k, i) => {
+          if (column.key.length - 1 === i) {
+            _values[k] = newValue;
+          }
+        });
+      } else {
+        _values[column.key] = newValue;
+      }
+
+      setData([...data]);
+    },
+    [data, setData],
+  );
 
   return (
     <BodyTable>
@@ -77,7 +99,13 @@ function TableBody() {
                       frozenColumnIndex + columnIndex,
                       column,
                       item,
-                      () => {},
+                      newValue => {
+                        setItemValue(ri, column, newValue);
+                        setEditItem(-1, -1);
+                      },
+                      () => {
+                        setEditItem(-1, -1);
+                      },
                       editable && editItemIndex === ri && editItemColIndex === columnIndex,
                     )}
                   </td>
@@ -124,14 +152,24 @@ export const TableBodyTr = styled.tr<{
   active?: boolean;
   editable?: boolean;
 }>`
-  ${({ editable }) => {
+  ${({ editable, itemHeight, itemPadding }) => {
     if (editable) {
       return css`
         cursor: default;
+        > td {
+          line-height: ${itemHeight}px;
+          padding: 0 6.5px;
+          height: ${itemHeight + itemPadding * 2}px;
+        }
       `;
     }
     return css`
       cursor: pointer;
+      > td {
+        line-height: ${itemHeight}px; // - border
+        padding: 0 6.5px;
+        height: ${itemHeight + itemPadding * 2}px;
+      }
     `;
   }}
 
@@ -151,11 +189,6 @@ export const TableBodyTr = styled.tr<{
       `;
     }
   }}
-  
-  > td {
-    line-height: ${p => p.itemHeight}px; // - border
-    padding: ${p => p.itemPadding}px 6.5px;
-  }
 `;
 
 export default TableBody;
