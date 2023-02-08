@@ -3,16 +3,18 @@ import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
 import BodyRoot from '../components/BodyRoot';
 import dynamic from 'next/dynamic';
-const Example = dynamic(() => import('../examples/BasicExample'), {
+import { Spinner } from '../components/Spinner';
+const Example = dynamic(() => import('../examples/EditorExample'), {
   ssr: false,
+  loading: () => <Spinner />,
 });
 
-const Home: NextPage = () => {
+const Editor: NextPage = () => {
   return (
     <PageContainer>
       <Container>
         <div>
-          <h2>Basic</h2>
+          <h2>Editor</h2>
           <Example />
         </div>
       </Container>
@@ -22,4 +24,4 @@ const Home: NextPage = () => {
 
 const PageContainer = styled(BodyRoot)``;
 
-export default Home;
+export default Editor;

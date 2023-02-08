@@ -1,9 +1,13 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
-import ColumnsGroupExample from '../examples/ColumnsGroupExample';
 import BodyRoot from '../components/BodyRoot';
+import dynamic from 'next/dynamic';
+import { Spinner } from '../components/Spinner';
+const Example = dynamic(() => import('../examples/ColumnsGroupExample'), {
+  ssr: false,
+  loading: () => <Spinner />,
+});
 
 const Sort: NextPage = () => {
   return (
@@ -11,7 +15,7 @@ const Sort: NextPage = () => {
       <Container>
         <div>
           <h2>ColumnsGroup</h2>
-          <ColumnsGroupExample />
+          <Example />
         </div>
       </Container>
     </PageContainer>

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
-import { Button } from 'antd';
+import ExampleContainer from '../components/ExampleContainer';
+import { useContainerSize } from '../hooks/useContainerSize';
 
 interface Props {}
 
@@ -34,17 +35,11 @@ function PagingExample(props: Props) {
       key: 'title',
       label: '제목',
       width: 300,
-      itemRender: item => {
-        return `${item.writer}//${item.title}`;
-      },
     },
     {
       key: 'writer',
       label: '작성자',
       width: 100,
-      itemRender: item => {
-        return `${item.writer}//A`;
-      },
     },
     {
       key: 'createAt',
@@ -52,20 +47,14 @@ function PagingExample(props: Props) {
       width: 100,
     },
   ]);
-  const [width, setWidth] = React.useState(600);
   const containerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (containerRef.current) {
-      setWidth(containerRef.current.clientWidth);
-    }
-  }, []);
+  const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
     <Container ref={containerRef}>
       <AXFDataGrid<IListItem>
-        width={width}
-        height={300}
+        width={containerWidth}
+        height={containerHeight}
         headerHeight={35}
         data={list}
         columns={columns}
@@ -81,16 +70,14 @@ function PagingExample(props: Props) {
           },
           displayPaginationLength: 5,
         }}
-        onClick={({ item, itemIndex, columnIndex, column }) => {
-          console.log('click tr', item, itemIndex, columnIndex, column);
+        onClick={({ item, index, columnIndex, column }) => {
+          console.log('click tr', item, index, columnIndex, column);
         }}
       />
     </Container>
   );
 }
 
-const Container = styled.div`
-  font-size: 13px;
-`;
+const Container = styled(ExampleContainer)``;
 
 export default PagingExample;

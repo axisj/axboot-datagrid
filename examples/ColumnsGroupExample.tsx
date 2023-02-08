@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDataGrid } from '../@axframe-datagrid';
+import { useContainerSize } from '../hooks/useContainerSize';
+import ExampleContainer from '../components/ExampleContainer';
 
 interface Props {}
 
@@ -21,20 +23,14 @@ const list = Array.from(Array(100)).map((v, i) => ({
 }));
 
 function ColumnsGroupExample(props: Props) {
-  const [width, setWidth] = React.useState(600);
   const containerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (containerRef.current) {
-      setWidth(containerRef.current.clientWidth);
-    }
-  }, []);
+  const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
     <Container ref={containerRef}>
       <AXFDataGrid<IListItem>
-        width={width}
-        height={700}
+        width={containerWidth}
+        height={containerHeight}
         data={list}
         frozenColumnIndex={2}
         headerHeight={60}
@@ -51,16 +47,20 @@ function ColumnsGroupExample(props: Props) {
             label: '제목',
             align: 'center',
             width: 120,
-            itemRender: item => {
-              return `${item.writer}//${item.title}`;
+            itemRender: ({ values }) => {
+              return (
+                <>
+                  {values.writer} / {values.title}
+                </>
+              );
             },
           },
           {
             key: 'writer',
             label: '작성자',
             width: 100,
-            itemRender: item => {
-              return `${item.writer}//A`;
+            itemRender: ({ values: values }) => {
+              return <>{values.writer} / A</>;
             },
           },
           {
@@ -105,8 +105,8 @@ function ColumnsGroupExample(props: Props) {
   );
 }
 
-const Container = styled.div`
-  font-size: 13px;
+const Container = styled(ExampleContainer)`
+  height: 700px;
 `;
 
 export default ColumnsGroupExample;

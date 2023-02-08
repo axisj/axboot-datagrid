@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
+import { useContainerSize } from '../hooks/useContainerSize';
+import ExampleContainer from '../components/ExampleContainer';
 
 interface Props {}
 
@@ -31,16 +33,20 @@ function BasicExample(props: Props) {
       key: 'title',
       label: '제목',
       width: 300,
-      itemRender: item => {
-        return `${item.writer}//${item.title}`;
+      itemRender: ({ values }) => {
+        return (
+          <>
+            {values.writer} / {values.title}
+          </>
+        );
       },
     },
     {
       key: 'writer',
       label: '작성자',
       width: 100,
-      itemRender: item => {
-        return `${item.writer}//A`;
+      itemRender: ({ values: values }) => {
+        return <>{values.writer} / A</>;
       },
     },
     {
@@ -70,20 +76,14 @@ function BasicExample(props: Props) {
     },
   ]);
 
-  const [width, setWidth] = React.useState(600);
   const containerRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (containerRef.current) {
-      setWidth(containerRef.current.clientWidth);
-    }
-  }, []);
+  const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
     <Container ref={containerRef}>
       <AXFDataGrid<IListItem>
-        width={width}
-        height={400}
+        width={containerWidth}
+        height={containerHeight}
         data={list}
         columns={columns}
         onChangeColumns={(columnIndex, width, columns) => {
@@ -102,8 +102,6 @@ function BasicExample(props: Props) {
   );
 }
 
-const Container = styled.div`
-  font-size: 13px;
-`;
+const Container = styled(ExampleContainer)``;
 
 export default BasicExample;

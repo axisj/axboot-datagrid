@@ -4,6 +4,7 @@ import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
 import { getCellValue, getCellValueByRowKey } from '../utils';
 import { css } from '@emotion/react';
+import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
 
 function TableBody() {
   const scrollTop = useAppStore(s => s.scrollTop);
@@ -19,9 +20,36 @@ function TableBody() {
   const handleClick = useAppStore(s => s.handleClick);
   const rowKey = useAppStore(s => s.rowKey);
   const selectedRowKey = useAppStore(s => s.selectedRowKey);
+  const editable = useAppStore(s => s.editable);
+  const setEditItem = useAppStore(s => s.setEditItem);
+  const editItemIndex = useAppStore(s => s.editItemIndex);
+  const editItemColIndex = useAppStore(s => s.editItemColIndex);
+  const setData = useAppStore(s => s.setData);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
+
+  const setItemValue = React.useCallback(
+    async (ri: number, column: AXFDGColumn<any>, newValue: any) => {
+      if (data[ri].status !== AXFDGDataItemStatus.new) {
+        data[ri].status = AXFDGDataItemStatus.edit;
+      }
+      let _values = data[ri].values;
+
+      if (Array.isArray(column.key)) {
+        column.key.forEach((k, i) => {
+          if (column.key.length - 1 === i) {
+            _values[k] = newValue;
+          }
+        });
+      } else {
+        _values[column.key] = newValue;
+      }
+
+      await setData([...data]);
+    },
+    [data, setData, setEditItem],
+  );
 
   return (
     <BodyTable>
@@ -34,26 +62,59 @@ function TableBody() {
             return null;
           }
 
+          const trProps = editable
+            ? {
+                editable: true,
+                hover: hoverItemIndex === ri,
+                onMouseOver: () => setHoverItemIndex(ri),
+                onMouseOut: () => setHoverItemIndex(undefined),
+              }
+            : {
+                hover: hoverItemIndex === ri,
+                onMouseOver: () => setHoverItemIndex(ri),
+                onMouseOut: () => setHoverItemIndex(undefined),
+              };
+
           return (
             <TableBodyTr
               key={ri}
               itemHeight={itemHeight}
               itemPadding={itemPadding}
-              hover={hoverItemIndex === ri}
               active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
-              onMouseOver={() => setHoverItemIndex(ri)}
-              onMouseOut={() => setHoverItemIndex(undefined)}
+              {...trProps}
             >
-              {columns.slice(frozenColumnIndex).map((column, idx) => {
+              {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
+                const tdProps: Record<string, any> = {};
+                if (editable) {
+                  tdProps.onClick = () => setEditItem(ri, columnIndex);
+                } else {
+                  tdProps.onClick = () => handleClick(ri, columnIndex);
+                }
+                const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
+
                 return (
                   <td
-                    key={idx}
+                    key={columnIndex}
                     style={{
                       textAlign: column.align,
                     }}
-                    onClick={() => handleClick(ri, frozenColumnIndex + idx)}
+                    role={`editable-${tdEditable}`}
+                    {...tdProps}
                   >
-                    {getCellValue(column, item)}
+                    {getCellValue(
+                      ri,
+                      frozenColumnIndex + columnIndex,
+                      column,
+                      item,
+                      async newValue => {
+                        await setItemValue(ri, column, newValue);
+                        await setEditItem(-1, -1);
+                      },
+                      async () => {
+                        await setEditItem(-1, -1);
+                      },
+                      tdEditable,
+                    )}
                   </td>
                 );
               })}
@@ -91,8 +152,33 @@ export const BodyTable = styled.table`
   }
 `;
 
-export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; hover?: boolean; active?: boolean }>`
-  cursor: pointer;
+export const TableBodyTr = styled.tr<{
+  itemHeight: number;
+  itemPadding: number;
+  hover?: boolean;
+  active?: boolean;
+  editable?: boolean;
+}>`
+  ${({ editable, itemHeight, itemPadding }) => {
+    if (editable) {
+      return css`
+        cursor: default;
+        > td {
+          line-height: ${itemHeight}px;
+          padding: 0 6.5px;
+          height: ${itemHeight + itemPadding * 2}px;
+        }
+      `;
+    }
+    return css`
+      cursor: pointer;
+      > td {
+        line-height: ${itemHeight}px; // - border
+        padding: 0 6.5px;
+        height: ${itemHeight + itemPadding * 2}px;
+      }
+    `;
+  }}
 
   ${({ hover }) => {
     if (hover) {
@@ -101,6 +187,7 @@ export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; 
       `;
     }
   }}
+  
   ${({ active }) => {
     if (active) {
       return css`
@@ -109,10 +196,6 @@ export const TableBodyTr = styled.tr<{ itemHeight: number; itemPadding: number; 
       `;
     }
   }}
-  > td {
-    line-height: ${p => p.itemHeight}px; // - border
-    padding: ${p => p.itemPadding}px 6.5px;
-  }
 `;
 
 export default TableBody;

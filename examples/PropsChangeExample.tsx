@@ -1,8 +1,10 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDataGrid, AXFDGColumn, AXFDGDataItem, AXFDGSortParam } from '../@axframe-datagrid';
-import { Button, Checkbox, Col, Divider, Form, Input, InputNumber, Row, Select, Switch } from 'antd';
+import { Checkbox, Col, Divider, Form, InputNumber, Row, Select, Switch } from 'antd';
 import { delay } from '../@axframe-datagrid/utils';
+import ExampleContainer from '../components/ExampleContainer';
+import { useContainerSize } from '../hooks/useContainerSize';
 
 interface Props {}
 
@@ -52,17 +54,11 @@ const columnsFirst: AXFDGColumn<IListItem>[] = [
     key: 'title',
     label: '제목',
     width: 300,
-    itemRender: item => {
-      return `${item.writer}//${item.title}`;
-    },
   },
   {
     key: 'writer',
     label: '작성자',
     width: 100,
-    itemRender: item => {
-      return `${item.writer}//A`;
-    },
   },
   {
     key: 'createAt',
@@ -91,60 +87,61 @@ function PropsChangeExample(props: Props) {
   const [selectedRowKey, setSelectedRowKey] = React.useState<string>();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
-
+  const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
   React.useEffect(() => {
     setColumns(columnsFirst);
-    if (containerRef.current) {
-      setWidth(containerRef.current.clientWidth);
-    }
   }, []);
 
   return (
-    <Container ref={containerRef}>
-      <AXFDataGrid<IListItem>
-        width={width}
-        height={height}
-        headerHeight={headerHeight}
-        footerHeight={footerHeight}
-        itemHeight={itemHeight}
-        itemPadding={itemPadding}
-        frozenColumnIndex={frozenColumnIndex}
-        data={list}
-        columns={columns}
-        onChangeColumns={(columnIndex, width, columns) => {
-          console.log('onChangeColumnWidths', columnIndex, width, columns);
-          setColumns(columns);
-        }}
-        rowChecked={{
-          // checkedIndexes,
-          checkedRowKeys,
-          onChange: (checkedIndexes, checkedRowKeys, checkedAll) => {
-            console.log('onChange rowSelection', checkedIndexes, checkedRowKeys, checkedAll);
-          },
-        }}
-        page={{
-          currentPage,
-          pageSize: 50,
-          totalPages: 10,
-          totalElements: list.length,
-          loading: false,
-          onChange: (pageNo, pageSize) => {
-            console.log(pageNo, pageSize);
-            setCurrentPage(pageNo);
-          },
-          displayPaginationLength: 5,
-        }}
-        sort={{
-          sortParams,
-          onChange: sortParams => {
-            console.log('onChange: sortParams', sortParams);
-          },
-        }}
-        loading={loading}
-        spinning={spinning}
-        rowKey={['group', 'k']}
-        selectedRowKey={selectedRowKey}
-      />
+    <>
+      <Wrap style={{ width, height }}>
+        <Container ref={containerRef} style={{ width, height }}>
+          <AXFDataGrid<IListItem>
+            width={containerWidth}
+            height={containerHeight}
+            headerHeight={headerHeight}
+            footerHeight={footerHeight}
+            itemHeight={itemHeight}
+            itemPadding={itemPadding}
+            frozenColumnIndex={frozenColumnIndex}
+            data={list}
+            columns={columns}
+            onChangeColumns={(columnIndex, width, columns) => {
+              console.log('onChangeColumnWidths', columnIndex, width, columns);
+              setColumns(columns);
+            }}
+            rowChecked={{
+              checkedIndexes,
+              // checkedRowKeys,
+              onChange: (checkedIndexes, checkedRowKeys, checkedAll) => {
+                console.log('onChange rowSelection', checkedIndexes, checkedRowKeys, checkedAll);
+              },
+            }}
+            page={{
+              currentPage,
+              pageSize: 50,
+              totalPages: 10,
+              totalElements: list.length,
+              loading: false,
+              onChange: (pageNo, pageSize) => {
+                console.log(pageNo, pageSize);
+                setCurrentPage(pageNo);
+              },
+              displayPaginationLength: 5,
+            }}
+            sort={{
+              sortParams,
+              onChange: sortParams => {
+                console.log('onChange: sortParams', sortParams);
+              },
+            }}
+            loading={loading}
+            spinning={spinning}
+            rowKey={['group', 'k']}
+            selectedRowKey={selectedRowKey}
+          />
+        </Container>
+      </Wrap>
 
       <Divider />
 
@@ -312,18 +309,25 @@ function PropsChangeExample(props: Props) {
             <Form.Item name={'selectedRowKey'} label={'SelectedRowKey'}>
               <Select
                 onChange={value => setSelectedRowKey(value)}
-                options={Array.from({ length: 10 }).map((_, i) => ({ label: `K${i + 1}`, value: `K${i + 1}` }))}
+                options={[
+                  {
+                    label: '',
+                    value: '',
+                  },
+                  ...Array.from({ length: 10 }).map((_, i) => ({ label: `K${i}`, value: `K${i}` })),
+                ]}
               />
             </Form.Item>
           </Col>
         </Row>
       </Form>
-    </Container>
+    </>
   );
 }
 
-const Container = styled.div`
-  font-size: 13px;
+const Wrap = styled.div`
+  position: relative;
 `;
+const Container = styled(ExampleContainer)``;
 
 export default PropsChangeExample;

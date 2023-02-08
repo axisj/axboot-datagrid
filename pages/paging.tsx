@@ -1,9 +1,10 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
 import { Container } from '../components/Layouts';
 import styled from '@emotion/styled';
-import PagingExample from '../examples/PagingExample';
 import BodyRoot from '../components/BodyRoot';
+import dynamic from 'next/dynamic';
+const Example = dynamic(() => import('../examples/PagingExample'), {
+  ssr: false,
+});
 
 export default function Paging() {
   return (
@@ -11,7 +12,7 @@ export default function Paging() {
       <Container>
         <div>
           <h2>Paging</h2>
-          <PagingExample />
+          <Example />
         </div>
       </Container>
     </PageContainer>

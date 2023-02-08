@@ -134,11 +134,11 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
     set({ page });
   },
   setHoverItemIndex: hoverItemIndex => set({ hoverItemIndex }),
-  handleClick: (itemIndex, columnIndex) => {
+  handleClick: (index, columnIndex) => {
     get().onClick?.({
-      itemIndex,
+      index,
       columnIndex,
-      item: get().data[itemIndex].values,
+      item: get().data[index].values,
       column: get().columns[columnIndex],
     });
   },
@@ -159,4 +159,11 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setOnClick: onClick => set({ onClick }),
   setRowKey: rowKey => set({ rowKey }),
   setSelectedRowKey: selectedRowKey => set({ selectedRowKey }),
+  setEditable: editable => set({ editable }),
+  setEditItem: (index, columnIndex) => {
+    set({
+      editItemIndex: index,
+      editItemColIndex: columnIndex,
+    });
+  },
 });

@@ -2,6 +2,17 @@ import React from 'react';
 
 type Direction = 'left' | 'center' | 'right';
 
+export interface AXFDGItemRenderProps<T> {
+  column: AXFDGColumn<T>;
+  index: number;
+  columnIndex: number;
+  item: AXFDGDataItem<T>;
+  values: T;
+  editable?: boolean;
+  handleSave?: (value: any) => void;
+  handleCancel?: () => void;
+}
+
 export interface AXFDGColumn<T> {
   key: string | string[];
   label: string;
@@ -10,7 +21,8 @@ export interface AXFDGColumn<T> {
   headerAlign?: Direction;
   sortDisable?: boolean;
   className?: string;
-  itemRender?: (item: T) => React.ReactNode;
+  itemRender?: React.FC<AXFDGItemRenderProps<T>>;
+  editable?: boolean;
 }
 
 export interface AXFDGColumnGroup {
@@ -20,9 +32,15 @@ export interface AXFDGColumnGroup {
   headerAlign?: Direction;
 }
 
+export enum AXFDGDataItemStatus {
+  new,
+  edit,
+  remove,
+}
+
 export type AXFDGDataItem<T> = {
   values: T;
-  status?: string;
+  status?: AXFDGDataItemStatus;
   parentItemIndex?: number;
 };
 
@@ -57,7 +75,7 @@ export interface AXFDGSortInfo {
 }
 
 export interface AXFDGClickParams<T> {
-  itemIndex: number;
+  index: number;
   columnIndex: number;
   item: T;
   column: AXFDGColumn<T>;
@@ -99,6 +117,7 @@ export interface AXFDGProps<T> {
 
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
+  editable?: boolean;
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -126,6 +145,8 @@ export interface AppModel<T> extends AXFDGProps<T> {
   displayPaginationLength: number;
   hoverItemIndex?: number;
   loading: boolean;
+  editItemIndex?: number;
+  editItemColIndex?: number;
 }
 
 export interface AppActions<T> {
@@ -143,7 +164,7 @@ export interface AppActions<T> {
   toggleColumnSort: (columnIndex: number) => void;
   setPage: (page: AXFDGPage) => void;
   setHoverItemIndex: (hoverItemIndex?: number) => void;
-  handleClick: (itemIndex: number, columnIndex: number) => void;
+  handleClick: (index: number, columnIndex: number) => void;
   setWidth: (width: number) => void;
   setHeight: (height: number) => void;
   setContentBodyHeight: (contentBodyHeight: number) => void;
@@ -161,6 +182,8 @@ export interface AppActions<T> {
   setOnClick: (onClick: AXFDGProps<T>['onClick']) => void;
   setRowKey: (rowKey: React.Key | React.Key[]) => void;
   setSelectedRowKey: (rowKey: React.Key | React.Key[]) => void;
+  setEditable: (editable: boolean) => void;
+  setEditItem: (index: number, columnIndex: number) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}
