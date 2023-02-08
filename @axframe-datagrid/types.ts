@@ -32,9 +32,15 @@ export interface AXFDGColumnGroup {
   headerAlign?: Direction;
 }
 
+export enum AXFDGDataItemStatus {
+  new,
+  edit,
+  remove,
+}
+
 export type AXFDGDataItem<T> = {
   values: T;
-  status?: string;
+  status?: AXFDGDataItemStatus;
   parentItemIndex?: number;
 };
 

@@ -39,7 +39,7 @@ export default function FocusExample(props: Props) {
       itemRender: ({ values }) => {
         return (
           <>
-            {value.writer} / {value.title}
+            {values.writer} / {values.title}
           </>
         );
       },

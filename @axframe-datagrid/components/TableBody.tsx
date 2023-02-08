@@ -4,7 +4,7 @@ import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
 import { getCellValue, getCellValueByRowKey } from '../utils';
 import { css } from '@emotion/react';
-import { AXFDGColumn } from '../types';
+import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
 
 function TableBody() {
   const scrollTop = useAppStore(s => s.scrollTop);
@@ -30,8 +30,10 @@ function TableBody() {
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
 
   const setItemValue = React.useCallback(
-    (ri: number, column: AXFDGColumn<any>, newValue: any) => {
-      data[ri].status = 'edited';
+    async (ri: number, column: AXFDGColumn<any>, newValue: any) => {
+      if (data[ri].status !== AXFDGDataItemStatus.new) {
+        data[ri].status = AXFDGDataItemStatus.edit;
+      }
       let _values = data[ri].values;
 
       if (Array.isArray(column.key)) {
@@ -44,9 +46,9 @@ function TableBody() {
         _values[column.key] = newValue;
       }
 
-      setData([...data]);
+      await setData([...data]);
     },
-    [data, setData],
+    [data, setData, setEditItem],
   );
 
   return (
@@ -63,6 +65,9 @@ function TableBody() {
           const trProps = editable
             ? {
                 editable: true,
+                hover: hoverItemIndex === ri,
+                onMouseOver: () => setHoverItemIndex(ri),
+                onMouseOut: () => setHoverItemIndex(undefined),
               }
             : {
                 hover: hoverItemIndex === ri,
@@ -85,6 +90,7 @@ function TableBody() {
                 } else {
                   tdProps.onClick = () => handleClick(ri, columnIndex);
                 }
+                const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
 
                 return (
                   <td
@@ -92,6 +98,7 @@ function TableBody() {
                     style={{
                       textAlign: column.align,
                     }}
+                    role={`editable-${tdEditable}`}
                     {...tdProps}
                   >
                     {getCellValue(
@@ -99,14 +106,14 @@ function TableBody() {
                       frozenColumnIndex + columnIndex,
                       column,
                       item,
-                      newValue => {
-                        setItemValue(ri, column, newValue);
-                        setEditItem(-1, -1);
+                      async newValue => {
+                        await setItemValue(ri, column, newValue);
+                        await setEditItem(-1, -1);
                       },
-                      () => {
-                        setEditItem(-1, -1);
+                      async () => {
+                        await setEditItem(-1, -1);
                       },
-                      editable && editItemIndex === ri && editItemColIndex === columnIndex,
+                      tdEditable,
                     )}
                   </td>
                 );

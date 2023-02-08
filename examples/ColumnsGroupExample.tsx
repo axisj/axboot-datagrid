@@ -50,7 +50,7 @@ function ColumnsGroupExample(props: Props) {
             itemRender: ({ values }) => {
               return (
                 <>
-                  {value.writer} / {value.title}
+                  {values.writer} / {values.title}
                 </>
               );
             },
