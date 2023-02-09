@@ -60,8 +60,6 @@ export default function useEditorGrid() {
   }, [list]);
 
   const handleRemoveList = React.useCallback(() => {
-    setList(list.filter(n => !selectedKeys.includes(n.values['uuid'])));
-
     setList(
       list
         .map(item => {
