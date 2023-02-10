@@ -70,7 +70,7 @@ function TableBodyFrozen(props: Props) {
       await setData([...data]);
       await onChangeData?.(ri, ci, _values, column);
     },
-    [data, setData],
+    [data, onChangeData, setData],
   );
 
   return (

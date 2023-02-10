@@ -352,7 +352,7 @@ const FrozenHeader = styled.div`
   position: absolute;
   background-color: var(--axfdg-header-bg);
   border-right: 1px solid var(--axfdg-border-color-base);
-  box-shadow: 0 0 3px var(--axfdg-border-color-base);
+  box-shadow: 0 0 2px var(--axfdg-border-color-base);
   z-index: 3;
 `;
 
@@ -422,7 +422,7 @@ const ScrollContent = styled.div`
 const FrozenScrollContent = styled.div`
   flex: none;
   border-right: 1px solid var(--axfdg-border-color-base);
-  box-shadow: 0 0 3px var(--axfdg-border-color-base);
+  box-shadow: 0 0 2px var(--axfdg-border-color-base);
   z-index: 2;
   overflow: hidden;
   position: relative;
