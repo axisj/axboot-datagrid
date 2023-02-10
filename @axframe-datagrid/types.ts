@@ -93,6 +93,7 @@ export interface AXFDGProps<T> {
   onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
   frozenColumnIndex?: number;
   data?: AXFDGDataItem<T>[];
+  onChangeData?: (index: number, columnIndex: number, item: T, column: AXFDGColumn<T>) => void;
 
   page?: AXFDGPage;
   enableLoadMore?: boolean;
@@ -179,11 +180,15 @@ export interface AppActions<T> {
   setCheckedIndexesMap: (checkedIndexesMap: Map<number, any>) => void;
   setSortParams: (sortParams: Record<string, AXFDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
-  setOnClick: (onClick: AXFDGProps<T>['onClick']) => void;
   setRowKey: (rowKey: React.Key | React.Key[]) => void;
   setSelectedRowKey: (rowKey: React.Key | React.Key[]) => void;
   setEditable: (editable: boolean) => void;
   setEditItem: (index: number, columnIndex: number) => void;
+
+  setOnClick: (onClick?: AXFDGProps<T>['onClick']) => void;
+  setOnChangeColumns: (onChangeColumns?: AXFDGProps<T>['onChangeColumns']) => void;
+  setOnChangeData: (onChangeData?: AXFDGProps<T>['onChangeData']) => void;
+  setOnLoadMore: (onLoadMore?: AXFDGProps<T>['onLoadMore']) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}

@@ -156,7 +156,6 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setFrozenColumnIndex: frozenColumnIndex => set({ frozenColumnIndex }),
   setSortParams: sortParams => set({ sortParams }),
   setFrozenColumnsWidth: frozenColumnsWidth => set({ frozenColumnsWidth }),
-  setOnClick: onClick => set({ onClick }),
   setRowKey: rowKey => set({ rowKey }),
   setSelectedRowKey: selectedRowKey => set({ selectedRowKey }),
   setEditable: editable => set({ editable }),
@@ -166,4 +165,8 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
       editItemColIndex: columnIndex,
     });
   },
+  setOnClick: onClick => set({ onClick }),
+  setOnChangeColumns: onChangeColumns => set({ onChangeColumns }),
+  setOnChangeData: onChangeData => set({ onChangeData }),
+  setOnLoadMore: onLoadMore => set({ onLoadMore }),
 });

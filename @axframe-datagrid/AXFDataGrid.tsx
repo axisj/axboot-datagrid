@@ -29,6 +29,7 @@ export function AXFDataGrid<T = Record<string, any>>({
   rowKey,
   selectedRowKey,
   editable,
+  onChangeData,
 }: AXFDGProps<T>) {
   const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
     if (rowChecked?.checkedRowKeys && rowKey) {
@@ -157,6 +158,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           rowKey,
           selectedRowKey,
           editable,
+          onChangeData,
           ...getAppStoreActions(set, get),
         }))
       }
@@ -184,6 +186,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           rowKey,
           selectedRowKey,
           editable,
+          onChangeData,
         }}
       />
     </AppStoreProvider>

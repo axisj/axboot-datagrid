@@ -36,6 +36,9 @@ function EditorExample(props: Props) {
           data={list}
           columns={columns}
           onChangeColumns={handleColumnsChange}
+          onChangeData={(ri, ci, item) => {
+            console.log('onChangeData', ri, ci, item);
+          }}
           rowChecked={{
             // checkedIndexes: [],
             checkedRowKeys: selectedKeys,

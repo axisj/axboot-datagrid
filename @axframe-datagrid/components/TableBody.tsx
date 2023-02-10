@@ -16,8 +16,8 @@ function TableBody() {
   const columns = useAppStore(s => s.columns);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
   const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
-  const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
   const handleClick = useAppStore(s => s.handleClick);
+  const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
   const rowKey = useAppStore(s => s.rowKey);
   const selectedRowKey = useAppStore(s => s.selectedRowKey);
   const editable = useAppStore(s => s.editable);
@@ -25,12 +25,13 @@ function TableBody() {
   const editItemIndex = useAppStore(s => s.editItemIndex);
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
   const setData = useAppStore(s => s.setData);
+  const onChangeData = useAppStore(s => s.onChangeData);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
 
   const setItemValue = React.useCallback(
-    async (ri: number, column: AXFDGColumn<any>, newValue: any) => {
+    async (ri: number, ci: number, column: AXFDGColumn<any>, newValue: any) => {
       if (data[ri].status !== AXFDGDataItemStatus.new) {
         data[ri].status = AXFDGDataItemStatus.edit;
       }
@@ -47,8 +48,9 @@ function TableBody() {
       }
 
       await setData([...data]);
+      await onChangeData?.(ri, ci, _values, column);
     },
-    [data, setData, setEditItem],
+    [data, onChangeData, setData],
   );
 
   return (
@@ -107,7 +109,7 @@ function TableBody() {
                       column,
                       item,
                       async newValue => {
-                        await setItemValue(ri, column, newValue);
+                        await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
                         await setEditItem(-1, -1);
                       },
                       async () => {

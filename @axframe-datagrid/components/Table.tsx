@@ -32,6 +32,9 @@ interface Props<T> {
   page?: AXFDGPage;
   data?: AXFDGDataItem<T>[];
   onClick?: AXFDGProps<T>['onClick'];
+  onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
+  onChangeData?: (index: number, columnIndex: number, item: T, column: AXFDGColumn<T>) => void;
+  onLoadMore?: (params: { scrollLeft: number; scrollTop: number }) => void;
 
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
@@ -82,11 +85,15 @@ function Table<T>(props: Props<T>) {
   const setData = useAppStore(s => s.setData);
   const setColumns = useAppStore(s => s.setColumns);
   const setColumnsGroup = useAppStore(s => s.setColumnsGroup);
-  const setOnClick = useAppStore(s => s.setOnClick);
   const setRowKey = useAppStore(s => s.setRowKey);
   const setFocusedRowKey = useAppStore(s => s.setSelectedRowKey);
-  const editable = useAppStore(s => s.editable);
+
   const setEditable = useAppStore(s => s.setEditable);
+
+  const setOnClick = useAppStore(s => s.setOnClick);
+  const setOnChangeColumns = useAppStore(s => s.setOnChangeColumns);
+  const setOnChangeData = useAppStore(s => s.setOnChangeData);
+  const setOnLoadMore = useAppStore(s => s.setOnLoadMore);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -208,9 +215,7 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.columnsGroup !== undefined) setColumnsGroup(props.columnsGroup);
   }, [setColumnsGroup, props.columnsGroup]);
-  React.useEffect(() => {
-    if (props.onClick !== undefined) setOnClick(props.onClick);
-  }, [setOnClick, props.onClick]);
+
   React.useEffect(() => {
     if (props.rowKey !== undefined) setRowKey(props.rowKey);
   }, [setRowKey, props.rowKey]);
@@ -220,6 +225,19 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.editable !== undefined) setEditable(props.editable);
   }, [setEditable, props.editable]);
+
+  React.useEffect(() => {
+    setOnClick(props.onClick);
+  }, [setOnClick, props.onClick]);
+  React.useEffect(() => {
+    setOnChangeColumns(props.onChangeColumns);
+  }, [setOnChangeColumns, props.onChangeColumns]);
+  React.useEffect(() => {
+    setOnChangeData(props.onChangeData);
+  }, [setOnChangeData, props.onChangeData]);
+  React.useEffect(() => {
+    setOnLoadMore(props.onLoadMore);
+  }, [setOnLoadMore, props.onLoadMore]);
 
   //setInitialized
   React.useEffect(() => {

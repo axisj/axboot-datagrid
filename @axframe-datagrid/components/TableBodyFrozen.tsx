@@ -4,6 +4,7 @@ import { getCellValue, getCellValueByRowKey } from '../utils';
 import { BodyTable, TableBodyTr } from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
+import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
 
 interface Props {
   style?: React.CSSProperties;
@@ -31,6 +32,8 @@ function TableBodyFrozen(props: Props) {
   const setEditItem = useAppStore(s => s.setEditItem);
   const editItemIndex = useAppStore(s => s.editItemIndex);
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
+  const setData = useAppStore(s => s.setData);
+  const onChangeData = useAppStore(s => s.onChangeData);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -47,6 +50,29 @@ function TableBodyFrozen(props: Props) {
     [selectedKeyMap, setSelectedKeys],
   );
 
+  const setItemValue = React.useCallback(
+    async (ri: number, ci: number, column: AXFDGColumn<any>, newValue: any) => {
+      if (data[ri].status !== AXFDGDataItemStatus.new) {
+        data[ri].status = AXFDGDataItemStatus.edit;
+      }
+      let _values = data[ri].values;
+
+      if (Array.isArray(column.key)) {
+        column.key.forEach((k, i) => {
+          if (column.key.length - 1 === i) {
+            _values[k] = newValue;
+          }
+        });
+      } else {
+        _values[column.key] = newValue;
+      }
+
+      await setData([...data]);
+      await onChangeData?.(ri, ci, _values, column);
+    },
+    [data, setData],
+  );
+
   return (
     <BodyTable style={props.style}>
       <TableColGroupFrozen />
@@ -58,7 +84,12 @@ function TableBodyFrozen(props: Props) {
             return null;
           }
           const trProps = editable
-            ? {}
+            ? {
+                editable: true,
+                hover: hoverItemIndex === ri,
+                onMouseOver: () => setHoverItemIndex(ri),
+                onMouseOut: () => setHoverItemIndex(undefined),
+              }
             : {
                 hover: hoverItemIndex === ri,
                 onMouseOver: () => setHoverItemIndex(ri),
@@ -102,8 +133,13 @@ function TableBodyFrozen(props: Props) {
                       columnIndex,
                       column,
                       item,
-                      () => {},
-                      () => {},
+                      async newValue => {
+                        await setItemValue(ri, columnIndex, column, newValue);
+                        await setEditItem(-1, -1);
+                      },
+                      async () => {
+                        await setEditItem(-1, -1);
+                      },
                       editable && editItemIndex === ri && editItemColIndex === columnIndex,
                     )}
                   </td>
