@@ -36,7 +36,8 @@ export default function useEditorGrid() {
     },
   ]);
   const [colWidths, setColWidths] = React.useState<number[]>([]);
-  const [selectedKeys, setSelectedKeys] = React.useState<React.Key[]>([]);
+  const [checkedKeys, setCheckedKeys] = React.useState<React.Key[]>([]);
+  const [selectedRowKey, setSelectedRowKey] = React.useState('');
 
   const handleColumnsChange = React.useCallback((columnIndex: number, width: number, columns: AXFDGColumn<Item>[]) => {
     setColWidths(columns.map(column => column.width));
@@ -63,7 +64,7 @@ export default function useEditorGrid() {
     setList(
       list
         .map(item => {
-          if (selectedKeys.includes(item.values['uuid'])) {
+          if (checkedKeys.includes(item.values['uuid'])) {
             if (item.status === AXFDGDataItemStatus.new) {
               return false;
             }
@@ -77,8 +78,8 @@ export default function useEditorGrid() {
         })
         .filter(Boolean) as AXFDGDataItem<Item>[],
     );
-    setSelectedKeys([]);
-  }, [list, selectedKeys]);
+    setCheckedKeys([]);
+  }, [list, checkedKeys]);
 
   const columns = React.useMemo(
     () =>
@@ -141,8 +142,10 @@ export default function useEditorGrid() {
     columns,
     list,
     handleAddList,
-    selectedKeys,
-    setSelectedKeys,
+    checkedKeys,
+    setCheckedKeys,
+    selectedRowKey,
+    setSelectedRowKey,
     handleRemoveList,
   };
 }

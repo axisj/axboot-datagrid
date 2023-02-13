@@ -9,8 +9,17 @@ import { Button, Divider } from 'antd';
 interface Props {}
 
 function EditorExample(props: Props) {
-  const { columns, handleColumnsChange, list, handleAddList, selectedKeys, setSelectedKeys, handleRemoveList } =
-    useEditorGrid();
+  const {
+    columns,
+    handleColumnsChange,
+    list,
+    handleAddList,
+    checkedKeys,
+    setCheckedKeys,
+    selectedRowKey,
+    setSelectedRowKey,
+    handleRemoveList,
+  } = useEditorGrid();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
@@ -41,15 +50,18 @@ function EditorExample(props: Props) {
           }}
           rowChecked={{
             // checkedIndexes: [],
-            checkedRowKeys: selectedKeys,
+            checkedRowKeys: checkedKeys,
             onChange: (ids, keys, selectedAll) => {
               // console.log('onChange rowSelection', ids, keys, selectedAll);
-              setSelectedKeys(keys);
+              setCheckedKeys(keys);
             },
           }}
-          onClick={item => console.log(item)}
+          onClick={item => {
+            setSelectedRowKey(item.item.uuid);
+          }}
           editable
           rowKey={'uuid'}
+          selectedRowKey={selectedRowKey}
         />
       </Container>
     </Wrap>

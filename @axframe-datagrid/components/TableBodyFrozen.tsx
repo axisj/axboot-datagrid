@@ -115,10 +115,9 @@ function TableBodyFrozen(props: Props) {
               {columns.slice(0, frozenColumnIndex).map((column, columnIndex) => {
                 const tdProps: Record<string, any> = {};
                 if (editable) {
-                  tdProps.onClick = () => setEditItem(ri, columnIndex);
-                } else {
-                  tdProps.onClick = () => handleClick(ri, columnIndex);
+                  tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }
+                tdProps.onClick = () => handleClick(ri, columnIndex);
 
                 return (
                   <td

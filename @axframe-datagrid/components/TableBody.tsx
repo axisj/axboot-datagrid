@@ -88,10 +88,9 @@ function TableBody() {
               {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
                 const tdProps: Record<string, any> = {};
                 if (editable) {
-                  tdProps.onClick = () => setEditItem(ri, columnIndex);
-                } else {
-                  tdProps.onClick = () => handleClick(ri, columnIndex);
+                  tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }
+                tdProps.onClick = () => handleClick(ri, columnIndex);
                 const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
 
                 return (
@@ -120,7 +119,7 @@ function TableBody() {
                   </td>
                 );
               })}
-              <td />
+              <td onClick={() => handleClick(ri, -1)} />
             </TableBodyTr>
           );
         })}
