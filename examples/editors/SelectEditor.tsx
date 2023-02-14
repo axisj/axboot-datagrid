@@ -30,18 +30,6 @@ export const SelectEditor = ({
   const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
     async evt => {
       switch (evt.key) {
-        case 'Down':
-        case 'ArrowDown':
-          break;
-        case 'Up':
-        case 'ArrowUp':
-          break;
-        case 'Left':
-        case 'ArrowLeft':
-          break;
-        case 'Right':
-        case 'ArrowRight':
-          break;
         case 'Tab':
           evt.preventDefault();
           if (evt.shiftKey) {
