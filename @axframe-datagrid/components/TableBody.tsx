@@ -6,6 +6,12 @@ import { getCellValue, getCellValueByRowKey } from '../utils';
 import { css } from '@emotion/react';
 import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
 
+const DIRC_MAP = {
+  next: 1,
+  prev: -1,
+  current: 0,
+};
+
 function TableBody() {
   const scrollTop = useAppStore(s => s.scrollTop);
   const itemHeight = useAppStore(s => s.itemHeight);
@@ -113,25 +119,10 @@ function TableBody() {
                         await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
 
                         if (columnDirection && rowDirection) {
-                          let _ci = frozenColumnIndex + columnIndex;
-                          let _ri = ri;
-                          if (columnDirection === 'next') {
-                            _ci += 1;
-                          } else if (columnDirection === 'prev') {
-                            _ci -= 1;
-                          }
-                          if (rowDirection === 'next') {
-                            _ri += 1;
-                          } else if (rowDirection === 'prev') {
-                            _ri -= 1;
-                          }
-
-                          if (_ci > columns.length - 1) {
-                            _ci = 0;
-                          }
-                          if (_ri > data.length - 1) {
-                            _ri = 0;
-                          }
+                          let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                          let _ri = ri + DIRC_MAP[rowDirection];
+                          if (_ci > columns.length - 1) _ci = 0;
+                          if (_ri > data.length - 1) _ri = 0;
 
                           await setEditItem(_ri, _ci);
                         } else {
@@ -142,25 +133,10 @@ function TableBody() {
                         await setEditItem(-1, -1);
                       },
                       async (columnDirection, rowDirection) => {
-                        let _ci = frozenColumnIndex + columnIndex;
-                        let _ri = ri;
-                        if (columnDirection === 'next') {
-                          _ci += 1;
-                        } else if (columnDirection === 'prev') {
-                          _ci -= 1;
-                        }
-                        if (rowDirection === 'next') {
-                          _ri += 1;
-                        } else if (rowDirection === 'prev') {
-                          _ri -= 1;
-                        }
-
-                        if (_ci > columns.length - 1) {
-                          _ci = 0;
-                        }
-                        if (_ri > data.length - 1) {
-                          _ri = 0;
-                        }
+                        let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                        let _ri = ri + DIRC_MAP[rowDirection];
+                        if (_ci > columns.length - 1) _ci = 0;
+                        if (_ri > data.length - 1) _ri = 0;
 
                         await setEditItem(_ri, _ci);
                       },
