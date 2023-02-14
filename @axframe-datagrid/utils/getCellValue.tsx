@@ -1,4 +1,4 @@
-import { AXFDGColumn, AXFDGDataItem } from '../types';
+import { AXFDGColumn, AXFDGDataItem, MoveDirection } from '../types';
 import React from 'react';
 
 export function getCellValue<T>(
@@ -8,6 +8,7 @@ export function getCellValue<T>(
   item: AXFDGDataItem<any>,
   handleSave?: (value: any) => void,
   handleCancel?: () => void,
+  handleMove?: (columnDirection: MoveDirection, rowDirection: MoveDirection) => void,
   editable?: boolean,
 ) {
   if (column.itemRender) {
@@ -21,6 +22,7 @@ export function getCellValue<T>(
         columnIndex={columnIndex}
         handleSave={handleSave}
         handleCancel={handleCancel}
+        handleMove={handleMove}
         editable={editable}
       />
     );

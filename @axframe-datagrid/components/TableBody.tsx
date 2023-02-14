@@ -53,6 +53,8 @@ function TableBody() {
     [data, onChangeData, setData],
   );
 
+  const handleMoveEdit = React.useCallback(async () => {}, []);
+
   return (
     <BodyTable>
       <TableColGroup />
@@ -113,6 +115,29 @@ function TableBody() {
                       },
                       async () => {
                         await setEditItem(-1, -1);
+                      },
+                      async (columnDirection, rowDirection) => {
+                        let _ci = frozenColumnIndex + columnIndex;
+                        let _ri = ri;
+                        if (columnDirection === 'next') {
+                          _ci += 1;
+                        } else if (columnDirection === 'prev') {
+                          _ci -= 1;
+                        }
+                        if (rowDirection === 'next') {
+                          _ri += 1;
+                        } else if (rowDirection === 'prev') {
+                          _ri -= 1;
+                        }
+
+                        if (_ci > columns.length - 1) {
+                          _ci = 0;
+                        }
+                        if (_ri > data.length - 1) {
+                          _ri = 0;
+                        }
+
+                        await setEditItem(_ri, _ci);
                       },
                       tdEditable,
                     )}

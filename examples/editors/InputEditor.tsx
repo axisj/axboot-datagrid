@@ -12,6 +12,7 @@ export const InputEditor = ({
   values,
   handleSave,
   handleCancel,
+  handleMove,
 }: AXFDGItemRenderProps<Item>) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -29,24 +30,24 @@ export const InputEditor = ({
     [currentValue, handleCancel, handleSave],
   );
 
-  const onKeyUp = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
+  const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
     evt => {
       switch (evt.key) {
-        case 'Down': // IE/Edge에서 사용되는 값
+        case 'Down':
         case 'ArrowDown':
-          // "아래 화살표" 키가 눌렸을 때의 동작입니다.
+          handleMove?.('current', 'next');
           break;
-        case 'Up': // IE/Edge에서 사용되는 값
+        case 'Up':
         case 'ArrowUp':
-          // "위 화살표" 키가 눌렸을 때의 동작입니다.
+          handleMove?.('current', 'prev');
           break;
-        case 'Left': // IE/Edge에서 사용되는 값
-        case 'ArrowLeft':
-          // "왼쪽 화살표" 키가 눌렸을 때의 동작입니다.
-          break;
-        case 'Right': // IE/Edge에서 사용되는 값
-        case 'ArrowRight':
-          // "오른쪽 화살표" 키가 눌렸을 때의 동작입니다.
+        case 'Tab':
+          evt.preventDefault();
+          if (evt.shiftKey) {
+            handleMove?.('prev', 'current');
+          } else {
+            handleMove?.('next', 'current');
+          }
           break;
         case 'Enter':
           handleSaveEdit(evt.currentTarget.value);
@@ -56,10 +57,10 @@ export const InputEditor = ({
           handleCancel?.();
           break;
         default:
-          return; // 키 이벤트를 처리하지 않는다면 종료합니다.
+          return;
       }
     },
-    [handleCancel, handleSaveEdit],
+    [handleCancel, handleMove, handleSaveEdit],
   );
 
   const onBlur = React.useCallback<React.FocusEventHandler<HTMLInputElement>>(
@@ -77,7 +78,7 @@ export const InputEditor = ({
           autoFocus
           size={'small'}
           defaultValue={currentValue}
-          onKeyUp={onKeyUp}
+          onKeyDown={onKeyDown}
           onBlur={onBlur}
         />
       </Container>

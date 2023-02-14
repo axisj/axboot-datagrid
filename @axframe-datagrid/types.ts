@@ -1,6 +1,7 @@
 import React from 'react';
 
-type Direction = 'left' | 'center' | 'right';
+export type AlignDirection = 'left' | 'center' | 'right';
+export type MoveDirection = 'prev' | 'next' | 'current';
 
 export interface AXFDGItemRenderProps<T> {
   column: AXFDGColumn<T>;
@@ -11,14 +12,15 @@ export interface AXFDGItemRenderProps<T> {
   editable?: boolean;
   handleSave?: (value: any) => void;
   handleCancel?: () => void;
+  handleMove?: (columnDirection: MoveDirection, rowDirection: MoveDirection) => void;
 }
 
 export interface AXFDGColumn<T> {
   key: string | string[];
   label: string;
   width: number;
-  align?: Direction;
-  headerAlign?: Direction;
+  align?: AlignDirection;
+  headerAlign?: AlignDirection;
   sortDisable?: boolean;
   className?: string;
   itemRender?: React.FC<AXFDGItemRenderProps<T>>;
@@ -28,8 +30,8 @@ export interface AXFDGColumn<T> {
 export interface AXFDGColumnGroup {
   label: string;
   colspan: number;
-  align?: Direction;
-  headerAlign?: Direction;
+  align?: AlignDirection;
+  headerAlign?: AlignDirection;
 }
 
 export enum AXFDGDataItemStatus {

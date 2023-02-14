@@ -12,6 +12,7 @@ export const SelectEditor = ({
   values,
   handleSave,
   handleCancel,
+  handleMove,
 }: AXFDGItemRenderProps<Item>) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const currentValue = React.useMemo(() => getCellValueByRowKey(column.key, item), [column, item, editable]);
@@ -31,19 +32,23 @@ export const SelectEditor = ({
       switch (evt.key) {
         case 'Down':
         case 'ArrowDown':
-          // "아래 화살표" 키가 눌렸을 때의 동작입니다.
           break;
         case 'Up':
         case 'ArrowUp':
-          // "위 화살표" 키가 눌렸을 때의 동작입니다.
           break;
         case 'Left':
         case 'ArrowLeft':
-          // "왼쪽 화살표" 키가 눌렸을 때의 동작입니다.
           break;
         case 'Right':
         case 'ArrowRight':
-          // "오른쪽 화살표" 키가 눌렸을 때의 동작입니다.
+          break;
+        case 'Tab':
+          evt.preventDefault();
+          if (evt.shiftKey) {
+            handleMove?.('prev', 'current');
+          } else {
+            handleMove?.('next', 'current');
+          }
           break;
         case 'Enter':
           break;
@@ -55,7 +60,7 @@ export const SelectEditor = ({
           return; // 키 이벤트를 처리하지 않는다면 종료합니다.
       }
     },
-    [handleCancel],
+    [handleCancel, handleMove],
   );
 
   const onBlur = React.useCallback<React.FocusEventHandler<HTMLInputElement>>(

@@ -13,6 +13,7 @@ export const DateEditor = ({
   values,
   handleSave,
   handleCancel,
+  handleMove,
 }: AXFDGItemRenderProps<Item>) => {
   const currentValue = React.useMemo(() => {
     return getCellValueByRowKey(column.key, item);
@@ -34,19 +35,19 @@ export const DateEditor = ({
       switch (evt.key) {
         case 'Down':
         case 'ArrowDown':
-          // "아래 화살표" 키가 눌렸을 때의 동작입니다.
+          handleMove?.('current', 'next');
           break;
         case 'Up':
         case 'ArrowUp':
-          // "위 화살표" 키가 눌렸을 때의 동작입니다.
+          handleMove?.('current', 'prev');
           break;
-        case 'Left':
-        case 'ArrowLeft':
-          // "왼쪽 화살표" 키가 눌렸을 때의 동작입니다.
-          break;
-        case 'Right':
-        case 'ArrowRight':
-          // "오른쪽 화살표" 키가 눌렸을 때의 동작입니다.
+        case 'Tab':
+          evt.preventDefault();
+          if (evt.shiftKey) {
+            handleMove?.('prev', 'current');
+          } else {
+            handleMove?.('next', 'current');
+          }
           break;
         case 'Enter':
           break;
@@ -58,7 +59,7 @@ export const DateEditor = ({
           return; // 키 이벤트를 처리하지 않는다면 종료합니다.
       }
     },
-    [handleCancel],
+    [handleCancel, handleMove],
   );
 
   const onBlur = React.useCallback<React.FocusEventHandler<HTMLInputElement>>(
