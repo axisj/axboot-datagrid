@@ -18,13 +18,16 @@ export const SelectEditor = ({
   const currentValue = React.useMemo(() => getCellValueByRowKey(column.key, item), [column, item, editable]);
 
   const handleSaveEdit = React.useCallback(
-    (newValue: any) => {
+    (newValue: any, ...rest: any) => {
       if (currentValue === newValue) {
+        handleCancel?.();
+        const [a, b] = rest;
+        handleMove?.(a, b);
         return;
       }
-      handleSave?.(newValue);
+      handleSave?.(newValue, ...rest);
     },
-    [currentValue, handleSave],
+    [currentValue, handleCancel, handleSave, handleMove],
   );
 
   const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
@@ -33,9 +36,9 @@ export const SelectEditor = ({
         case 'Tab':
           evt.preventDefault();
           if (evt.shiftKey) {
-            handleMove?.('prev', 'current');
+            handleSaveEdit(evt.currentTarget.value, 'prev', 'current');
           } else {
-            handleMove?.('next', 'current');
+            handleSaveEdit(evt.currentTarget.value, 'next', 'current');
           }
           break;
         case 'Enter':
@@ -48,7 +51,7 @@ export const SelectEditor = ({
           return; // 키 이벤트를 처리하지 않는다면 종료합니다.
       }
     },
-    [handleCancel, handleMove],
+    [handleCancel, handleSaveEdit],
   );
 
   const onBlur = React.useCallback<React.FocusEventHandler<HTMLInputElement>>(

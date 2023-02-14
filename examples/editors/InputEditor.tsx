@@ -20,14 +20,16 @@ export const InputEditor = ({
   const currentValue = React.useMemo(() => getCellValueByRowKey(column.key, item), [column, item, editable]);
 
   const handleSaveEdit = React.useCallback(
-    (newValue: any) => {
+    (newValue: any, ...rest: any) => {
       if (currentValue === newValue) {
         handleCancel?.();
+        const [a, b] = rest;
+        handleMove?.(a, b);
         return;
       }
-      handleSave?.(newValue);
+      handleSave?.(newValue, ...rest);
     },
-    [currentValue, handleCancel, handleSave],
+    [currentValue, handleCancel, handleSave, handleMove],
   );
 
   const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
@@ -35,18 +37,18 @@ export const InputEditor = ({
       switch (evt.key) {
         case 'Down':
         case 'ArrowDown':
-          handleMove?.('current', 'next');
+          handleSaveEdit(evt.currentTarget.value, 'current', 'next');
           break;
         case 'Up':
         case 'ArrowUp':
-          handleMove?.('current', 'prev');
+          handleSaveEdit(evt.currentTarget.value, 'current', 'prev');
           break;
         case 'Tab':
           evt.preventDefault();
           if (evt.shiftKey) {
-            handleMove?.('prev', 'current');
+            handleSaveEdit(evt.currentTarget.value, 'prev', 'current');
           } else {
-            handleMove?.('next', 'current');
+            handleSaveEdit(evt.currentTarget.value, 'next', 'current');
           }
           break;
         case 'Enter':
@@ -60,7 +62,7 @@ export const InputEditor = ({
           return;
       }
     },
-    [handleCancel, handleMove, handleSaveEdit],
+    [handleCancel, handleSaveEdit],
   );
 
   const onBlur = React.useCallback<React.FocusEventHandler<HTMLInputElement>>(

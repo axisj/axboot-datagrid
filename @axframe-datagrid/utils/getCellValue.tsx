@@ -6,7 +6,7 @@ export function getCellValue<T>(
   columnIndex: number,
   column: AXFDGColumn<T>,
   item: AXFDGDataItem<any>,
-  handleSave?: (value: any) => void,
+  handleSave?: (value: any, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => void,
   handleCancel?: () => void,
   handleMove?: (columnDirection: MoveDirection, rowDirection: MoveDirection) => void,
   editable?: boolean,
