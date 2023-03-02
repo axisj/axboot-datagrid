@@ -55,6 +55,9 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
       get().rowChecked?.onChange([], [], checkedAll);
     }
   },
+  setRowChecked: rowChecked => {
+    set({ rowChecked });
+  },
   setCheckedIndexesMap: checkedIndexesMap => {
     const checkedAll: CheckedAll =
       checkedIndexesMap.size > 0 && checkedIndexesMap.size !== get().data.length

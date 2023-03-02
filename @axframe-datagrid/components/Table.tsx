@@ -7,7 +7,15 @@ import TableHeadFrozen from './TableHeadFrozen';
 import TableBodyFrozen from './TableBodyFrozen';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
-import { AXFDGColumn, AXFDGColumnGroup, AXFDGDataItem, AXFDGPage, AXFDGProps, AXFDGSortParam } from '../types';
+import {
+  AXFDGColumn,
+  AXFDGColumnGroup,
+  AXFDGDataItem,
+  AXFDGPage,
+  AXFDGProps,
+  AXFDGRowChecked,
+  AXFDGSortParam,
+} from '../types';
 import { getFrozenColumnsWidth } from '../utils';
 import { css } from '@emotion/react';
 
@@ -25,6 +33,7 @@ interface Props<T> {
   itemPadding?: number;
   frozenColumnIndex?: number;
 
+  rowChecked?: AXFDGRowChecked;
   checkedIndexesMap: Map<number, any>;
   sortParams?: Record<string, AXFDGSortParam>;
   columns: AXFDGColumn<T>[];
@@ -78,6 +87,7 @@ function Table<T>(props: Props<T>) {
   const setItemHeight = useAppStore(s => s.setItemHeight);
   const setItemPadding = useAppStore(s => s.setItemPadding);
   const setFrozenColumnIndex = useAppStore(s => s.setFrozenColumnIndex);
+  const setRowChecked = useAppStore(s => s.setRowChecked);
   const setCheckedIndexesMap = useAppStore(s => s.setCheckedIndexesMap);
   const setSortParams = useAppStore(s => s.setSortParams);
   const setFrozenColumnsWidth = useAppStore(s => s.setFrozenColumnsWidth);
@@ -190,6 +200,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.checkedIndexesMap !== undefined) setCheckedIndexesMap(props.checkedIndexesMap);
   }, [setCheckedIndexesMap, props.checkedIndexesMap]);
+  React.useEffect(() => {
+    if (props.rowChecked !== undefined) setRowChecked(props.rowChecked);
+  }, [setRowChecked, props.rowChecked]);
   React.useEffect(() => {
     if (props.sortParams !== undefined) setSortParams(props.sortParams);
   }, [setSortParams, props.sortParams]);

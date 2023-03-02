@@ -178,6 +178,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           itemHeight,
           itemPadding,
           frozenColumnIndex,
+          rowChecked,
           checkedIndexesMap,
           sortParams,
           page,
