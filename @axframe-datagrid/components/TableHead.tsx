@@ -114,7 +114,7 @@ function TableHead({ container }: Props) {
                   </HeadTd>
                 );
               })}
-              <HeadTd />
+              {ri === 0 && <HeadTd rowSpan={2} />}
             </tr>
           );
         })}
