@@ -112,7 +112,7 @@ function TableHeadFrozen({ container }: Props) {
                   <HeadTd
                     data-column-index={c.columnIndex}
                     key={index}
-                    rowSpan={c.rowSpan}
+                    rowSpan={c.rowspan}
                     style={{
                       textAlign: c.headerAlign ?? c.align,
                     }}
