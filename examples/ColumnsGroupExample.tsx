@@ -32,8 +32,8 @@ function ColumnsGroupExample(props: Props) {
         width={containerWidth}
         height={containerHeight}
         data={list}
-        frozenColumnIndex={2}
-        headerHeight={60}
+        frozenColumnIndex={0}
+        headerHeight={48}
         itemHeight={24}
         itemPadding={5}
         columns={[
@@ -89,11 +89,7 @@ function ColumnsGroupExample(props: Props) {
             width: 100,
           },
         ]}
-        columnsGroup={[
-          { label: '구분1', colspan: 2, align: 'center' },
-          { label: '구분2', colspan: 2 },
-          { label: '구분3', colspan: 4 },
-        ]}
+        columnsGroup={[{ label: '묶음', columnIndexes: [2, 3, 4], align: 'center' }]}
         rowChecked={{
           checkedIndexes: [],
           onChange: (ids, selectedAll) => {

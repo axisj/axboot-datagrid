@@ -19,53 +19,111 @@ function TableHead({ container }: Props) {
   const columnResizing = useAppStore(s => s.columnResizing);
   const toggleColumnSort = useAppStore(s => s.toggleColumnSort);
 
+  const columnsTable = React.useMemo(() => {
+    const hasColumnsGroup = columnsGroup.length > 0;
+    const rows: Record<string, any>[] = [];
+
+    if (hasColumnsGroup) {
+      const row: Record<string, any>[] = [];
+      const secondRow: Record<string, any>[] = [];
+      columns.slice(frozenColumnIndex).forEach((column, index) => {
+        const ci = frozenColumnIndex + index;
+        const findCgIndex = columnsGroup.findIndex(cg => cg.columnIndexes.includes(ci));
+        if (findCgIndex > -1) {
+          const prevItem = row[row.length - 1];
+          if (!prevItem || prevItem.cgi !== findCgIndex) {
+            const cifi = columnsGroup[findCgIndex].columnIndexes.findIndex(n => n === ci);
+            row.push({
+              type: 'column-group',
+              cgi: findCgIndex,
+              colspan: columnsGroup[findCgIndex].columnIndexes.length - cifi,
+              ...columnsGroup[findCgIndex],
+            });
+          }
+
+          secondRow.push({
+            type: 'column',
+            columnIndex: ci,
+            ...column,
+          });
+        } else {
+          row.push({
+            type: 'column',
+            columnIndex: ci,
+            ...column,
+            rowspan: 2,
+          });
+        }
+      });
+
+      rows.push(row, secondRow);
+    } else {
+      const row: Record<string, any>[] = [];
+      columns.slice(frozenColumnIndex).forEach((column, index) => {
+        const ci = frozenColumnIndex + index;
+        row.push({
+          type: 'column',
+          columnIndex: ci,
+          ...column,
+        });
+      });
+      rows.push(row);
+    }
+
+    return rows;
+  }, [columns, columnsGroup, frozenColumnIndex]);
+
   return (
-    <HeadTable headerHeight={headerHeight}>
+    <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1}>
       <TableColGroup />
       <tbody role={'rfdg-head'}>
-        {columnsGroup.length > 0 && (
-          <tr role={'column-group'}>
-            {columnsGroup.map((cg, index) => (
-              <HeadGroupTd
-                key={index}
-                colSpan={cg.colspan}
-                style={{
-                  textAlign: cg.headerAlign ?? cg.align,
-                }}
-              >
-                {cg.label}
-              </HeadGroupTd>
-            ))}
-            <HeadGroupTd />
-          </tr>
-        )}
-        <tr>
-          {columns.slice(frozenColumnIndex).map((c, index) => (
-            <HeadTd
-              data-column-index={frozenColumnIndex + index}
-              key={index}
-              style={{
-                textAlign: c.headerAlign ?? c.align,
-              }}
-              hasOnClick={sort && !c.sortDisable}
-              columnResizing={columnResizing}
-              onClick={evt => {
-                evt.preventDefault();
-                toggleColumnSort(frozenColumnIndex + index);
-              }}
-            >
-              <TableHeadColumn column={c} />
-              <ColResizer columnIndex={frozenColumnIndex + index} container={container} />
-            </HeadTd>
-          ))}
-          <HeadTd />
-        </tr>
+        {columnsTable.map((row, ri) => {
+          return (
+            <tr key={ri}>
+              {row.map((c: any, index: any) => {
+                if (c.type === 'column-group') {
+                  return (
+                    <HeadGroupTd
+                      key={index}
+                      colSpan={c.colspan}
+                      style={{
+                        textAlign: c.headerAlign ?? c.align,
+                      }}
+                    >
+                      {c.label}
+                    </HeadGroupTd>
+                  );
+                }
+                return (
+                  <HeadTd
+                    data-column-index={c.columnIndex}
+                    key={index}
+                    rowSpan={c.rowspan}
+                    style={{
+                      textAlign: c.headerAlign ?? c.align,
+                    }}
+                    hasOnClick={sort && !c.sortDisable}
+                    columnResizing={columnResizing}
+                    onClick={evt => {
+                      evt.preventDefault();
+                      toggleColumnSort(frozenColumnIndex + index);
+                    }}
+                  >
+                    <TableHeadColumn column={c} />
+                    <ColResizer columnIndex={c.columnIndex} container={container} bordered={columnsTable.length > 1} />
+                  </HeadTd>
+                );
+              })}
+              <HeadTd />
+            </tr>
+          );
+        })}
       </tbody>
     </HeadTable>
   );
 }
 
-export const HeadTable = styled.table<{ headerHeight: number }>`
+export const HeadTable = styled.table<{ headerHeight: number; hasGroup: boolean }>`
   table-layout: fixed;
   width: 100%;
   border-collapse: separate;
@@ -87,12 +145,9 @@ export const HeadGroupTd = styled.td`
   border-bottom-width: 1px;
   background-color: var(--axfdg-header-group-bg);
 
-  &[rowSpan='2'] {
-    background-color: transparent;
-    border-right-style: solid;
-    border-right-color: var(--axfdg-border-color-base);
-    border-right-width: 1px;
-  }
+  border-right-style: solid;
+  border-right-color: var(--axfdg-border-color-base);
+  border-right-width: 1px;
 `;
 
 export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean }>`

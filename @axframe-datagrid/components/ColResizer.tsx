@@ -1,11 +1,12 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import {css} from '@emotion/react';
-import {delay, mouseEventSubscribe} from '../utils';
-import {useAppStore} from '../store';
+import { css } from '@emotion/react';
+import { delay, mouseEventSubscribe } from '../utils';
+import { useAppStore } from '../store';
 
 interface StyledProps {
   hideHandle?: boolean;
+  bordered?: boolean;
 }
 
 interface Props extends StyledProps {
@@ -13,9 +14,10 @@ interface Props extends StyledProps {
   columnIndex: number;
 }
 
-function ColResizer({container, columnIndex, hideHandle}: Props) {
+function ColResizer({ container, columnIndex, hideHandle, bordered }: Props) {
   const setColumnWidth = useAppStore(s => s.setColumnWidth);
   const setColumnResizing = useAppStore(s => s.setColumnResizing);
+  const columnsGroup = useAppStore(s => s.columnsGroup);
 
   const onMouseDownResizerHandle = React.useCallback(
     (evt: React.MouseEvent<HTMLDivElement, MouseEvent>, columnIndex: number) => {
@@ -76,6 +78,7 @@ function ColResizer({container, columnIndex, hideHandle}: Props) {
 
   return (
     <Container
+      bordered={bordered}
       hideHandle={hideHandle}
       onMouseDown={evt => onMouseDownResizerHandle(evt, columnIndex)}
       onDoubleClick={evt => onMouseDoubleClick(evt, columnIndex)}
@@ -93,7 +96,7 @@ const Container = styled.div<StyledProps>`
   cursor: col-resize;
   z-index: 2;
 
-  ${({hideHandle = false}) => {
+  ${({ hideHandle = false, bordered }) => {
     if (hideHandle) {
       return css``;
     }
@@ -105,7 +108,7 @@ const Container = styled.div<StyledProps>`
         content: '';
         display: block;
         width: 1px;
-        height: 0.8em;
+        height: ${bordered ? '100%' : '1em'};
         transform: translateY(-50%);
         background: var(--axfdg-border-color-base);
       }

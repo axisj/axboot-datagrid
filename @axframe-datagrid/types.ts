@@ -29,7 +29,7 @@ export interface AXFDGColumn<T> {
 
 export interface AXFDGColumnGroup {
   label: string;
-  colspan: number;
+  columnIndexes: number[];
   align?: AlignDirection;
   headerAlign?: AlignDirection;
 }
@@ -133,7 +133,6 @@ export interface AppModel<T> extends AXFDGProps<T> {
   itemPadding: number;
   frozenColumnIndex: number;
   frozenColumnsWidth: number;
-  frozenColumnsGroup: AXFDGColumnGroup[];
   columnsGroup: AXFDGColumnGroup[];
   data: AXFDGDataItem<T>[];
   columnResizing: boolean;
