@@ -166,7 +166,6 @@ function TableBodyFrozen(props: Props) {
     editable,
     endNumber,
     frozenColumnIndex,
-    hasRowChecked,
     itemHeight,
     itemPadding,
     rowKey,
