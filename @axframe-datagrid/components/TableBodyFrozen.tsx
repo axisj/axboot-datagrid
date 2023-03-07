@@ -1,10 +1,10 @@
 import * as React from 'react';
 import RowSelector from './RowSelector';
-import { getCellValue, getCellValueByRowKey } from '../utils';
+import { getCellValueByRowKey } from '../utils';
 import { BodyTable, TableBodyTr } from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
-import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
+import { AXFDGColumn, AXFDGDataItemStatus, MoveDirection } from '../types';
 
 interface Props {
   style?: React.CSSProperties;
@@ -81,6 +81,8 @@ function TableBodyFrozen(props: Props) {
     [data, onChangeData, setData],
   );
 
+  const getCellValueCB = React.useCallback(() => {}, []);
+
   return (
     <BodyTable style={props.style}>
       <TableColGroupFrozen />
@@ -127,6 +129,9 @@ function TableBodyFrozen(props: Props) {
                 }
                 tdProps.onClick = () => handleClick(ri, columnIndex);
 
+                const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
+                const Render = column.itemRender;
+
                 return (
                   <td
                     key={columnIndex}
@@ -135,37 +140,46 @@ function TableBodyFrozen(props: Props) {
                     }}
                     {...tdProps}
                   >
-                    {getCellValue(
-                      ri,
-                      columnIndex,
-                      column,
-                      item,
-                      async (newValue, columnDirection, rowDirection) => {
-                        await setItemValue(ri, columnIndex, column, newValue);
+                    {Render ? (
+                      <Render
+                        item={item}
+                        values={item.values}
+                        column={column}
+                        index={ri}
+                        columnIndex={columnIndex}
+                        handleSave={async (
+                          newValue: any,
+                          columnDirection?: MoveDirection,
+                          rowDirection?: MoveDirection,
+                        ) => {
+                          await setItemValue(ri, columnIndex, column, newValue);
 
-                        if (columnDirection && rowDirection) {
-                          let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                          if (columnDirection && rowDirection) {
+                            let _ci = columnIndex + DIRC_MAP[columnDirection];
+                            let _ri = ri + DIRC_MAP[rowDirection];
+                            if (_ci > columns.length - 1) _ci = 0;
+                            if (_ri > data.length - 1) _ri = 0;
+
+                            await setEditItem(_ri, _ci);
+                          } else {
+                            await setEditItem(-1, -1);
+                          }
+                        }}
+                        handleCancel={async () => {
+                          await setEditItem(-1, -1);
+                        }}
+                        handleMove={async (columnDirection: MoveDirection, rowDirection: MoveDirection) => {
+                          let _ci = columnIndex + DIRC_MAP[columnDirection];
                           let _ri = ri + DIRC_MAP[rowDirection];
                           if (_ci > columns.length - 1) _ci = 0;
                           if (_ri > data.length - 1) _ri = 0;
 
                           await setEditItem(_ri, _ci);
-                        } else {
-                          await setEditItem(-1, -1);
-                        }
-                      },
-                      async () => {
-                        await setEditItem(-1, -1);
-                      },
-                      async (columnDirection, rowDirection) => {
-                        let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
-                        let _ri = ri + DIRC_MAP[rowDirection];
-                        if (_ci > columns.length - 1) _ci = 0;
-                        if (_ri > data.length - 1) _ri = 0;
-
-                        await setEditItem(_ri, _ci);
-                      },
-                      editable && editItemIndex === ri && editItemColIndex === columnIndex,
+                        }}
+                        editable={tdEditable}
+                      />
+                    ) : (
+                      getCellValueByRowKey(column.key, item)
                     )}
                   </td>
                 );

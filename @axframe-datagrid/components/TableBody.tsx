@@ -2,9 +2,9 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
-import { getCellValue, getCellValueByRowKey } from '../utils';
+import { getCellValueByRowKey } from '../utils';
 import { css } from '@emotion/react';
-import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
+import { AXFDGColumn, AXFDGDataItemStatus, MoveDirection } from '../types';
 
 const DIRC_MAP = {
   next: 1,
@@ -100,6 +100,8 @@ function TableBody() {
                 }
                 tdProps.onClick = () => handleClick(ri, columnIndex);
                 const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
+                const Render = column.itemRender;
+                const _columnIndex = frozenColumnIndex + columnIndex;
 
                 return (
                   <td
@@ -110,37 +112,46 @@ function TableBody() {
                     role={`editable-${tdEditable}`}
                     {...tdProps}
                   >
-                    {getCellValue(
-                      ri,
-                      frozenColumnIndex + columnIndex,
-                      column,
-                      item,
-                      async (newValue, columnDirection, rowDirection) => {
-                        await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
+                    {Render ? (
+                      <Render
+                        item={item}
+                        values={item.values}
+                        column={column}
+                        index={ri}
+                        columnIndex={_columnIndex}
+                        handleSave={async (
+                          newValue: any,
+                          columnDirection?: MoveDirection,
+                          rowDirection?: MoveDirection,
+                        ) => {
+                          await setItemValue(ri, _columnIndex, column, newValue);
 
-                        if (columnDirection && rowDirection) {
-                          let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                          if (columnDirection && rowDirection) {
+                            let _ci = _columnIndex + DIRC_MAP[columnDirection];
+                            let _ri = ri + DIRC_MAP[rowDirection];
+                            if (_ci > columns.length - 1) _ci = 0;
+                            if (_ri > data.length - 1) _ri = 0;
+
+                            await setEditItem(_ri, _ci);
+                          } else {
+                            await setEditItem(-1, -1);
+                          }
+                        }}
+                        handleCancel={async () => {
+                          await setEditItem(-1, -1);
+                        }}
+                        handleMove={async (columnDirection: MoveDirection, rowDirection: MoveDirection) => {
+                          let _ci = _columnIndex + DIRC_MAP[columnDirection];
                           let _ri = ri + DIRC_MAP[rowDirection];
                           if (_ci > columns.length - 1) _ci = 0;
                           if (_ri > data.length - 1) _ri = 0;
 
                           await setEditItem(_ri, _ci);
-                        } else {
-                          await setEditItem(-1, -1);
-                        }
-                      },
-                      async () => {
-                        await setEditItem(-1, -1);
-                      },
-                      async (columnDirection, rowDirection) => {
-                        let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
-                        let _ri = ri + DIRC_MAP[rowDirection];
-                        if (_ci > columns.length - 1) _ci = 0;
-                        if (_ri > data.length - 1) _ri = 0;
-
-                        await setEditItem(_ri, _ci);
-                      },
-                      tdEditable,
+                        }}
+                        editable={tdEditable}
+                      />
+                    ) : (
+                      getCellValueByRowKey(column.key, item)
                     )}
                   </td>
                 );
