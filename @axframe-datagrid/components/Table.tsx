@@ -112,6 +112,14 @@ function Table<T>(props: Props<T>) {
   const onScroll = React.useCallback(() => {
     if (scrollContainerRef.current) {
       const { scrollTop, scrollLeft } = scrollContainerRef.current;
+
+      if(containerRef.current) {
+        const contHeader = containerRef.current.querySelector('[role="rfdg-header"]') as any;
+        if(contHeader && contHeader["style"]) {
+          contHeader["style"].marginLeft = `${-scrollLeft}px`;
+        }
+      }
+      
       setScroll(scrollTop, scrollLeft);
     }
   }, [setScroll]);
