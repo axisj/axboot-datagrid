@@ -42,7 +42,7 @@ interface Props<T> {
   data?: AXFDGDataItem<T>[];
   onClick?: AXFDGProps<T>['onClick'];
   onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
-  onChangeData?: (index: number, columnIndex: number, item: T, column: AXFDGColumn<T>) => void;
+  onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXFDGColumn<T> | null) => void;
   onLoadMore?: (params: { scrollLeft: number; scrollTop: number }) => void;
 
   rowKey?: React.Key | React.Key[];
