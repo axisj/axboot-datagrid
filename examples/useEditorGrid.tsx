@@ -87,6 +87,12 @@ export default function useEditorGrid() {
         [
           {
             key: '_',
+            label: 'Checked',
+            width: 80,
+            itemRender: ({ item }) => <>{`${item.checked ?? false}`}</>,
+          },
+          {
+            key: '_',
             label: 'Status',
             width: 60,
             align: 'center',

@@ -42,16 +42,20 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
       const checkedIndexes: number[] = [];
       const checkedRowKeys: (string | number)[] = [];
       get().data.forEach((v, i) => {
+        v.checked = true;
         checkedIndexesMap.set(i, true);
         checkedIndexes.push(i);
         if (rowKey) {
           checkedRowKeys.push(getCellValueByRowKey(rowKey, v));
         }
       });
-      set({ checkedIndexesMap, checkedAll });
+      set({ checkedIndexesMap, checkedAll, data: [...get().data] });
       get().rowChecked?.onChange(checkedIndexes, checkedRowKeys, checkedAll);
     } else {
-      set({ checkedIndexesMap: new Map(), checkedAll });
+      get().data.forEach((v, i) => {
+        v.checked = false;
+      });
+      set({ checkedIndexesMap: new Map(), checkedAll, data: [...get().data] });
       get().rowChecked?.onChange([], [], checkedAll);
     }
   },

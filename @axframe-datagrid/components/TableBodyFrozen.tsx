@@ -44,15 +44,18 @@ function TableBodyFrozen(props: Props) {
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
 
   const handleChangeChecked = React.useCallback(
-    (index: number, checked: boolean) => {
+    async (index: number, checked: boolean) => {
       if (checked) {
+        data[index].checked = true;
         selectedKeyMap.set(index, true);
       } else {
+        data[index].checked = false;
         selectedKeyMap.delete(index);
       }
       setSelectedKeys([...selectedKeyMap.keys()]);
+      await setData([...data]);
     },
-    [selectedKeyMap, setSelectedKeys],
+    [data, selectedKeyMap, setData, setSelectedKeys],
   );
 
   const setItemValue = React.useCallback(

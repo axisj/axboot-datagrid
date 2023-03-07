@@ -43,6 +43,7 @@ export enum AXFDGDataItemStatus {
 export type AXFDGDataItem<T> = {
   values: T;
   status?: AXFDGDataItemStatus;
+  checked?: boolean;
   parentItemIndex?: number;
 };
 
@@ -95,7 +96,7 @@ export interface AXFDGProps<T> {
   onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
   frozenColumnIndex?: number;
   data?: AXFDGDataItem<T>[];
-  onChangeData?: (index: number, columnIndex: number, item: T, column: AXFDGColumn<T>) => void;
+  onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXFDGColumn<T> | null) => void;
 
   page?: AXFDGPage;
   enableLoadMore?: boolean;
