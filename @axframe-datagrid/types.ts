@@ -126,6 +126,31 @@ export interface AXFDGProps<T> {
 
 export type CheckedAll = true | false | 'indeterminate';
 
+export const DIRC_MAP = {
+  next: 1,
+  prev: -1,
+  current: 0,
+};
+
+export interface TableBodyRowTd {
+  column: AXFDGColumn<any>;
+  columnIndex: number;
+  renderedValue: any;
+  tdValue: any;
+  tdEditable: boolean;
+  Render?: React.FC<AXFDGItemRenderProps<any>>;
+  style?: React.CSSProperties;
+}
+
+export interface TableBodyRow {
+  ri: number;
+  itemHeight: number;
+  itemPadding: number;
+  active: boolean;
+  item: AXFDGDataItem<any>;
+  children: TableBodyRowTd[];
+}
+
 export interface AppModel<T> extends AXFDGProps<T> {
   initialized: boolean;
   headerHeight: number;

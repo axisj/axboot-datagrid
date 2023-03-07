@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import TableBody from './TableBody';
 import { useAppStore } from '../store';
-import TableHead from './TableHead';
 import TableHeadFrozen from './TableHeadFrozen';
+import TableHead from './TableHead';
 import TableBodyFrozen from './TableBodyFrozenNew';
+import TableBody from './TableBodyNew';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
 import {
@@ -112,6 +112,14 @@ function Table<T>(props: Props<T>) {
   const onScroll = React.useCallback(() => {
     if (scrollContainerRef.current) {
       const { scrollTop, scrollLeft } = scrollContainerRef.current;
+
+      // if(containerRef.current) {
+      //   const contHeader = containerRef.current.querySelector('[role="rfdg-header"]') as any;
+      //   if(contHeader && contHeader["style"]) {
+      //     contHeader["style"].marginLeft = `${-scrollLeft}px`;
+      //   }
+      // }
+
       setScroll(scrollTop, scrollLeft);
     }
   }, [setScroll]);

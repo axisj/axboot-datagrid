@@ -4,7 +4,8 @@ import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
 import { getCellValueByRowKey } from '../utils';
 import { css } from '@emotion/react';
-import { AXFDGColumn, AXFDGDataItemStatus, MoveDirection, DIRC_MAP } from '../types';
+import { AXFDGColumn, AXFDGDataItemStatus, MoveDirection, DIRC_MAP, TableBodyRowTd, TableBodyRow } from '../types';
+import RowSelector from './RowSelector';
 
 function TableBody() {
   const scrollTop = useAppStore(s => s.scrollTop);
@@ -55,17 +56,55 @@ function TableBody() {
 
   const handleMoveEdit = React.useCallback(async () => {}, []);
 
+  const dataRow = React.useMemo(() => {
+    return Array.from({ length: endNumber - startIdx }, (_, i) => {
+      const ri = startIdx + i;
+      const item = data[ri];
+      if (!item) {
+        return null;
+      }
+
+      return {
+        ri,
+        itemHeight,
+        itemPadding,
+        active: rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false,
+        item,
+        children: columns.slice(frozenColumnIndex).map((column, columnIndex) => {
+          const _columnIndex = frozenColumnIndex + columnIndex;
+          return {
+            column,
+            columnIndex: _columnIndex,
+            style: {
+              textAlign: column.align,
+            },
+            tdEditable: editable && editItemIndex === ri && editItemColIndex === _columnIndex,
+            Render: column.itemRender,
+            tdValue: getCellValueByRowKey(column.key, item),
+          } as TableBodyRowTd;
+        }),
+      } as TableBodyRow;
+    }).filter(Boolean) as TableBodyRow[];
+  }, [
+    columns,
+    data,
+    editItemColIndex,
+    editItemIndex,
+    editable,
+    endNumber,
+    frozenColumnIndex,
+    itemHeight,
+    itemPadding,
+    rowKey,
+    selectedRowKey,
+    startIdx,
+  ]);
+
   return (
     <BodyTable>
       <TableColGroup />
       <tbody role={'rfdg-body'}>
-        {Array.from({ length: endNumber - startIdx }, (_, i) => {
-          const ri = startIdx + i;
-          const item = data[ri];
-          if (!item) {
-            return null;
-          }
-
+        {dataRow.map(({ ri, itemHeight, itemPadding, active, item, children }) => {
           const trProps = editable
             ? {
                 editable: true,
@@ -78,50 +117,33 @@ function TableBody() {
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),
               };
-
           return (
-            <TableBodyTr
-              key={ri}
-              itemHeight={itemHeight}
-              itemPadding={itemPadding}
-              active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
-              {...trProps}
-            >
-              {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
+            <TableBodyTr key={ri} itemHeight={itemHeight} itemPadding={itemPadding} active={active} {...trProps}>
+              {children.map(({ column, columnIndex, style, Render, renderedValue, tdValue, tdEditable }, index) => {
                 const tdProps: Record<string, any> = {};
                 if (editable) {
                   tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }
                 tdProps.onClick = () => handleClick(ri, columnIndex);
-                const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
-                const Render = column.itemRender;
-                const _columnIndex = frozenColumnIndex + columnIndex;
 
                 return (
-                  <td
-                    key={columnIndex}
-                    style={{
-                      textAlign: column.align,
-                    }}
-                    role={`editable-${tdEditable}`}
-                    {...tdProps}
-                  >
+                  <td key={columnIndex} style={style} {...tdProps}>
                     {Render ? (
                       <Render
                         item={item}
                         values={item.values}
                         column={column}
                         index={ri}
-                        columnIndex={_columnIndex}
+                        columnIndex={columnIndex}
                         handleSave={async (
                           newValue: any,
                           columnDirection?: MoveDirection,
                           rowDirection?: MoveDirection,
                         ) => {
-                          await setItemValue(ri, _columnIndex, column, newValue);
+                          await setItemValue(ri, columnIndex, column, newValue);
 
                           if (columnDirection && rowDirection) {
-                            let _ci = _columnIndex + DIRC_MAP[columnDirection];
+                            let _ci = columnIndex + DIRC_MAP[columnDirection];
                             let _ri = ri + DIRC_MAP[rowDirection];
                             if (_ci > columns.length - 1) _ci = 0;
                             if (_ri > data.length - 1) _ri = 0;
@@ -135,7 +157,7 @@ function TableBody() {
                           await setEditItem(-1, -1);
                         }}
                         handleMove={async (columnDirection: MoveDirection, rowDirection: MoveDirection) => {
-                          let _ci = _columnIndex + DIRC_MAP[columnDirection];
+                          let _ci = columnIndex + DIRC_MAP[columnDirection];
                           let _ri = ri + DIRC_MAP[rowDirection];
                           if (_ci > columns.length - 1) _ci = 0;
                           if (_ri > data.length - 1) _ri = 0;
@@ -145,7 +167,7 @@ function TableBody() {
                         editable={tdEditable}
                       />
                     ) : (
-                      getCellValueByRowKey(column.key, item)
+                      tdValue
                     )}
                   </td>
                 );

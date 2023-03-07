@@ -62,6 +62,7 @@ function EditorExample(props: Props) {
           editable
           rowKey={'uuid'}
           selectedRowKey={selectedRowKey}
+          frozenColumnIndex={4}
         />
       </Container>
     </Wrap>
