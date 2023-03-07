@@ -15,6 +15,23 @@ const DIRC_MAP = {
   current: 0,
 };
 
+interface RTD {
+  column: AXFDGColumn<any>;
+  columnIndex: number;
+  renderedValue: any;
+  tdValue: any;
+  style?: React.CSSProperties;
+}
+
+interface RTR {
+  ri: number;
+  itemHeight: number;
+  itemPadding: number;
+  active: boolean;
+  item: AXFDGDataItem<any>;
+  children: RTD[];
+}
+
 function TableBodyFrozen(props: Props) {
   const itemHeight = useAppStore(s => s.itemHeight);
   const scrollTop = useAppStore(s => s.scrollTop);
@@ -81,18 +98,89 @@ function TableBodyFrozen(props: Props) {
     [data, onChangeData, setData],
   );
 
-  const getCellValueCB = React.useCallback(() => {}, []);
+  const dataRow = React.useMemo(() => {
+    return Array.from({ length: endNumber - startIdx }, (_, i) => {
+      const ri = startIdx + i;
+      const item = data[ri];
+      if (!item) {
+        return null;
+      }
+
+      return {
+        ri,
+        itemHeight,
+        itemPadding,
+        active: rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false,
+        item,
+        children: columns.slice(0, frozenColumnIndex).map((column, columnIndex) => {
+          const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
+          return {
+            column,
+            columnIndex,
+            style: {
+              textAlign: column.align,
+            },
+            renderedValue: column.itemRender?.({
+              item,
+              values: item.values,
+              column,
+              index: ri,
+              columnIndex,
+              handleSave: async (newValue: any, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => {
+                await setItemValue(ri, columnIndex, column, newValue);
+
+                if (columnDirection && rowDirection) {
+                  let _ci = columnIndex + DIRC_MAP[columnDirection];
+                  let _ri = ri + DIRC_MAP[rowDirection];
+                  if (_ci > columns.length - 1) _ci = 0;
+                  if (_ri > data.length - 1) _ri = 0;
+
+                  await setEditItem(_ri, _ci);
+                } else {
+                  await setEditItem(-1, -1);
+                }
+              },
+              handleCancel: async () => {
+                await setEditItem(-1, -1);
+              },
+              handleMove: async (columnDirection: MoveDirection, rowDirection: MoveDirection) => {
+                let _ci = columnIndex + DIRC_MAP[columnDirection];
+                let _ri = ri + DIRC_MAP[rowDirection];
+                if (_ci > columns.length - 1) _ci = 0;
+                if (_ri > data.length - 1) _ri = 0;
+
+                await setEditItem(_ri, _ci);
+              },
+              editable: tdEditable,
+            }),
+            tdValue: getCellValueByRowKey(column.key, item),
+          } as RTD;
+        }),
+      } as RTR;
+    }).filter(Boolean) as RTR[];
+  }, [
+    columns,
+    data,
+    editItemColIndex,
+    editItemIndex,
+    editable,
+    endNumber,
+    frozenColumnIndex,
+    hasRowChecked,
+    itemHeight,
+    itemPadding,
+    rowKey,
+    selectedRowKey,
+    setEditItem,
+    setItemValue,
+    startIdx,
+  ]);
 
   return (
     <BodyTable style={props.style}>
       <TableColGroupFrozen />
       <tbody role={'rfdg-body-frozen'}>
-        {Array.from({ length: endNumber - startIdx }, (_, i) => {
-          const ri = startIdx + i;
-          const item = data[ri];
-          if (!item) {
-            return null;
-          }
+        {dataRow.map(({ ri, itemHeight, itemPadding, active, children }) => {
           const trProps = editable
             ? {
                 editable: true,
@@ -105,15 +193,8 @@ function TableBodyFrozen(props: Props) {
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),
               };
-
           return (
-            <TableBodyTr
-              key={ri}
-              itemHeight={itemHeight}
-              itemPadding={itemPadding}
-              active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
-              {...trProps}
-            >
+            <TableBodyTr key={ri} itemHeight={itemHeight} itemPadding={itemPadding} active={active} {...trProps}>
               {hasRowChecked && (
                 <td>
                   <RowSelector
@@ -122,65 +203,16 @@ function TableBodyFrozen(props: Props) {
                   />
                 </td>
               )}
-              {columns.slice(0, frozenColumnIndex).map((column, columnIndex) => {
+              {children.map(({ column, columnIndex, style, renderedValue, tdValue }, index) => {
                 const tdProps: Record<string, any> = {};
                 if (editable) {
                   tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }
                 tdProps.onClick = () => handleClick(ri, columnIndex);
 
-                const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
-                const Render = column.itemRender;
-
                 return (
-                  <td
-                    key={columnIndex}
-                    style={{
-                      textAlign: column.align,
-                    }}
-                    {...tdProps}
-                  >
-                    {Render ? (
-                      <Render
-                        item={item}
-                        values={item.values}
-                        column={column}
-                        index={ri}
-                        columnIndex={columnIndex}
-                        handleSave={async (
-                          newValue: any,
-                          columnDirection?: MoveDirection,
-                          rowDirection?: MoveDirection,
-                        ) => {
-                          await setItemValue(ri, columnIndex, column, newValue);
-
-                          if (columnDirection && rowDirection) {
-                            let _ci = columnIndex + DIRC_MAP[columnDirection];
-                            let _ri = ri + DIRC_MAP[rowDirection];
-                            if (_ci > columns.length - 1) _ci = 0;
-                            if (_ri > data.length - 1) _ri = 0;
-
-                            await setEditItem(_ri, _ci);
-                          } else {
-                            await setEditItem(-1, -1);
-                          }
-                        }}
-                        handleCancel={async () => {
-                          await setEditItem(-1, -1);
-                        }}
-                        handleMove={async (columnDirection: MoveDirection, rowDirection: MoveDirection) => {
-                          let _ci = columnIndex + DIRC_MAP[columnDirection];
-                          let _ri = ri + DIRC_MAP[rowDirection];
-                          if (_ci > columns.length - 1) _ci = 0;
-                          if (_ri > data.length - 1) _ri = 0;
-
-                          await setEditItem(_ri, _ci);
-                        }}
-                        editable={tdEditable}
-                      />
-                    ) : (
-                      getCellValueByRowKey(column.key, item)
-                    )}
+                  <td key={columnIndex} style={style} {...tdProps}>
+                    {renderedValue ?? tdValue}
                   </td>
                 );
               })}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid } from '../@axframe-datagrid';
+import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
 import { useContainerSize } from '../hooks/useContainerSize';
 import ExampleContainer from '../components/ExampleContainer';
 
@@ -25,7 +25,64 @@ const list = Array.from(Array(100)).map((v, i) => ({
 function ColumnsGroupExample(props: Props) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
-
+  const columns = React.useMemo(
+    () =>
+      [
+        {
+          key: 'id',
+          label: '아이디 IS LONG !',
+          width: 100,
+        },
+        {
+          key: 'title',
+          label: '제목',
+          align: 'center',
+          width: 120,
+          itemRender: ({ values }) => {
+            console.log('itemRender call');
+            return (
+              <>
+                {values.writer} / {values.title}
+              </>
+            );
+          },
+        },
+        {
+          key: 'writer',
+          label: '작성자',
+          width: 100,
+          itemRender: ({ values }) => {
+            return <>{values.writer} / A</>;
+          },
+        },
+        {
+          key: 'createAt',
+          label: '작성일A',
+          width: 100,
+        },
+        {
+          key: 'createAt',
+          label: '작성일B',
+          width: 100,
+        },
+        {
+          key: 'createAt',
+          label: '작성일C',
+          width: 100,
+        },
+        {
+          key: 'createAt',
+          label: '작성일D',
+          width: 100,
+        },
+        {
+          key: 'createAt',
+          label: '작성일E',
+          width: 100,
+        },
+      ] as AXFDGColumn<any>[],
+    [],
+  );
   return (
     <Container ref={containerRef}>
       <AXFDataGrid<IListItem>
@@ -36,59 +93,7 @@ function ColumnsGroupExample(props: Props) {
         headerHeight={48}
         itemHeight={24}
         itemPadding={5}
-        columns={[
-          {
-            key: 'id',
-            label: '아이디 IS LONG !',
-            width: 100,
-          },
-          {
-            key: 'title',
-            label: '제목',
-            align: 'center',
-            width: 120,
-            itemRender: ({ values }) => {
-              return (
-                <>
-                  {values.writer} / {values.title}
-                </>
-              );
-            },
-          },
-          {
-            key: 'writer',
-            label: '작성자',
-            width: 100,
-            itemRender: ({ values: values }) => {
-              return <>{values.writer} / A</>;
-            },
-          },
-          {
-            key: 'createAt',
-            label: '작성일A',
-            width: 100,
-          },
-          {
-            key: 'createAt',
-            label: '작성일B',
-            width: 100,
-          },
-          {
-            key: 'createAt',
-            label: '작성일C',
-            width: 100,
-          },
-          {
-            key: 'createAt',
-            label: '작성일D',
-            width: 100,
-          },
-          {
-            key: 'createAt',
-            label: '작성일E',
-            width: 100,
-          },
-        ]}
+        columns={columns}
         columnsGroup={[{ label: '묶음', columnIndexes: [2, 3, 4], align: 'center' }]}
         rowChecked={{
           checkedIndexes: [],

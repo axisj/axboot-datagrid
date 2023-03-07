@@ -4,7 +4,7 @@ import TableBody from './TableBody';
 import { useAppStore } from '../store';
 import TableHead from './TableHead';
 import TableHeadFrozen from './TableHeadFrozen';
-import TableBodyFrozen from './TableBodyFrozen';
+import TableBodyFrozen from './TableBodyFrozenNew';
 import TableFooter from './TableFooter';
 import Loading from './Loading';
 import {
