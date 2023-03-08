@@ -94,6 +94,7 @@ function TableBodyFrozen(props: Props) {
           const trProps = editable
             ? {
                 editable: true,
+                'aria-checked': selectedAll === true || selectedKeyMap.get(ri),
                 hover: hoverItemIndex === ri,
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),
@@ -122,6 +123,7 @@ function TableBodyFrozen(props: Props) {
               )}
               {columns.slice(0, frozenColumnIndex).map((column, columnIndex) => {
                 const tdProps: Record<string, any> = {};
+                tdProps.className = column.className;
                 if (editable) {
                   tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }

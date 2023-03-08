@@ -69,7 +69,13 @@ function EditorExample(props: Props) {
 }
 
 const Wrap = styled.div``;
-const Container = styled(ExampleContainer)``;
+const Container = styled(ExampleContainer)`
+  tr[aria-checked='true'] {
+    .editable {
+      background: rgba(237, 239, 203, 0.5);
+    }
+  }
+`;
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;

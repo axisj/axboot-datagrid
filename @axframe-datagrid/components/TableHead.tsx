@@ -61,6 +61,7 @@ function TableHead({ container }: Props) {
       const row: Record<string, any>[] = [];
       columns.slice(frozenColumnIndex).forEach((column, index) => {
         const ci = frozenColumnIndex + index;
+
         row.push({
           type: 'column',
           columnIndex: ci,
@@ -86,6 +87,7 @@ function TableHead({ container }: Props) {
                     <HeadGroupTd
                       key={index}
                       colSpan={c.colspan}
+                      className={c.headerClassName}
                       style={{
                         textAlign: c.headerAlign ?? c.align,
                       }}
@@ -102,6 +104,7 @@ function TableHead({ container }: Props) {
                     style={{
                       textAlign: c.headerAlign ?? c.align,
                     }}
+                    className={c.headerClassName}
                     hasOnClick={sort && !c.sortDisable}
                     columnResizing={columnResizing}
                     onClick={evt => {

@@ -100,6 +100,7 @@ function TableHeadFrozen({ container }: Props) {
                     <HeadGroupTd
                       key={index}
                       colSpan={c.colspan}
+                      className={c.headerClassName}
                       style={{
                         textAlign: c.headerAlign ?? c.align,
                       }}
@@ -116,6 +117,7 @@ function TableHeadFrozen({ container }: Props) {
                     style={{
                       textAlign: c.headerAlign ?? c.align,
                     }}
+                    className={c.headerClassName}
                     hasOnClick={sort && !c.sortDisable}
                     columnResizing={columnResizing}
                     onClick={evt => {
