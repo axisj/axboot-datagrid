@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDGItemRenderProps } from '../../@axframe-datagrid';
-import { getCellValueByRowKey } from '../../@axframe-datagrid/utils';
 import { Item } from '../useEditorGrid';
 import { Input } from 'antd';
 
@@ -10,18 +9,14 @@ export const InputEditor = ({
   item,
   column,
   values,
+  value,
   handleSave,
   handleCancel,
   handleMove,
 }: AXFDGItemRenderProps<Item>) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const currentValue = React.useMemo(() => getCellValueByRowKey(column.key, item), [column, item, editable]);
-
   const handleSaveEdit = React.useCallback(
     (newValue: any, ...rest: any) => {
-      if (currentValue === newValue) {
+      if (value === newValue) {
         handleCancel?.();
         const [a, b] = rest;
         handleMove?.(a, b);
@@ -29,7 +24,7 @@ export const InputEditor = ({
       }
       handleSave?.(newValue, ...rest);
     },
-    [currentValue, handleCancel, handleSave, handleMove],
+    [value, handleCancel, handleSave, handleMove],
   );
 
   const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
@@ -75,18 +70,11 @@ export const InputEditor = ({
   if (editable) {
     return (
       <Container>
-        <Input
-          bordered={false}
-          autoFocus
-          size={'small'}
-          defaultValue={currentValue}
-          onKeyDown={onKeyDown}
-          onBlur={onBlur}
-        />
+        <Input bordered={false} autoFocus size={'small'} defaultValue={value} onKeyDown={onKeyDown} onBlur={onBlur} />
       </Container>
     );
   }
-  return <>{currentValue}</>;
+  return <>{value}</>;
 };
 
 const Container = styled.div`

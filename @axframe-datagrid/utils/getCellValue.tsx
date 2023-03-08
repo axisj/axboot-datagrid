@@ -7,6 +7,7 @@ function _getCellValue<T>(
   columnIndex: number,
   column: AXFDGColumn<T>,
   item: AXFDGDataItem<any>,
+  valueByRowKey: any,
   handleSave?: (value: any, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => void,
   handleCancel?: () => void,
   handleMove?: (columnDirection: MoveDirection, rowDirection: MoveDirection) => void,
@@ -18,6 +19,7 @@ function _getCellValue<T>(
       <Render
         item={item}
         values={item.values}
+        value={valueByRowKey}
         column={column}
         index={index}
         columnIndex={columnIndex}
@@ -28,21 +30,20 @@ function _getCellValue<T>(
       />
     );
   } else {
-    return getCellValueByRowKey(column.key, item);
+    return valueByRowKey;
   }
 }
 
-function _getCellValueByRowKey<T>(rowKey: React.Key | React.Key[], item: AXFDGDataItem<any>) {
+export function getCellValueByRowKey<T>(rowKey: React.Key | React.Key[], values: T) {
   if (Array.isArray(rowKey)) {
     return rowKey.reduce((acc, cur) => {
       if (!acc) return acc;
       if (acc[cur]) return acc[cur];
       return acc;
-    }, item.values);
+    }, values as Record<string, any>);
   } else {
-    return item.values[rowKey];
+    return (values as Record<string, any>)[rowKey];
   }
 }
-
-export const getCellValue = memoizee(_getCellValue, { length: 8 });
-export const getCellValueByRowKey = memoizee(_getCellValueByRowKey, { length: 2 });
+//
+export const getCellValue = memoizee(_getCellValue, { length: 9 });

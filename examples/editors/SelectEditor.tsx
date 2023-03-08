@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDGItemRenderProps } from '../../@axframe-datagrid';
-import { delay, getCellValueByRowKey } from '../../@axframe-datagrid/utils';
 import { Item } from '../useEditorGrid';
 import { Select } from 'antd';
 
@@ -10,16 +9,15 @@ export const SelectEditor = ({
   item,
   column,
   values,
+  value,
   handleSave,
   handleCancel,
   handleMove,
 }: AXFDGItemRenderProps<Item>) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const currentValue = React.useMemo(() => getCellValueByRowKey(column.key, item), [column, item, editable]);
-
   const handleSaveEdit = React.useCallback(
     (newValue: any, ...rest: any) => {
-      if (currentValue === newValue) {
+      if (value === newValue) {
         handleCancel?.();
         const [a, b] = rest;
         handleMove?.(a, b);
@@ -27,7 +25,7 @@ export const SelectEditor = ({
       }
       handleSave?.(newValue, ...rest);
     },
-    [currentValue, handleCancel, handleSave, handleMove],
+    [value, handleCancel, handleSave, handleMove],
   );
 
   const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
@@ -81,7 +79,7 @@ export const SelectEditor = ({
             { value: 'Y', label: '사용' },
             { value: 'N', label: '사용안함' },
           ]}
-          defaultValue={currentValue}
+          defaultValue={value}
           onSelect={onSelect}
           onBlur={onBlur}
           onKeyDown={onKeyDown}
@@ -92,7 +90,7 @@ export const SelectEditor = ({
     // return <EditorInput ref={inputRef} defaultValue={currentValue} onKeyUp={onKeyUp} onBlur={onBlur} />;
   }
 
-  return <>{currentValue}</>;
+  return <>{value}</>;
 };
 
 const Container = styled.div`

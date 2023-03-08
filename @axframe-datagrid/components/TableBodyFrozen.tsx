@@ -110,7 +110,7 @@ function TableBodyFrozen(props: Props) {
               key={ri}
               itemHeight={itemHeight}
               itemPadding={itemPadding}
-              active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
+              active={rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false}
               {...trProps}
             >
               {hasRowChecked && (
@@ -142,6 +142,7 @@ function TableBodyFrozen(props: Props) {
                       columnIndex,
                       column,
                       item,
+                      getCellValueByRowKey(column.key, item.values),
                       async (newValue, columnDirection, rowDirection) => {
                         await setItemValue(ri, columnIndex, column, newValue);
 

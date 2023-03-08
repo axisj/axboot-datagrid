@@ -11,18 +11,14 @@ export const DateEditor = ({
   item,
   column,
   values,
+  value,
   handleSave,
   handleCancel,
   handleMove,
 }: AXFDGItemRenderProps<Item>) => {
-  const currentValue = React.useMemo(() => {
-    return getCellValueByRowKey(column.key, item);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [column, item, editable]);
-
   const handleSaveEdit = React.useCallback(
     (newValue: any, ...rest: any) => {
-      if (currentValue === newValue) {
+      if (value === newValue) {
         handleCancel?.();
         const [a, b] = rest;
         handleMove?.(a, b);
@@ -30,7 +26,7 @@ export const DateEditor = ({
       }
       handleSave?.(newValue, ...rest);
     },
-    [currentValue, handleCancel, handleSave, handleMove],
+    [value, handleCancel, handleSave, handleMove],
   );
 
   const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
@@ -81,7 +77,7 @@ export const DateEditor = ({
   );
 
   if (editable) {
-    const defaultValue = currentValue ? dayjs(currentValue) : undefined;
+    const defaultValue = value ? dayjs(value) : undefined;
 
     return (
       <Container>
@@ -101,7 +97,7 @@ export const DateEditor = ({
     // return <EditorInput ref={inputRef} defaultValue={currentValue} onKeyUp={onKeyUp} onBlur={onBlur} />;
   }
 
-  return <>{currentValue}</>;
+  return <>{value}</>;
 };
 
 const Container = styled.div`

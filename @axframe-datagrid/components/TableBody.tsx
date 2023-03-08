@@ -119,6 +119,7 @@ function TableBody() {
                       frozenColumnIndex + columnIndex,
                       column,
                       item,
+                      getCellValueByRowKey(column.key, item.values),
                       async (newValue, columnDirection, rowDirection) => {
                         await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
 

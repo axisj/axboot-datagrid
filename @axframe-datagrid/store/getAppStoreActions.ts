@@ -23,7 +23,7 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
       const item = data[key];
       checkedIndexes.push(key);
       if (rowKey) {
-        checkedRowKeys.push(getCellValueByRowKey(rowKey, item));
+        checkedRowKeys.push(getCellValueByRowKey(rowKey, item.values));
       }
     });
 
@@ -46,7 +46,7 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
         checkedIndexesMap.set(i, true);
         checkedIndexes.push(i);
         if (rowKey) {
-          checkedRowKeys.push(getCellValueByRowKey(rowKey, v));
+          checkedRowKeys.push(getCellValueByRowKey(rowKey, v.values));
         }
       });
       set({ checkedIndexesMap, checkedAll, data: [...get().data] });

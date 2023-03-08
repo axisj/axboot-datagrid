@@ -35,8 +35,8 @@ export function AXFDataGrid<T = Record<string, any>>({
     if (rowChecked?.checkedRowKeys && rowKey) {
       const checkedIndexesMap: Map<number, any> = new Map();
       rowChecked.checkedRowKeys.forEach(key => {
-        const fIndex = data?.findIndex((value, index, obj) => {
-          return getCellValueByRowKey(rowKey, value) === key;
+        const fIndex = data?.findIndex((item, index, obj) => {
+          return getCellValueByRowKey(rowKey, item.values) === key;
         });
         if (fIndex > -1) {
           checkedIndexesMap.set(fIndex, true);

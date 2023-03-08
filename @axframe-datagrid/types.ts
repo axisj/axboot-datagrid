@@ -9,6 +9,7 @@ export interface AXFDGItemRenderProps<T> {
   columnIndex: number;
   item: AXFDGDataItem<T>;
   values: T;
+  value: any;
   editable?: boolean;
   handleSave?: (value: any, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => void;
   handleCancel?: () => void;
