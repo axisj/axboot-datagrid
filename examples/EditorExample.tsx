@@ -70,8 +70,10 @@ function EditorExample(props: Props) {
 
 const Wrap = styled.div``;
 const Container = styled(ExampleContainer)`
-  .editable {
-    background: rgba(237, 239, 203, 0.5);
+  tr[aria-checked='true'] {
+    .editable {
+      background: rgba(237, 239, 203, 0.5);
+    }
   }
 `;
 const Buttons = styled.div`

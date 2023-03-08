@@ -94,6 +94,7 @@ function TableBodyFrozen(props: Props) {
           const trProps = editable
             ? {
                 editable: true,
+                'aria-checked': selectedAll === true || selectedKeyMap.get(ri),
                 hover: hoverItemIndex === ri,
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),

@@ -32,6 +32,8 @@ function TableBody() {
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
   const setData = useAppStore(s => s.setData);
   const onChangeData = useAppStore(s => s.onChangeData);
+  const selectedAll = useAppStore(s => s.checkedAll);
+  const selectedKeyMap = useAppStore(s => s.checkedIndexesMap);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -75,6 +77,7 @@ function TableBody() {
           const trProps = editable
             ? {
                 editable: true,
+                'aria-checked': selectedAll === true || selectedKeyMap.get(ri),
                 hover: hoverItemIndex === ri,
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),
