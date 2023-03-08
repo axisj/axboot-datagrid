@@ -32,8 +32,6 @@ function TableBody() {
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
   const setData = useAppStore(s => s.setData);
   const onChangeData = useAppStore(s => s.onChangeData);
-  const selectedAll = useAppStore(s => s.checkedAll);
-  const selectedKeyMap = useAppStore(s => s.checkedIndexesMap);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -61,8 +59,6 @@ function TableBody() {
     [data, onChangeData, setData],
   );
 
-  const handleMoveEdit = React.useCallback(async () => {}, []);
-
   return (
     <BodyTable>
       <TableColGroup />
@@ -77,7 +73,6 @@ function TableBody() {
           const trProps = editable
             ? {
                 editable: true,
-                'aria-checked': selectedAll === true || selectedKeyMap.get(ri),
                 hover: hoverItemIndex === ri,
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),
@@ -93,7 +88,7 @@ function TableBody() {
               key={ri}
               itemHeight={itemHeight}
               itemPadding={itemPadding}
-              active={rowKey ? getCellValueByRowKey(rowKey, item) === selectedRowKey : false}
+              active={rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false}
               {...trProps}
             >
               {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
@@ -102,7 +97,7 @@ function TableBody() {
                   tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }
                 tdProps.onClick = () => handleClick(ri, columnIndex);
-                tdProps.className = column.className;
+                tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
 
                 const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
 

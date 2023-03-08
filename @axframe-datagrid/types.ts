@@ -24,6 +24,7 @@ export interface AXFDGColumn<T> {
   headerAlign?: AlignDirection;
   sortDisable?: boolean;
   className?: string;
+  getClassName?: (item: AXFDGDataItem<T>) => string;
   headerClassName?: string;
   itemRender?: React.FC<AXFDGItemRenderProps<T>>;
   editable?: boolean;

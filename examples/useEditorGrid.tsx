@@ -99,6 +99,9 @@ export default function useEditorGrid() {
             itemRender: ({ item }) => {
               return item.status !== undefined ? AXFDGDataItemStatus[item.status] : '';
             },
+            getClassName: item => {
+              return item.checked ? 'editable' : '';
+            },
           },
           { key: 'uuid', label: 'UUID', width: 150 },
           {
