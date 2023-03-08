@@ -122,6 +122,7 @@ function TableBodyFrozen(props: Props) {
               )}
               {columns.slice(0, frozenColumnIndex).map((column, columnIndex) => {
                 const tdProps: Record<string, any> = {};
+                tdProps.className = column.className;
                 if (editable) {
                   tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }

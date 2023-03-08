@@ -106,18 +106,21 @@ export default function useEditorGrid() {
             label: 'Code',
             width: 150,
             itemRender: InputEditor,
+            className: 'editable',
           },
           {
             key: 'useYn',
             label: 'USE_YN',
             width: 100,
             itemRender: SelectEditor,
+            className: 'editable',
           },
           {
             key: 'selectDate',
             label: 'DatePicker',
             width: 150,
             itemRender: DateEditor,
+            className: 'editable',
           },
           // {
           //   key: 'dateRange',

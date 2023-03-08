@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@emotion/styled": "^11.10.4",
+    "@types/memoizee": "^0.4.8",
+    "memoizee": "^0.4.15",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zustand": "^4.1.1"

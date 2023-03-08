@@ -102,7 +102,7 @@ const Container = styled.div`
     padding: 0;
     border-radius: 0;
     height: 100%;
-    background: #fff;
+    background: transparent;
     //background: #ccc;
   }
 `;

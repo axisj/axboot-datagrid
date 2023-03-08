@@ -99,6 +99,8 @@ function TableBody() {
                   tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }
                 tdProps.onClick = () => handleClick(ri, columnIndex);
+                tdProps.className = column.className;
+
                 const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
 
                 return (
@@ -107,7 +109,6 @@ function TableBody() {
                     style={{
                       textAlign: column.align,
                     }}
-                    role={`editable-${tdEditable}`}
                     {...tdProps}
                   >
                     {getCellValue(

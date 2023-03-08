@@ -1,7 +1,8 @@
 import { AXFDGColumn, AXFDGDataItem, MoveDirection } from '../types';
 import React from 'react';
+import memoizee from 'memoizee';
 
-export function getCellValue<T>(
+function _getCellValue<T>(
   index: number,
   columnIndex: number,
   column: AXFDGColumn<T>,
@@ -31,7 +32,7 @@ export function getCellValue<T>(
   }
 }
 
-export function getCellValueByRowKey<T>(rowKey: React.Key | React.Key[], item: AXFDGDataItem<any>) {
+function _getCellValueByRowKey<T>(rowKey: React.Key | React.Key[], item: AXFDGDataItem<any>) {
   if (Array.isArray(rowKey)) {
     return rowKey.reduce((acc, cur) => {
       if (!acc) return acc;
@@ -42,3 +43,6 @@ export function getCellValueByRowKey<T>(rowKey: React.Key | React.Key[], item: A
     return item.values[rowKey];
   }
 }
+
+export const getCellValue = memoizee(_getCellValue, { length: 8 });
+export const getCellValueByRowKey = memoizee(_getCellValueByRowKey, { length: 2 });
