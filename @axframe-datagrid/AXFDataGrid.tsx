@@ -123,6 +123,7 @@ export function AXFDataGrid<T = Record<string, any>>({
         {...{
           columns,
           columnsGroup,
+          onChangeColumns,
           width,
           height,
           loading,

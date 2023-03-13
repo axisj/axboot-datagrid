@@ -113,7 +113,11 @@ function TableHead({ container }: Props) {
                     }}
                   >
                     <TableHeadColumn column={c} />
-                    <ColResizer columnIndex={c.columnIndex} container={container} bordered={columnsTable.length > 1} />
+                    <ColResizer
+                      columnIndex={frozenColumnIndex + index}
+                      container={container}
+                      bordered={columnsTable.length > 1}
+                    />
                   </HeadTd>
                 );
               })}
