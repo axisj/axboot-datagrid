@@ -83,7 +83,7 @@ function TableHeadFrozen({ container }: Props) {
         {columnsTable.map((row, ri) => {
           return (
             <tr key={ri}>
-              {ri === 0 && showLineNumber && <HeadTd className={'rfdg-tr-line-number'} rowSpan={columnsTable.length}>&nbsp;</HeadTd>}
+              {ri === 0 && showLineNumber && <LineNumberTd rowSpan={columnsTable.length}>&nbsp;</LineNumberTd>}
               {ri === 0 && hasRowSelection && (
                 <HeadTd rowSpan={columnsTable.length}>
                   <RowSelector
@@ -140,5 +140,11 @@ function TableHeadFrozen({ container }: Props) {
     </HeadTable>
   );
 }
+
+const LineNumberTd = styled(HeadTd)`
+  &:not(:last-child) {
+    border-right: 1px solid var(--axfdg-border-color-base);
+  }
+`;
 
 export default TableHeadFrozen;
