@@ -132,7 +132,6 @@ function TableHeadFrozen({ container }: Props) {
                   </HeadTd>
                 );
               })}
-              <HeadTd />
             </tr>
           );
         })}
