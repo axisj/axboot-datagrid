@@ -1,14 +1,27 @@
 import { AXFDGColumn, AXFDGRowChecked } from '../types';
+import { getLineNumberWidth } from './getLineNumber';
 
 interface Props<T> {
+  showLineNumber?: boolean;
   rowChecked?: AXFDGRowChecked;
   itemHeight: number;
   frozenColumnIndex: number;
   columns: AXFDGColumn<T>[];
+  dataLength: number;
 }
 
-export function getFrozenColumnsWidth<T>({ rowChecked, itemHeight, frozenColumnIndex, columns }: Props<T>) {
+export function getFrozenColumnsWidth<T>({
+  showLineNumber,
+  rowChecked,
+  itemHeight,
+  frozenColumnIndex,
+  columns,
+  dataLength,
+}: Props<T>) {
   let frozenColumnsWidth: number = 0;
+  if (showLineNumber) {
+    frozenColumnsWidth += getLineNumberWidth({ dataLength });
+  }
   if (!!rowChecked) {
     frozenColumnsWidth += Math.min(itemHeight, 15) + 7 * 2;
   }
@@ -17,5 +30,6 @@ export function getFrozenColumnsWidth<T>({ rowChecked, itemHeight, frozenColumnI
       return acc + (cur.width ?? 0);
     }, 0);
   }
+
   return frozenColumnsWidth;
 }

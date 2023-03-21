@@ -30,6 +30,7 @@ export function AXFDataGrid<T = Record<string, any>>({
   selectedRowKey,
   editable,
   onChangeData,
+  showLineNumber,
 }: AXFDGProps<T>) {
   const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
     if (rowChecked?.checkedRowKeys && rowKey) {
@@ -53,12 +54,14 @@ export function AXFDataGrid<T = Record<string, any>>({
   const frozenColumnsWidth = React.useMemo(
     () =>
       getFrozenColumnsWidth({
+        showLineNumber,
         rowChecked,
         itemHeight,
         frozenColumnIndex,
         columns,
+        dataLength: data.length,
       }),
-    [columns, frozenColumnIndex, itemHeight, rowChecked],
+    [columns, frozenColumnIndex, itemHeight, showLineNumber, rowChecked, data.length],
   );
 
   const sortParams = React.useMemo(() => {
@@ -115,6 +118,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           selectedRowKey,
           editable,
           onChangeData,
+          showLineNumber,
           ...getAppStoreActions(set, get),
         }))
       }
@@ -145,6 +149,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           selectedRowKey,
           editable,
           onChangeData,
+          showLineNumber,
         }}
       />
     </AppStoreProvider>

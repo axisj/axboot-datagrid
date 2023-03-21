@@ -26,6 +26,7 @@ function Nav(props: Props) {
         defaultActiveKey={router.asPath}
         items={[
           { label: `Index`, key: '/' },
+          { label: `LineNumber`, key: '/lineNumber' },
           { label: `ColumnGroup`, key: '/columnGroup' },
           { label: `Sort`, key: '/sort' },
           { label: `Paging`, key: '/paging' },

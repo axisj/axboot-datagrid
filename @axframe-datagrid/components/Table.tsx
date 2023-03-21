@@ -48,6 +48,7 @@ interface Props<T> {
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
   editable?: boolean;
+  showLineNumber?: boolean;
 }
 
 function Table<T>(props: Props<T>) {
@@ -74,6 +75,7 @@ function Table<T>(props: Props<T>) {
   const page = useAppStore(s => s.page);
   const loading = useAppStore(s => s.loading);
   const spinning = useAppStore(s => s.spinning);
+  const showLineNumber = useAppStore(s => s.showLineNumber);
 
   const setHeight = useAppStore(s => s.setHeight);
   const setContentBodyHeight = useAppStore(s => s.setContentBodyHeight);
@@ -104,6 +106,7 @@ function Table<T>(props: Props<T>) {
   const setOnChangeColumns = useAppStore(s => s.setOnChangeColumns);
   const setOnChangeData = useAppStore(s => s.setOnChangeData);
   const setOnLoadMore = useAppStore(s => s.setOnLoadMore);
+  const setShowLineNumber = useAppStore(s => s.setShowLineNumber);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -113,13 +116,13 @@ function Table<T>(props: Props<T>) {
     if (scrollContainerRef.current) {
       const { scrollTop, scrollLeft } = scrollContainerRef.current;
 
-      if(containerRef.current) {
+      if (containerRef.current) {
         const contHeader = containerRef.current.querySelector('[role="rfdg-header"]') as any;
-        if(contHeader && contHeader["style"]) {
-          contHeader["style"].marginLeft = `${-scrollLeft}px`;
+        if (contHeader && contHeader['style']) {
+          contHeader['style'].marginLeft = `${-scrollLeft}px`;
         }
       }
-      
+
       setScroll(scrollTop, scrollLeft);
     }
   }, [setScroll]);
@@ -194,17 +197,26 @@ function Table<T>(props: Props<T>) {
     if (props.itemPadding !== undefined) setItemPadding(props.itemPadding);
   }, [setItemPadding, props.itemPadding]);
   React.useEffect(() => {
-    if (props.frozenColumnIndex !== undefined) {
-      const frozenColumnsWidth = getFrozenColumnsWidth({
-        rowChecked,
-        itemHeight,
-        frozenColumnIndex: props.frozenColumnIndex,
-        columns,
-      });
-      setFrozenColumnsWidth(frozenColumnsWidth);
-      setFrozenColumnIndex(props.frozenColumnIndex);
-    }
-  }, [setFrozenColumnIndex, props.frozenColumnIndex, rowChecked, itemHeight, columns, setFrozenColumnsWidth]);
+    const frozenColumnsWidth = getFrozenColumnsWidth({
+      showLineNumber,
+      rowChecked,
+      itemHeight,
+      frozenColumnIndex: props.frozenColumnIndex ?? 0,
+      columns,
+      dataLength: data.length,
+    });
+    setFrozenColumnsWidth(frozenColumnsWidth);
+    setFrozenColumnIndex(props.frozenColumnIndex ?? 0);
+  }, [
+    setFrozenColumnIndex,
+    props.frozenColumnIndex,
+    showLineNumber,
+    rowChecked,
+    itemHeight,
+    columns,
+    setFrozenColumnsWidth,
+    data.length,
+  ]);
   React.useEffect(() => {
     if (props.checkedIndexesMap !== undefined) setCheckedIndexesMap(props.checkedIndexesMap);
   }, [setCheckedIndexesMap, props.checkedIndexesMap]);
@@ -259,6 +271,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     setOnLoadMore(props.onLoadMore);
   }, [setOnLoadMore, props.onLoadMore]);
+  React.useEffect(() => {
+    setShowLineNumber(props.showLineNumber);
+  }, [setShowLineNumber, props.showLineNumber]);
 
   //setInitialized
   React.useEffect(() => {

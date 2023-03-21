@@ -85,6 +85,7 @@ function PropsChangeExample(props: Props) {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([]);
   const [selectedRowKey, setSelectedRowKey] = React.useState<string>();
+  const [showLineNumber, setShowLineNumber] = React.useState(false);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
@@ -139,6 +140,7 @@ function PropsChangeExample(props: Props) {
             spinning={spinning}
             rowKey={['group', 'k']}
             selectedRowKey={selectedRowKey}
+            showLineNumber={showLineNumber}
           />
         </Container>
       </Wrap>
@@ -170,6 +172,11 @@ function PropsChangeExample(props: Props) {
           <Col xs={12} sm={6}>
             <Form.Item name={'spinning'} label={'Spinning'} valuePropName={'checked'}>
               <Switch onChange={checked => setSpinning(checked)} />
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Form.Item name={'showLineNumber'} label={'LineNumber'} valuePropName={'checked'}>
+              <Switch onChange={checked => setShowLineNumber(checked)} />
             </Form.Item>
           </Col>
           <Col xs={12} sm={6}>

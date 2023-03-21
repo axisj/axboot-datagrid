@@ -176,4 +176,5 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setOnChangeColumns: onChangeColumns => set({ onChangeColumns }),
   setOnChangeData: onChangeData => set({ onChangeData }),
   setOnLoadMore: onLoadMore => set({ onLoadMore }),
+  setShowLineNumber: showLineNumber => set({ showLineNumber }),
 });

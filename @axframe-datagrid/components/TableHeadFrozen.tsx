@@ -14,6 +14,7 @@ interface Props {
 function TableHeadFrozen({ container }: Props) {
   const sort = useAppStore(s => s.sort);
   const hasRowSelection = useAppStore(s => !!s.rowChecked);
+  const showLineNumber = useAppStore(s => s.showLineNumber);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
   const columnsGroup = useAppStore(s => s.columnsGroup);
@@ -82,6 +83,7 @@ function TableHeadFrozen({ container }: Props) {
         {columnsTable.map((row, ri) => {
           return (
             <tr key={ri}>
+              {ri === 0 && showLineNumber && <HeadTd className={'rfdg-tr-line-number'} rowSpan={columnsTable.length}>&nbsp;</HeadTd>}
               {ri === 0 && hasRowSelection && (
                 <HeadTd rowSpan={columnsTable.length}>
                   <RowSelector

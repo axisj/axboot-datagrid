@@ -96,6 +96,7 @@ function ColumnsGroupExample(props: Props) {
             console.log('onChange rowSelection', ids, selectedAll);
           },
         }}
+        showLineNumber
       />
     </Container>
   );

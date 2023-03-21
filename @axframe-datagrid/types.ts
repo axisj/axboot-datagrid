@@ -125,6 +125,7 @@ export interface AXFDGProps<T> {
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
   editable?: boolean;
+  showLineNumber?: boolean;
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -196,6 +197,7 @@ export interface AppActions<T> {
   setOnChangeColumns: (onChangeColumns?: AXFDGProps<T>['onChangeColumns']) => void;
   setOnChangeData: (onChangeData?: AXFDGProps<T>['onChangeData']) => void;
   setOnLoadMore: (onLoadMore?: AXFDGProps<T>['onLoadMore']) => void;
+  setShowLineNumber: (showLineNumber?: boolean) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}

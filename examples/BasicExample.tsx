@@ -90,12 +90,12 @@ function BasicExample(props: Props) {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
-        rowChecked={{
-          checkedIndexes: [],
-          onChange: (ids, selectedAll) => {
-            console.log('onChange rowSelection', ids, selectedAll);
-          },
-        }}
+        // rowChecked={{
+        //   checkedIndexes: [],
+        //   onChange: (ids, selectedAll) => {
+        //     console.log('onChange rowSelection', ids, selectedAll);
+        //   },
+        // }}
         onClick={item => console.log(item)}
       />
     </Container>

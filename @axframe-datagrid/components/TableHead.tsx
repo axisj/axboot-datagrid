@@ -133,7 +133,7 @@ function TableHead({ container }: Props) {
 export const HeadTable = styled.table<{ headerHeight: number; hasGroup: boolean }>`
   table-layout: fixed;
   width: 100%;
-  border-collapse: separate;
+  border-collapse: collapse;
   border-spacing: 0;
   height: ${p => p.headerHeight}px;
   color: var(--axfdg-header-color);
@@ -162,7 +162,7 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
   padding: 0 7px;
   border-bottom-style: solid;
   border-bottom-color: var(--axfdg-border-color-base);
-  border-bottom-width: 1px;
+  border-width: 2px;
 
   ${({ hasOnClick, columnResizing }) => {
     if (hasOnClick && !columnResizing) {
@@ -175,6 +175,10 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
       `;
     }
   }}
+
+  &.rfdg-tr-line-number {
+    border-right: 1px solid var(--axfdg-border-color-base);
+  }
 `;
 
 export default TableHead;

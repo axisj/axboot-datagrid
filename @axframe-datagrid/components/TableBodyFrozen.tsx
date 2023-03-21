@@ -27,6 +27,7 @@ function TableBodyFrozen(props: Props) {
   const setSelectedKeys = useAppStore(s => s.setCheckedIndexes);
   const selectedAll = useAppStore(s => s.checkedAll);
   const hasRowChecked = useAppStore(s => !!s.rowChecked);
+  const showLineNumber = useAppStore(s => s.showLineNumber);
   const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
   const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
   const handleClick = useAppStore(s => s.handleClick);
@@ -112,6 +113,7 @@ function TableBodyFrozen(props: Props) {
               active={rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false}
               {...trProps}
             >
+              {showLineNumber && <td className={'rfdg-tr-line-number'}>{ri + 1}</td>}
               {hasRowChecked && (
                 <td>
                   <RowSelector
@@ -120,6 +122,7 @@ function TableBodyFrozen(props: Props) {
                   />
                 </td>
               )}
+
               {columns.slice(0, frozenColumnIndex).map((column, columnIndex) => {
                 const tdProps: Record<string, any> = {};
                 if (editable) {

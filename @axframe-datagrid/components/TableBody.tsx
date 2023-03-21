@@ -203,6 +203,14 @@ export const TableBodyTr = styled.tr<{
         line-height: ${itemHeight}px; // - border
         padding: 0 6.5px;
         height: ${itemHeight + itemPadding * 2}px;
+
+        &.rfdg-tr-line-number {
+          padding: 0;
+          text-align: center;
+          &:not(:last-child) {
+            border-right: 1px solid var(--axfdg-border-color-base);
+          }
+        }
       }
     `;
   }}

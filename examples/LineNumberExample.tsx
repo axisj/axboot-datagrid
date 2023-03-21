@@ -13,7 +13,7 @@ interface IListItem {
   createAt: string;
 }
 
-const list = Array.from(Array(10000)).map((v, i) => ({
+const list = Array.from(Array(5)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
     title: `title_${i}`,
@@ -22,7 +22,7 @@ const list = Array.from(Array(10000)).map((v, i) => ({
   },
 }));
 
-function SortExample(props: Props) {
+function LineNumberExample(props: Props) {
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
     {
       key: 'id',
@@ -33,17 +33,46 @@ function SortExample(props: Props) {
       key: 'title',
       label: '제목',
       width: 300,
+      itemRender: ({ values }) => {
+        return (
+          <>
+            {values.writer} / {values.title}
+          </>
+        );
+      },
     },
     {
       key: 'writer',
       label: '작성자',
       width: 100,
+      itemRender: ({ values: values }) => {
+        return <>{values.writer} / A</>;
+      },
     },
     {
       key: 'createAt',
-      label: '작성일',
+      label: '작성일A',
       width: 100,
-      sortDisable: true,
+    },
+    {
+      key: 'createAt',
+      label: '작성일B',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일C',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일D',
+      width: 100,
+    },
+    {
+      key: 'createAt',
+      label: '작성일E',
+      width: 100,
     },
   ]);
 
@@ -55,25 +84,19 @@ function SortExample(props: Props) {
       <AXFDataGrid<IListItem>
         width={containerWidth}
         height={containerHeight}
-        headerHeight={35}
         data={list}
         columns={columns}
         onChangeColumns={(columnIndex, width, columns) => {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
-        rowChecked={{
-          checkedIndexes: [],
-          onChange: (ids, selectedAll) => {
-            console.log('onChange rowSelection', ids, selectedAll);
-          },
-        }}
-        sort={{
-          sortParams: [{ key: 'title', orderBy: 'desc' }],
-          onChange: sortParams => {
-            console.log('onChange: sortParams', sortParams);
-          },
-        }}
+        // rowChecked={{
+        //   checkedIndexes: [],
+        //   onChange: (ids, selectedAll) => {
+        //     console.log('onChange rowSelection', ids, selectedAll);
+        //   },
+        // }}
+        onClick={item => console.log(item)}
         showLineNumber
       />
     </Container>
@@ -82,4 +105,4 @@ function SortExample(props: Props) {
 
 const Container = styled(ExampleContainer)``;
 
-export default SortExample;
+export default LineNumberExample;
