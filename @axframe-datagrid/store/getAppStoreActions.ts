@@ -80,10 +80,12 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
 
         if (columnIndex < frozenColumnIndex) {
           const frozenColumnsWidth = getFrozenColumnsWidth({
+            showLineNumber: get().showLineNumber,
             rowChecked: get().rowChecked,
             itemHeight: get().itemHeight,
             frozenColumnIndex: get().frozenColumnIndex,
             columns,
+            dataLength: get().data.length,
           });
 
           if (frozenColumnsWidth + 20 > get().width) {
