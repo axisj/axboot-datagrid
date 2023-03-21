@@ -5,6 +5,7 @@ import { BodyTable, TableBodyTr } from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
 import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
+import styled from '@emotion/styled';
 
 interface Props {
   style?: React.CSSProperties;
@@ -113,7 +114,7 @@ function TableBodyFrozen(props: Props) {
               active={rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false}
               {...trProps}
             >
-              {showLineNumber && <td className={'rfdg-tr-line-number'}>{ri + 1}</td>}
+              {showLineNumber && <LineNumberTd>{ri + 1}</LineNumberTd>}
               {hasRowChecked && (
                 <td>
                   <RowSelector
@@ -182,5 +183,13 @@ function TableBodyFrozen(props: Props) {
     </BodyTable>
   );
 }
+
+const LineNumberTd = styled.td`
+  padding: 0 !important;
+  text-align: center;
+  &:not(:last-child) {
+    border-right: 1px solid var(--axfdg-border-color-base);
+  }
+`;
 
 export default TableBodyFrozen;
