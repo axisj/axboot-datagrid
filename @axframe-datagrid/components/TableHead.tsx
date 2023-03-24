@@ -89,7 +89,7 @@ function TableHead({ container }: Props) {
                       colSpan={c.colspan}
                       className={c.headerClassName}
                       style={{
-                        textAlign: c.headerAlign ?? c.align ?? 'center',
+                        textAlign: c.headerAlign ?? 'center',
                       }}
                     >
                       {c.label}
@@ -102,7 +102,7 @@ function TableHead({ container }: Props) {
                     key={index}
                     rowSpan={c.rowspan}
                     style={{
-                      textAlign: c.headerAlign ?? c.align ?? 'center',
+                      textAlign: c.headerAlign ?? 'center',
                     }}
                     className={c.headerClassName}
                     hasOnClick={sort && !c.sortDisable}
