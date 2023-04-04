@@ -109,15 +109,11 @@ function TableHead({ container }: Props) {
                     columnResizing={columnResizing}
                     onClick={evt => {
                       evt.preventDefault();
-                      toggleColumnSort(frozenColumnIndex + index);
+                      toggleColumnSort(c.columnIndex);
                     }}
                   >
                     <TableHeadColumn column={c} />
-                    <ColResizer
-                      columnIndex={frozenColumnIndex + index}
-                      container={container}
-                      bordered={columnsTable.length > 1}
-                    />
+                    <ColResizer columnIndex={c.columnIndex} container={container} bordered={columnsTable.length > 1} />
                   </HeadTd>
                 );
               })}
