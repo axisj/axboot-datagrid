@@ -94,11 +94,9 @@ function TableBody() {
               {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
                 const tdProps: Record<string, any> = {};
                 if (editable) {
-                  // tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
-                  tdProps.onClick = () => setEditItem(ri, columnIndex);
-                } else {
-                  tdProps.onClick = () => handleClick(ri, columnIndex);
+                  tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }
+                tdProps.onClick = () => handleClick(ri, columnIndex);
                 tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
 
                 const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
