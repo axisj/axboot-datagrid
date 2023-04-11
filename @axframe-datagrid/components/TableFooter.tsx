@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import Pagination from './Pagination';
 import { useAppStore } from '../store';
+import { toMoney } from '../utils/number';
 
 interface Props {}
 
@@ -12,7 +13,7 @@ function TableFooter(props: Props) {
 
   return (
     <Container>
-      <StatusContainer ref={statusContainerRef}>{page && `${page?.totalElements ?? 0} Items`}</StatusContainer>
+      <StatusContainer ref={statusContainerRef}>{page && `${toMoney(page?.totalElements ?? 0)} Items`}</StatusContainer>
       <PagingContainer ref={pagingContainerRef}>
         <Pagination />
       </PagingContainer>

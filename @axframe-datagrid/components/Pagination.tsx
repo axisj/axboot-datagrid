@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { useAppStore } from '../store';
 import { css } from '@emotion/react';
+import { toMoney } from '../utils/number';
 
 interface Props {}
 
@@ -42,7 +43,7 @@ function Pagination(props: Props) {
             const num = (pageNumber = pageStartNumber + i);
             return (
               <No key={num} active={page.currentPage === num} onClick={() => onClickPageNo(num)}>
-                {num}
+                {toMoney(num)}
               </No>
             );
           }
@@ -50,7 +51,7 @@ function Pagination(props: Props) {
         {pageNumber < page.totalPages && (
           <>
             {pageNumber < page.totalPages - 1 && '...'}
-            <No onClick={() => onClickPageNo(page.totalPages)}>{page.totalPages}</No>
+            <No onClick={() => onClickPageNo(page.totalPages)}>{toMoney(page.totalPages)}</No>
           </>
         )}
       </Container>

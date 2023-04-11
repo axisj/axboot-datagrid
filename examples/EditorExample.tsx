@@ -72,6 +72,11 @@ const Wrap = styled.div``;
 const Container = styled(ExampleContainer)`
   .editable {
     background: rgba(255, 253, 158, 0.5);
+    user-select: none;
+    input,
+    select {
+      user-select: all;
+    }
   }
 `;
 const Buttons = styled.div`
