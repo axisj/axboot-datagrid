@@ -212,6 +212,14 @@ export const TableBodyTr = styled.tr<{
     `;
   }}
 
+  ${({ hover }) => {
+    if (hover) {
+      return css`
+        background: var(--axfdg-body-hover-bg);
+      `;
+    }
+  }}
+  
   ${({ odd, hover }) => {
     if (odd && hover) {
       return css`
@@ -220,14 +228,6 @@ export const TableBodyTr = styled.tr<{
     } else if (odd) {
       return css`
         background: var(--axfdg-body-odd-bg);
-      `;
-    }
-  }}
-
-  ${({ hover }) => {
-    if (hover) {
-      return css`
-        background-color: var(--axfdg-body-hover-bg);
       `;
     }
   }}
