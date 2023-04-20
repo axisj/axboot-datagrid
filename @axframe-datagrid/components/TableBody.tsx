@@ -83,12 +83,16 @@ function TableBody() {
                 onMouseOut: () => setHoverItemIndex(undefined),
               };
 
+          const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
+
           return (
             <TableBodyTr
               key={ri}
               itemHeight={itemHeight}
               itemPadding={itemPadding}
-              active={rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false}
+              active={active}
+              odd={ri % 2 === 0}
+              className={active ? 'active' : ''}
               {...trProps}
             >
               {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
@@ -185,6 +189,7 @@ export const TableBodyTr = styled.tr<{
   hover?: boolean;
   active?: boolean;
   editable?: boolean;
+  odd?: boolean;
 }>`
   ${({ editable, itemHeight, itemPadding }) => {
     if (editable) {
@@ -207,6 +212,18 @@ export const TableBodyTr = styled.tr<{
     `;
   }}
 
+  ${({ odd, hover }) => {
+    if (odd && hover) {
+      return css`
+        background: var(--axfdg-body-hover-odd-bg);
+      `;
+    } else if (odd) {
+      return css`
+        background: var(--axfdg-body-odd-bg);
+      `;
+    }
+  }}
+
   ${({ hover }) => {
     if (hover) {
       return css`
@@ -214,12 +231,12 @@ export const TableBodyTr = styled.tr<{
       `;
     }
   }}
-  
+
   ${({ active }) => {
     if (active) {
       return css`
-        background-color: var(--axfdg-body-active-bg);
-        color: var(--axfdg-primary-color);
+        background-color: var(--axfdg-body-active-bg) !important;
+        color: var(--axfdg-primary-color) !important;
       `;
     }
   }}

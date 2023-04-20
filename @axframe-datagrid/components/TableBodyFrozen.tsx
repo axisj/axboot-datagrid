@@ -105,13 +105,16 @@ function TableBodyFrozen(props: Props) {
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),
               };
+          const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
 
           return (
             <TableBodyTr
               key={ri}
               itemHeight={itemHeight}
               itemPadding={itemPadding}
-              active={rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false}
+              active={active}
+              odd={ri % 2 === 0}
+              className={active ? 'active' : ''}
               {...trProps}
             >
               {showLineNumber && <LineNumberTd>{ri + 1}</LineNumberTd>}
