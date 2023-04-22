@@ -104,7 +104,7 @@ const Container = styled.div<StyledProps>`
       &:after {
         position: absolute;
         top: 50%;
-        right: 7px;
+        right: 6.5px;
         content: '';
         display: block;
         width: 1px;
