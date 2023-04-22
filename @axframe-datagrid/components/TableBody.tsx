@@ -32,6 +32,7 @@ function TableBody() {
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
   const setData = useAppStore(s => s.setData);
   const onChangeData = useAppStore(s => s.onChangeData);
+  const msg = useAppStore(s => s.msg);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -153,6 +154,17 @@ function TableBody() {
             </TableBodyTr>
           );
         })}
+
+        {endNumber - startIdx < 1 && (
+          <NoDataTr>
+            {msg?.emptyList && (
+              <>
+                <td colSpan={columns.slice(frozenColumnIndex).length}>{msg?.emptyList}</td>
+                <td />
+              </>
+            )}
+          </NoDataTr>
+        )}
       </tbody>
     </BodyTable>
   );
@@ -240,6 +252,14 @@ export const TableBodyTr = styled.tr<{
       `;
     }
   }}
+`;
+
+export const NoDataTr = styled.tr`
+  td {
+    text-align: center;
+    padding: 20px 0;
+    //background: var(--axfdg-scroll-track-bg);
+  }
 `;
 
 export default TableBody;

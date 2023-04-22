@@ -49,6 +49,7 @@ interface Props<T> {
   selectedRowKey?: React.Key | React.Key[];
   editable?: boolean;
   showLineNumber?: boolean;
+  msg?: AXFDGProps<T>['msg'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -107,6 +108,7 @@ function Table<T>(props: Props<T>) {
   const setOnChangeData = useAppStore(s => s.setOnChangeData);
   const setOnLoadMore = useAppStore(s => s.setOnLoadMore);
   const setShowLineNumber = useAppStore(s => s.setShowLineNumber);
+  const setMsg = useAppStore(s => s.setMsg);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -274,6 +276,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     setShowLineNumber(props.showLineNumber);
   }, [setShowLineNumber, props.showLineNumber]);
+  React.useEffect(() => {
+    setMsg(props.msg);
+  }, [setMsg, props.msg]);
 
   //setInitialized
   React.useEffect(() => {

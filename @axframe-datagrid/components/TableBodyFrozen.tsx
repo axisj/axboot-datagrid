@@ -1,7 +1,7 @@
 import * as React from 'react';
 import RowSelector from './RowSelector';
 import { getCellValue, getCellValueByRowKey } from '../utils';
-import { BodyTable, TableBodyTr } from './TableBody';
+import { BodyTable, NoDataTr, TableBodyTr } from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
 import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
@@ -182,6 +182,7 @@ function TableBodyFrozen(props: Props) {
             </TableBodyTr>
           );
         })}
+        {endNumber - startIdx < 1 && <NoDataTr />}
       </tbody>
     </BodyTable>
   );

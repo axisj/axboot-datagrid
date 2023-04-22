@@ -198,6 +198,7 @@ export interface AppActions<T> {
   setOnChangeData: (onChangeData?: AXFDGProps<T>['onChangeData']) => void;
   setOnLoadMore: (onLoadMore?: AXFDGProps<T>['onLoadMore']) => void;
   setShowLineNumber: (showLineNumber?: boolean) => void;
+  setMsg: (msg?: AXFDGProps<T>['msg']) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}
