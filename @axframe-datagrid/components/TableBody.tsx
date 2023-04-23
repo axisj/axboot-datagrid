@@ -255,6 +255,7 @@ export const TableBodyTr = styled.tr<{
 `;
 
 export const NoDataTr = styled.tr`
+  border-color: var(--axfdg-scroll-track-bg) !important;
   td {
     text-align: center;
     padding: 20px 0;
