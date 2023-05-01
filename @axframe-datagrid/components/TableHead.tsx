@@ -129,7 +129,7 @@ function TableHead({ container }: Props) {
 export const HeadTable = styled.table<{ headerHeight: number; hasGroup: boolean }>`
   table-layout: fixed;
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: unset;
   border-spacing: 0;
   height: ${p => p.headerHeight}px;
   color: var(--axfdg-header-color);
@@ -158,7 +158,7 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
   padding: 0 7px;
   border-bottom-style: solid;
   border-bottom-color: var(--axfdg-border-color-base);
-  border-width: 2px;
+  border-width: 1px;
 
   ${({ hasOnClick, columnResizing }) => {
     if (hasOnClick && !columnResizing) {
