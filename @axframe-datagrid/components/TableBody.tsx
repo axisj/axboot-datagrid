@@ -174,23 +174,17 @@ export const BodyTable = styled.table`
   position: absolute;
   table-layout: fixed;
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
   border-spacing: 0;
   background-color: var(--axfdg-body-bg);
   color: var(--axfdg-body-color);
 
   > tbody > tr {
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--axfdg-border-color-base);
-    border-top: 0 none;
-    border-left: 0 none;
-    border-right: 0 none;
-
     > td {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+      border-bottom: 1px solid var(--axfdg-border-color-base);
     }
   }
 `;
