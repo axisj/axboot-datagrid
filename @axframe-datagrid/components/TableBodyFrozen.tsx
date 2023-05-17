@@ -153,7 +153,7 @@ function TableBodyFrozen(props: Props) {
                         await setItemValue(ri, columnIndex, column, newValue);
 
                         if (columnDirection && rowDirection) {
-                          let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                          let _ci = columnIndex + DIRC_MAP[columnDirection];
                           let _ri = ri + DIRC_MAP[rowDirection];
                           if (_ci > columns.length - 1) _ci = 0;
                           if (_ri > data.length - 1) _ri = 0;
@@ -167,7 +167,7 @@ function TableBodyFrozen(props: Props) {
                         await setEditItem(-1, -1);
                       },
                       async (columnDirection, rowDirection) => {
-                        let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                        let _ci = columnIndex + DIRC_MAP[columnDirection];
                         let _ri = ri + DIRC_MAP[rowDirection];
                         if (_ci > columns.length - 1) _ci = 0;
                         if (_ri > data.length - 1) _ri = 0;

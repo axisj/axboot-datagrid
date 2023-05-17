@@ -40,6 +40,7 @@ function EditorExample(props: Props) {
 
       <Container ref={containerRef}>
         <AXFDataGrid<Item>
+          frozenColumnIndex={3}
           width={containerWidth}
           height={containerHeight}
           data={list}
