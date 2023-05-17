@@ -114,39 +114,61 @@ function TableBody() {
                     }}
                     {...tdProps}
                   >
-                    {getCellValue(
-                      ri,
-                      frozenColumnIndex + columnIndex,
-                      column,
-                      item,
-                      getCellValueByRowKey(column.key, item.values),
-                      async (newValue, columnDirection, rowDirection) => {
-                        await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
+                    {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
+                      const tdProps: Record<string, any> = {};
+                      if (editable) {
+                        tdProps.onDoubleClick = () => setEditItem(ri, frozenColumnIndex + columnIndex);
+                      }
+                      tdProps.onClick = () => handleClick(ri, columnIndex);
+                      tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
 
-                        if (columnDirection && rowDirection) {
-                          let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
-                          let _ri = ri + DIRC_MAP[rowDirection];
-                          if (_ci > columns.length - 1) _ci = 0;
-                          if (_ri > data.length - 1) _ri = 0;
+                      const tdEditable =
+                        editable && editItemIndex === ri && editItemColIndex === frozenColumnIndex + columnIndex;
 
-                          await setEditItem(_ri, _ci);
-                        } else {
-                          await setEditItem(-1, -1);
-                        }
-                      },
-                      async () => {
-                        await setEditItem(-1, -1);
-                      },
-                      async (columnDirection, rowDirection) => {
-                        let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
-                        let _ri = ri + DIRC_MAP[rowDirection];
-                        if (_ci > columns.length - 1) _ci = 0;
-                        if (_ri > data.length - 1) _ri = 0;
+                      return (
+                        <td
+                          key={columnIndex}
+                          style={{
+                            textAlign: column.align,
+                          }}
+                          {...tdProps}
+                        >
+                          {getCellValue(
+                            ri,
+                            frozenColumnIndex + columnIndex,
+                            column,
+                            item,
+                            getCellValueByRowKey(column.key, item.values),
+                            async (newValue, columnDirection, rowDirection) => {
+                              await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
 
-                        await setEditItem(_ri, _ci);
-                      },
-                      tdEditable,
-                    )}
+                              if (columnDirection && rowDirection) {
+                                let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                                let _ri = ri + DIRC_MAP[rowDirection];
+                                if (_ci > columns.length - 1) _ci = 0;
+                                if (_ri > data.length - 1) _ri = 0;
+
+                                await setEditItem(_ri, _ci);
+                              } else {
+                                await setEditItem(-1, -1);
+                              }
+                            },
+                            async () => {
+                              await setEditItem(-1, -1);
+                            },
+                            async (columnDirection, rowDirection) => {
+                              let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                              let _ri = ri + DIRC_MAP[rowDirection];
+                              if (_ci > columns.length - 1) _ci = 0;
+                              if (_ri > data.length - 1) _ri = 0;
+
+                              await setEditItem(_ri, _ci);
+                            },
+                            tdEditable,
+                          )}
+                        </td>
+                      );
+                    })}
                   </td>
                 );
               })}

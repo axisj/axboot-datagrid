@@ -103,7 +103,7 @@ export default function useEditorGrid() {
               return item.checked ? 'editable' : '';
             },
           },
-          { key: 'uuid', label: 'UUID', width: 150 },
+          { key: 'uuid', label: 'UUID', width: 150, itemRender: InputEditor },
           {
             key: 'code',
             label: 'Code',
