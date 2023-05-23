@@ -17,7 +17,7 @@ interface Props extends StylesProps {
 
 function RowSelector({ checked = false, indeterminate, handleChange }: Props) {
   const itemHeight = useAppStore(s => s.itemHeight);
-  const checkboxHeight = itemHeight > 15 ? 15 : itemHeight;
+  const checkboxHeight = Math.min(15, itemHeight);
 
   return (
     <Container itemHeight={itemHeight} onClick={() => handleChange?.(!checked)}>
@@ -65,9 +65,9 @@ const CheckBoxControl = styled.div<StylesProps>`
         opacity: 1;
         position: absolute;
         top: 47%;
-        left: 23%;
-        width: 5px;
-        height: 7px;
+        left: 21%;
+        width: ${Math.max(size - 11, 2)}px;
+        height: ${Math.max(size - 9, 4)}px;
       }
     `;
   }};
