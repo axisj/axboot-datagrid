@@ -103,7 +103,7 @@ function ColumnsGroupExample(props: Props) {
 }
 
 const Container = styled(ExampleContainer)`
-  height: 700px;
+  height: 500px;
 `;
 
 export default ColumnsGroupExample;

@@ -54,39 +54,49 @@ function LoadingExample(props: Props) {
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
-    <Container ref={containerRef}>
-      <AXFDataGrid<IListItem>
-        width={containerWidth}
-        height={containerHeight}
-        headerHeight={35}
-        data={list}
-        columns={columns}
-        onChangeColumns={(columnIndex, width, columns) => {
-          console.log('onChangeColumnWidths', columnIndex, width, columns);
-          setColumns(columns);
-        }}
-        rowChecked={{
-          checkedIndexes: [],
-          onChange: (ids, selectedAll) => {
-            console.log('onChange rowSelection', ids, selectedAll);
-          },
-        }}
-        loading={loading}
-        spinning={spinning}
-      />
-
-      <br />
-
-      <Space wrap>
+    <Wrap>
+      <Buttons>
         <Button onClick={() => setLoading(true)}>Loading : true</Button>
         <Button onClick={() => setLoading(false)}>Loading : false</Button>
         <Button onClick={() => setSpinning(true)}>Spinning : true</Button>
         <Button onClick={() => setSpinning(false)}>Spinning : false</Button>
-      </Space>
-    </Container>
+      </Buttons>
+
+      <Container ref={containerRef}>
+        <AXFDataGrid<IListItem>
+          width={containerWidth}
+          height={containerHeight}
+          headerHeight={35}
+          data={list}
+          columns={columns}
+          onChangeColumns={(columnIndex, width, columns) => {
+            console.log('onChangeColumnWidths', columnIndex, width, columns);
+            setColumns(columns);
+          }}
+          rowChecked={{
+            checkedIndexes: [],
+            onChange: (ids, selectedAll) => {
+              console.log('onChange rowSelection', ids, selectedAll);
+            },
+          }}
+          loading={loading}
+          spinning={spinning}
+        />
+      </Container>
+    </Wrap>
   );
 }
 
+const Wrap = styled.div``;
 const Container = styled(ExampleContainer)``;
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  padding: 10px 0;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
 
 export default LoadingExample;

@@ -63,27 +63,31 @@ export default function FocusExample(props: Props) {
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
   return (
-    <Container ref={containerRef}>
-      <AXFDataGrid<IListItem>
-        width={containerWidth}
-        height={containerHeight}
-        headerHeight={35}
-        data={list}
-        columns={columns}
-        onChangeColumns={(columnIndex, width, columns) => {
-          console.log('onChangeColumnWidths', columnIndex, width, columns);
-          setColumns(columns);
-        }}
-        onClick={({ item }) => {
-          // console.log('item.id', item.id);
-          setSelectedRowKey(item.no);
-        }}
-        rowKey={'no'}
-        selectedRowKey={selectedRowKey}
-      />
-      <br />
+    <>
+
       <b>selectedRowKey</b> : {selectedRowKey}
-    </Container>
+      <br />
+      <br />
+      <Container ref={containerRef}>
+        <AXFDataGrid<IListItem>
+          width={containerWidth}
+          height={containerHeight}
+          headerHeight={35}
+          data={list}
+          columns={columns}
+          onChangeColumns={(columnIndex, width, columns) => {
+            console.log('onChangeColumnWidths', columnIndex, width, columns);
+            setColumns(columns);
+          }}
+          onClick={({ item }) => {
+            // console.log('item.id', item.id);
+            setSelectedRowKey(item.no);
+          }}
+          rowKey={'no'}
+          selectedRowKey={selectedRowKey}
+        />
+      </Container>
+    </>
   );
 }
 
