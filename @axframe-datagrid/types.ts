@@ -51,9 +51,9 @@ export type AXFDGDataItem<T> = {
 };
 
 export interface AXFDGPage {
-  currentPage: number;
+  currentPage?: number;
   pageSize?: number;
-  totalPages: number;
+  totalPages?: number;
   totalElements?: number;
   loading?: boolean;
   onChange?: (currentPage: number, pageSize?: number) => void;

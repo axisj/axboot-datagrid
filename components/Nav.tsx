@@ -33,6 +33,7 @@ function Nav(props: Props) {
           { label: `Loading`, key: '/loading' },
           { label: `Focus`, key: '/focus' },
           { label: `Editor`, key: '/editor' },
+          { label: `VirtualScroll`, key: '/virtualScroll' },
           { label: `Props Change`, key: '/propsChange' },
         ]}
         onTabClick={async activeKey => {
