@@ -1,9 +1,9 @@
-import * as React from "react";
-import { AppStoreProvider, getAppStoreActions } from "./store";
-import Table from "./components/Table";
-import { AppModelColumn, AppStore, AXFDGProps, AXFDGSortParam } from "./types";
-import create from "zustand";
-import { getCellValueByRowKey } from "./utils";
+import * as React from 'react';
+import { AppStoreProvider, getAppStoreActions } from './store';
+import Table from './components/Table';
+import { AppModelColumn, AppStore, AXFDGProps, AXFDGSortParam } from './types';
+import create from 'zustand';
+import { getCellValueByRowKey } from './utils';
 
 export function AXFDataGrid<T = Record<string, any>>({
   width,

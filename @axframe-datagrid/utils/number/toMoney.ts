@@ -1,4 +1,4 @@
-import { toNumber } from "./";
+import { toNumber } from './';
 
 export function toMoney(value: unknown): string {
   const n = toNumber(value);
@@ -8,5 +8,5 @@ export function toMoney(value: unknown): string {
     : n
         .toFixed(0)
         .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

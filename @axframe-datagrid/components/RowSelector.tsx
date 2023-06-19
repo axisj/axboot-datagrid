@@ -1,7 +1,7 @@
-import * as React from "react";
-import styled from "@emotion/styled";
-import { useAppStore } from "../store";
-import { css } from "@emotion/react";
+import * as React from 'react';
+import styled from '@emotion/styled';
+import { useAppStore } from '../store';
+import { css } from '@emotion/react';
 
 interface StylesProps {
   checked?: boolean;

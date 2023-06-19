@@ -1,5 +1,5 @@
-import { AXFDGColumn, AXFDGRowChecked } from "../types";
-import { getLineNumberWidth } from "./getLineNumber";
+import { AXFDGColumn, AXFDGRowChecked } from '../types';
+import { getLineNumberWidth } from './getLineNumber';
 
 interface Props<T> {
   showLineNumber?: boolean;

@@ -1,12 +1,12 @@
-import * as React from "react";
-import styled from "@emotion/styled";
-import TableBody from "./TableBody";
-import { useAppStore } from "../store";
-import TableHead from "./TableHead";
-import TableHeadFrozen from "./TableHeadFrozen";
-import TableBodyFrozen from "./TableBodyFrozen";
-import TableFooter from "./TableFooter";
-import Loading from "./Loading";
+import * as React from 'react';
+import styled from '@emotion/styled';
+import TableBody from './TableBody';
+import { useAppStore } from '../store';
+import TableHead from './TableHead';
+import TableHeadFrozen from './TableHeadFrozen';
+import TableBodyFrozen from './TableBodyFrozen';
+import TableFooter from './TableFooter';
+import Loading from './Loading';
 import {
   AppModelColumn,
   AXFDGColumn,
@@ -15,10 +15,10 @@ import {
   AXFDGPage,
   AXFDGProps,
   AXFDGRowChecked,
-  AXFDGSortParam
-} from "../types";
-import { getFrozenColumnsWidth } from "../utils";
-import { css } from "@emotion/react";
+  AXFDGSortParam,
+} from '../types';
+import { getFrozenColumnsWidth } from '../utils';
+import { css } from '@emotion/react';
 
 interface Props<T> {
   width?: number;
@@ -41,7 +41,7 @@ interface Props<T> {
   columnsGroup: AXFDGColumnGroup[];
   page?: AXFDGPage;
   data?: AXFDGDataItem<T>[];
-  onClick?: AXFDGProps<T>["onClick"];
+  onClick?: AXFDGProps<T>['onClick'];
   onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
   onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXFDGColumn<T> | null) => void;
   onLoadMore?: (params: { scrollLeft: number; scrollTop: number }) => void;
@@ -50,7 +50,7 @@ interface Props<T> {
   selectedRowKey?: React.Key | React.Key[];
   editable?: boolean;
   showLineNumber?: boolean;
-  msg?: AXFDGProps<T>["msg"];
+  msg?: AXFDGProps<T>['msg'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -121,9 +121,9 @@ function Table<T>(props: Props<T>) {
       const { scrollTop, scrollLeft } = scrollContainerRef.current;
 
       if (containerRef.current) {
-        const contHeader = containerRef.current.querySelector("[role=\"rfdg-header\"]") as any;
-        if (contHeader && contHeader["style"]) {
-          contHeader["style"].marginLeft = `${-scrollLeft}px`;
+        const contHeader = containerRef.current.querySelector('[role="rfdg-header"]') as any;
+        if (contHeader && contHeader['style']) {
+          contHeader['style'].marginLeft = `${-scrollLeft}px`;
         }
       }
 
@@ -131,7 +131,7 @@ function Table<T>(props: Props<T>) {
     }
   }, [setScroll]);
 
-  const onWheel: (this: HTMLDivElement, ev: HTMLElementEventMap["wheel"]) => any = React.useCallback(evt => {
+  const onWheel: (this: HTMLDivElement, ev: HTMLElementEventMap['wheel']) => any = React.useCallback(evt => {
     evt.preventDefault();
 
     if (scrollContainerRef.current) {
@@ -140,7 +140,7 @@ function Table<T>(props: Props<T>) {
       if ((evt as any).detail) {
         delta.y = (evt as any).detail * 10;
       } else {
-        if (typeof evt.deltaY === "undefined") {
+        if (typeof evt.deltaY === 'undefined') {
           delta.y = -(evt as any).wheelDelta;
           delta.x = 0;
         } else {
@@ -174,7 +174,7 @@ function Table<T>(props: Props<T>) {
     itemHeight,
     itemPadding,
     setContentBodyHeight,
-    setDisplayItemCount
+    setDisplayItemCount,
   ]);
 
   React.useEffect(() => {
@@ -207,7 +207,7 @@ function Table<T>(props: Props<T>) {
       itemHeight,
       frozenColumnIndex: props.frozenColumnIndex ?? 0,
       columns,
-      dataLength: data.length
+      dataLength: data.length,
     });
     setFrozenColumnsWidth(frozenColumnsWidth);
     setFrozenColumnIndex(props.frozenColumnIndex ?? 0);
@@ -219,7 +219,7 @@ function Table<T>(props: Props<T>) {
     itemHeight,
     columns,
     setFrozenColumnsWidth,
-    data.length
+    data.length,
   ]);
   React.useEffect(() => {
     if (props.checkedIndexesMap !== undefined) setCheckedIndexesMap(props.checkedIndexesMap);
@@ -245,13 +245,15 @@ function Table<T>(props: Props<T>) {
     props.page?.totalPages,
     props.page?.totalElements,
     props.page?.onChange,
-    props.page?.displayPaginationLength
+    props.page?.displayPaginationLength,
   ]);
   React.useEffect(() => {
     if (props.data !== undefined) setData(props.data);
   }, [setData, props.data]);
   React.useEffect(() => {
-    if (props.columns !== undefined) setColumns(props.columns);
+    if (props.columns !== undefined) {
+      setColumns(props.columns);
+    }
   }, [setColumns, props.columns]);
   React.useEffect(() => {
     if (props.columnsGroup !== undefined) setColumnsGroup(props.columnsGroup);
@@ -293,20 +295,20 @@ function Table<T>(props: Props<T>) {
     const scrollContainerRefCurrent = scrollContainerRef?.current;
     const frozenScrollContainerRefCurrent = frozenScrollContainerRef?.current;
     if (scrollContainerRefCurrent) {
-      scrollContainerRefCurrent.removeEventListener("scroll", onScroll);
-      scrollContainerRefCurrent.addEventListener("scroll", onScroll, { passive: true, capture: true });
+      scrollContainerRefCurrent.removeEventListener('scroll', onScroll);
+      scrollContainerRefCurrent.addEventListener('scroll', onScroll, { passive: true, capture: true });
       scrollContainerRefCurrent.scrollLeft = props.scrollLeft ?? scrollLeft;
       scrollContainerRefCurrent.scrollTop = props.scrollTop ?? scrollTop;
     }
 
     if (frozenScrollContainerRefCurrent) {
-      frozenScrollContainerRefCurrent.removeEventListener("wheel", onWheel);
-      frozenScrollContainerRefCurrent.addEventListener("wheel", onWheel);
+      frozenScrollContainerRefCurrent.removeEventListener('wheel', onWheel);
+      frozenScrollContainerRefCurrent.addEventListener('wheel', onWheel);
     }
 
     return () => {
-      scrollContainerRefCurrent?.removeEventListener("scroll", onScroll);
-      frozenScrollContainerRefCurrent?.removeEventListener("wheel", onWheel);
+      scrollContainerRefCurrent?.removeEventListener('scroll', onScroll);
+      frozenScrollContainerRefCurrent?.removeEventListener('wheel', onWheel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.scrollTop, props.scrollLeft]);
@@ -314,22 +316,22 @@ function Table<T>(props: Props<T>) {
   return (
     <Container
       ref={containerRef}
-      role={"axframe-datagrid"}
+      role={'axframe-datagrid'}
       style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
       className={className}
     >
-      <HeaderContainer style={{ height: headerHeight }} role={"rfdg-header-container"}>
+      <HeaderContainer style={{ height: headerHeight }} role={'rfdg-header-container'}>
         {(frozenColumnsWidth ?? 0) > 0 && (
           <FrozenHeader
             style={{
-              width: frozenColumnsWidth
+              width: frozenColumnsWidth,
             }}
-            role={"rfdg-frozen-header"}
+            role={'rfdg-frozen-header'}
           >
             <TableHeadFrozen container={containerRef} />
           </FrozenHeader>
         )}
-        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={"rfdg-header"}>
+        <Header style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rfdg-header'}>
           <TableHead container={containerRef} />
         </Header>
       </HeaderContainer>
@@ -339,33 +341,33 @@ function Table<T>(props: Props<T>) {
           <FrozenScrollContent
             ref={frozenScrollContainerRef}
             style={{
-              width: frozenColumnsWidth
+              width: frozenColumnsWidth,
             }}
-            role={"rfdg-frozen-scroll-container"}
+            role={'rfdg-frozen-scroll-container'}
           >
             <TableBodyFrozen
               style={{
-                marginTop: -scrollTop % trHeight
+                marginTop: -scrollTop % trHeight,
               }}
             />
           </FrozenScrollContent>
         )}
-        <ScrollContainer ref={scrollContainerRef} role={"rfdg-scroll-container"}>
+        <ScrollContainer ref={scrollContainerRef} role={'rfdg-scroll-container'}>
           <ScrollContent
             style={{
               paddingTop: paddingTop,
-              height: data.length * trHeight
+              height: data.length * trHeight,
             }}
           >
             <TableBody scrollContainerRef={scrollContainerRef} />
           </ScrollContent>
         </ScrollContainer>
 
-        <Loading active={!!spinning} size={"small"} />
+        <Loading active={!!spinning} size={'small'} />
       </BodyContainer>
 
       {page && (
-        <FooterContainer style={{ height: footerHeight }} role={"rfdg-footer-container"}>
+        <FooterContainer style={{ height: footerHeight }} role={'rfdg-footer-container'}>
           <TableFooter />
         </FooterContainer>
       )}

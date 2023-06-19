@@ -1,15 +1,15 @@
-import * as React from "react";
-import styled from "@emotion/styled";
-import { AXFDGColumn } from "../types";
-import { useAppStore } from "../store";
-import { css } from "@emotion/react";
+import * as React from 'react';
+import styled from '@emotion/styled';
+import { AXFDGColumn } from '../types';
+import { useAppStore } from '../store';
+import { css } from '@emotion/react';
 
 interface Props<T> {
   column: AXFDGColumn<T>;
 }
 
 interface SorterProps {
-  sort?: "asc" | "desc";
+  sort?: 'asc' | 'desc';
 }
 
 function TableHeadColumn<T>({ column }: Props<T>) {
@@ -18,7 +18,7 @@ function TableHeadColumn<T>({ column }: Props<T>) {
   const sortDisable = column.sortDisable;
 
   if (sort && !sortDisable) {
-    const columnKey = Array.isArray(column.key) ? column.key.join(".") : column.key;
+    const columnKey = Array.isArray(column.key) ? column.key.join('.') : column.key;
     const sortParam = sortParams[columnKey];
     return (
       <ColumnWithSorter>
@@ -76,7 +76,7 @@ const ColumnSorter = styled.span<SorterProps>`
     border-top: 4.5px solid var(--axfdg-border-color-base);
 
     ${({ sort }) => {
-      if (sort === "desc") {
+      if (sort === 'desc') {
         return css`
           border-top: 4.5px solid var(--axfdg-primary-color);
         `;
@@ -93,7 +93,7 @@ const ColumnSorter = styled.span<SorterProps>`
     border-bottom: 4.5px solid var(--axfdg-border-color-base);
 
     ${({ sort }) => {
-      if (sort === "asc") {
+      if (sort === 'asc') {
         return css`
           border-bottom: 4.5px solid var(--axfdg-primary-color);
         `;

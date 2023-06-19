@@ -1,5 +1,5 @@
-import { CheckedAll, StoreActions } from "../types";
-import { getCellValueByRowKey, getFrozenColumnsWidth } from "../utils";
+import { CheckedAll, StoreActions } from '../types';
+import { getCellValueByRowKey, getFrozenColumnsWidth } from '../utils';
 
 export const getAppStoreActions: StoreActions = (set, get) => ({
   setInitialized: initialized => set({ initialized }),
@@ -73,10 +73,20 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setColumnWidth: (columnIndex, width) => {
     const columns = get().columns;
     const frozenColumnIndex = get().frozenColumnIndex;
+
     if (width !== undefined) {
       if (columns[columnIndex]) {
         const _columnWidth = columns[columnIndex].width;
         columns[columnIndex].width = width;
+
+        let left = columns[columnIndex].left;
+
+        for (let i = columnIndex + 1; i < columns.length; i++) {
+          left += columns[i - 1].width;
+          if (i > frozenColumnIndex) {
+            columns[i].left = left;
+          }
+        }
 
         if (columnIndex < frozenColumnIndex) {
           const frozenColumnsWidth = getFrozenColumnsWidth({

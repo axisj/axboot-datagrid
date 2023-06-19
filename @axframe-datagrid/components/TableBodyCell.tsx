@@ -1,5 +1,5 @@
-import * as React from "react";
-import { AXFDGColumn, AXFDGDataItem, MoveDirection } from "../types";
+import * as React from 'react';
+import { AXFDGColumn, AXFDGDataItem, MoveDirection } from '../types';
 
 interface Props<T> {
   index: number;
@@ -14,16 +14,16 @@ interface Props<T> {
 }
 
 function Cell<T>({
-                   index,
-                   columnIndex,
-                   column,
-                   item,
-                   valueByRowKey,
-                   handleSave,
-                   handleCancel,
-                   handleMove,
-                   editable
-                 }: Props<T>) {
+  index,
+  columnIndex,
+  column,
+  item,
+  valueByRowKey,
+  handleSave,
+  handleCancel,
+  handleMove,
+  editable,
+}: Props<T>) {
   if (column.itemRender) {
     const Render = column.itemRender;
     return (
