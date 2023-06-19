@@ -1,8 +1,8 @@
-import * as React from 'react';
-import styled from '@emotion/styled';
-import { css } from '@emotion/react';
-import { delay, mouseEventSubscribe } from '../utils';
-import { useAppStore } from '../store';
+import * as React from "react";
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+import { delay, mouseEventSubscribe } from "../utils";
+import { useAppStore } from "../store";
 
 interface StyledProps {
   hideHandle?: boolean;
@@ -37,10 +37,10 @@ function ColResizer({ container, columnIndex, hideHandle, bordered }: Props) {
         () => {
           setColumnResizing(false);
           setColumnWidth(columnIndex);
-        },
+        }
       );
     },
-    [container, setColumnResizing, setColumnWidth],
+    [container, setColumnResizing, setColumnWidth]
   );
 
   const onMouseDoubleClick = React.useCallback(
@@ -49,17 +49,17 @@ function ColResizer({ container, columnIndex, hideHandle, bordered }: Props) {
       evt.stopPropagation();
 
       if (container.current) {
-        const headFrozenHTML = container.current.querySelector('[role="rfdg-head-frozen"]')?.innerHTML;
-        const headHTML = container.current.querySelector('[role="rfdg-head"]')?.innerHTML;
-        const bodyFrozenHTML = container.current.querySelector('[role="rfdg-body-frozen"]')?.innerHTML;
-        const bodyHTML = container.current.querySelector('[role="rfdg-body"]')?.innerHTML;
-        const targetDiv = document.createElement('div');
-        targetDiv.style.position = 'fixed';
-        targetDiv.style.top = '-9999px';
+        const headFrozenHTML = container.current.querySelector("[role=\"rfdg-head-frozen\"]")?.innerHTML;
+        const headHTML = container.current.querySelector("[role=\"rfdg-head\"]")?.innerHTML;
+        const bodyFrozenHTML = container.current.querySelector("[role=\"rfdg-body-frozen\"]")?.innerHTML;
+        const bodyHTML = container.current.querySelector("[role=\"rfdg-body\"]")?.innerHTML;
+        const targetDiv = document.createElement("div");
+        targetDiv.style.position = "fixed";
+        targetDiv.style.top = "-9999px";
 
         targetDiv.innerHTML = `<table><thead>${headFrozenHTML}</thead><tbody>${bodyFrozenHTML}</tbody></table>
 <table><thead>${headHTML}</thead><tbody>${bodyHTML}</tbody></table>`;
-        const bodyTarget = document.getElementById('root') ?? document.body;
+        const bodyTarget = document.getElementById("root") ?? document.body;
         bodyTarget.append(targetDiv);
 
         await delay(30);
@@ -73,7 +73,7 @@ function ColResizer({ container, columnIndex, hideHandle, bordered }: Props) {
         targetDiv.remove();
       }
     },
-    [container, setColumnWidth],
+    [container, setColumnWidth]
   );
 
   return (
@@ -108,7 +108,7 @@ const Container = styled.div<StyledProps>`
         content: '';
         display: block;
         width: 1px;
-        height: ${bordered ? '100%' : '1em'};
+        height: ${bordered ? "100%" : "1em"};
         transform: translateY(-50%);
         background: var(--axfdg-border-color-base);
       }

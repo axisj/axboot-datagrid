@@ -130,6 +130,10 @@ export interface AXFDGProps<T> {
 
 export type CheckedAll = true | false | 'indeterminate';
 
+export interface AppModelColumn<T> extends AXFDGColumn<T> {
+  left: number;
+}
+
 export interface AppModel<T> extends AXFDGProps<T> {
   initialized: boolean;
   headerHeight: number;
@@ -137,7 +141,8 @@ export interface AppModel<T> extends AXFDGProps<T> {
   itemHeight: number;
   itemPadding: number;
   frozenColumnIndex: number;
-  frozenColumnsWidth: number;
+  frozenColumnsWidth?: number;
+  columns: AppModelColumn<T>[];
   columnsGroup: AXFDGColumnGroup[];
   data: AXFDGDataItem<T>[];
   columnResizing: boolean;
@@ -149,7 +154,7 @@ export interface AppModel<T> extends AXFDGProps<T> {
   checkedIndexesMap: Map<number, any>;
   checkedAll: CheckedAll;
   sortParams: Record<string, AXFDGSortParam>;
-  displayPaginationLength: number;
+  displayPaginationLength?: number;
   hoverItemIndex?: number;
   loading: boolean;
   editItemIndex?: number;
@@ -161,7 +166,7 @@ export interface AppActions<T> {
   setScrollTop: (scrollTop: number) => void;
   setScrollLeft: (scrollLeft: number) => void;
   setScroll: (scrollTop: number, scrollLeft: number) => void;
-  setColumns: (columns: AXFDGColumn<T>[]) => void;
+  setColumns: (columns: AppModelColumn<T>[]) => void;
   setColumnsGroup: (columnsGroup: AXFDGColumnGroup[]) => void;
   setData: (data: AXFDGDataItem<T>[]) => void;
   setCheckedIndexes: (ids: number[]) => void;
@@ -199,6 +204,7 @@ export interface AppActions<T> {
   setOnLoadMore: (onLoadMore?: AXFDGProps<T>['onLoadMore']) => void;
   setShowLineNumber: (showLineNumber?: boolean) => void;
   setMsg: (msg?: AXFDGProps<T>['msg']) => void;
+  setDisplayPaginationLength: (length: number) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}

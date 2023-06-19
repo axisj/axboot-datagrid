@@ -1,10 +1,11 @@
-import * as React from 'react';
-import styled from '@emotion/styled';
-import { useAppStore } from '../store';
-import { css } from '@emotion/react';
-import { toMoney } from '../utils/number';
+import * as React from "react";
+import styled from "@emotion/styled";
+import { useAppStore } from "../store";
+import { css } from "@emotion/react";
+import { toMoney } from "../utils/number";
 
-interface Props {}
+interface Props {
+}
 
 function Pagination(props: Props) {
   const page = useAppStore(s => s.page);
@@ -18,11 +19,11 @@ function Pagination(props: Props) {
         page?.onChange?.(pageNo, page?.pageSize);
       }
     },
-    [page, setPage],
+    [page, setPage]
   );
 
   if (page) {
-    const displayLength = Math.min(displayPaginationLength, page.totalPages ?? 5);
+    const displayLength = Math.min(displayPaginationLength ?? 0, page.totalPages ?? 5);
     const pageStartNumber = (() => {
       const pageEndNumber = Math.min(page.currentPage + Math.floor(displayLength / 2), page.totalPages);
       return Math.max(pageEndNumber - (displayLength - 1), 1);
@@ -35,7 +36,7 @@ function Pagination(props: Props) {
         {pageStartNumber > 1 && (
           <>
             <No onClick={() => onClickPageNo(1)}>1</No>
-            {pageStartNumber > 2 && '...'}
+            {pageStartNumber > 2 && "..."}
           </>
         )}
         {Array.from({ length: displayLength }).map((_, i) => {
@@ -50,7 +51,7 @@ function Pagination(props: Props) {
         })}
         {pageNumber < page.totalPages && (
           <>
-            {pageNumber < page.totalPages - 1 && '...'}
+            {pageNumber < page.totalPages - 1 && "..."}
             <No onClick={() => onClickPageNo(page.totalPages)}>{toMoney(page.totalPages)}</No>
           </>
         )}
@@ -83,15 +84,15 @@ const No = styled.span<{ active?: boolean }>`
   }
 
   ${({ active }) => {
-    if (active) {
-      return css`
+  if (active) {
+    return css`
         color: var(--axfdg-primary-color);
         border: 1px solid var(--axfdg-primary-color);
         background-color: var(--axfdg-body-bg);
         border-radius: 2px;
         margin: 0 3px;
       `;
-    }
-  }}
+  }
+}}
 `;
 export default Pagination;

@@ -1,11 +1,11 @@
-import styled from '@emotion/styled';
-import * as React from 'react';
-import { useAppStore } from '../store';
-import RowSelector from './RowSelector';
-import TableColGroupFrozen from './TableColGroupFrozen';
-import { HeadGroupTd, HeadTable, HeadTd } from './TableHead';
-import ColResizer from './ColResizer';
-import TableHeadColumn from './TableHeadColumn';
+import styled from "@emotion/styled";
+import * as React from "react";
+import { useAppStore } from "../store";
+import RowSelector from "./RowSelector";
+import TableColGroupFrozen from "./TableColGroupFrozen";
+import { HeadGroupTd, HeadTable, HeadTd } from "./TableHead";
+import ColResizer from "./ColResizer";
+import TableHeadColumn from "./TableHeadColumn";
 
 interface Props {
   container: React.RefObject<HTMLDivElement>;
@@ -38,24 +38,24 @@ function TableHeadFrozen({ container }: Props) {
           if (!prevItem || prevItem.cgi !== findCgIndex) {
             const cifi = columnsGroup[findCgIndex].columnIndexes.findIndex(n => n === index);
             row.push({
-              type: 'column-group',
+              type: "column-group",
               cgi: findCgIndex,
               colspan: columnsGroup[findCgIndex].columnIndexes.length - cifi,
-              ...columnsGroup[findCgIndex],
+              ...columnsGroup[findCgIndex]
             });
           }
 
           secondRow.push({
-            type: 'column',
+            type: "column",
             columnIndex: index,
-            ...column,
+            ...column
           });
         } else {
           row.push({
-            type: 'column',
+            type: "column",
             columnIndex: index,
             ...column,
-            rowspan: 2,
+            rowspan: 2
           });
         }
       });
@@ -65,9 +65,9 @@ function TableHeadFrozen({ container }: Props) {
       const row: Record<string, any>[] = [];
       columns.slice(0, frozenColumnIndex).forEach((column, index) => {
         row.push({
-          type: 'column',
+          type: "column",
           columnIndex: index,
-          ...column,
+          ...column
         });
       });
       rows.push(row);
@@ -79,62 +79,62 @@ function TableHeadFrozen({ container }: Props) {
   return (
     <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1}>
       <TableColGroupFrozen />
-      <tbody role={'rfdg-head-frozen'}>
-        {columnsTable.map((row, ri) => {
-          return (
-            <tr key={ri}>
-              {ri === 0 && showLineNumber && <LineNumberTd rowSpan={columnsTable.length}>&nbsp;</LineNumberTd>}
-              {ri === 0 && hasRowSelection && (
-                <HeadTd rowSpan={columnsTable.length}>
-                  <RowSelector
-                    checked={selectedAll === true}
-                    indeterminate={selectedAll === 'indeterminate'}
-                    handleChange={checked => {
-                      setSelectedAll(checked);
-                    }}
-                  />
-                </HeadTd>
-              )}
+      <tbody role={"rfdg-head-frozen"}>
+      {columnsTable.map((row, ri) => {
+        return (
+          <tr key={ri}>
+            {ri === 0 && showLineNumber && <LineNumberTd rowSpan={columnsTable.length}>&nbsp;</LineNumberTd>}
+            {ri === 0 && hasRowSelection && (
+              <HeadTd rowSpan={columnsTable.length}>
+                <RowSelector
+                  checked={selectedAll === true}
+                  indeterminate={selectedAll === "indeterminate"}
+                  handleChange={checked => {
+                    setSelectedAll(checked);
+                  }}
+                />
+              </HeadTd>
+            )}
 
-              {row.map((c: any, index: any) => {
-                if (c.type === 'column-group') {
-                  return (
-                    <HeadGroupTd
-                      key={index}
-                      colSpan={c.colspan}
-                      className={c.headerClassName}
-                      style={{
-                        textAlign: c.headerAlign ?? 'center',
-                      }}
-                    >
-                      {c.label}
-                    </HeadGroupTd>
-                  );
-                }
+            {row.map((c: any, index: any) => {
+              if (c.type === "column-group") {
                 return (
-                  <HeadTd
-                    data-column-index={c.columnIndex}
+                  <HeadGroupTd
                     key={index}
-                    rowSpan={c.rowspan}
-                    style={{
-                      textAlign: c.headerAlign ?? 'center',
-                    }}
+                    colSpan={c.colspan}
                     className={c.headerClassName}
-                    hasOnClick={sort && !c.sortDisable}
-                    columnResizing={columnResizing}
-                    onClick={evt => {
-                      evt.preventDefault();
-                      toggleColumnSort(index);
+                    style={{
+                      textAlign: c.headerAlign ?? "center"
                     }}
                   >
-                    <TableHeadColumn column={c} />
-                    <ColResizer columnIndex={c.columnIndex} container={container} bordered={columnsTable.length > 1} />
-                  </HeadTd>
+                    {c.label}
+                  </HeadGroupTd>
                 );
-              })}
-            </tr>
-          );
-        })}
+              }
+              return (
+                <HeadTd
+                  data-column-index={c.columnIndex}
+                  key={index}
+                  rowSpan={c.rowspan}
+                  style={{
+                    textAlign: c.headerAlign ?? "center"
+                  }}
+                  className={c.headerClassName}
+                  hasOnClick={sort && !c.sortDisable}
+                  columnResizing={columnResizing}
+                  onClick={evt => {
+                    evt.preventDefault();
+                    toggleColumnSort(index);
+                  }}
+                >
+                  <TableHeadColumn column={c} />
+                  <ColResizer columnIndex={c.columnIndex} container={container} bordered={columnsTable.length > 1} />
+                </HeadTd>
+              );
+            })}
+          </tr>
+        );
+      })}
       </tbody>
     </HeadTable>
   );

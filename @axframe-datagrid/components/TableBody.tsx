@@ -1,20 +1,26 @@
-import * as React from 'react';
-import styled from '@emotion/styled';
-import { useAppStore } from '../store';
-import TableColGroup from './TableColGroup';
-import { getCellValueByRowKey } from '../utils';
-import { css } from '@emotion/react';
-import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
-import { TableBodyCell } from './TableBodyCell';
+import * as React from "react";
+import styled from "@emotion/styled";
+import { useAppStore } from "../store";
+import TableColGroup from "./TableColGroup";
+import { getCellValueByRowKey } from "../utils";
+import { css } from "@emotion/react";
+import { AXFDGColumn, AXFDGDataItemStatus } from "../types";
+import { TableBodyCell } from "./TableBodyCell";
 
 const DIRC_MAP = {
   next: 1,
   prev: -1,
-  current: 0,
+  current: 0
 };
 
-function TableBody() {
+interface Props {
+  scrollContainerRef: React.RefObject<HTMLDivElement>;
+}
+
+function TableBody({ scrollContainerRef }: Props) {
   const scrollTop = useAppStore(s => s.scrollTop);
+  const width = useAppStore(s => s.width);
+  const frozenColumnsWidth = useAppStore(s => s.frozenColumnsWidth);
   const itemHeight = useAppStore(s => s.itemHeight);
   const itemPadding = useAppStore(s => s.itemPadding);
   const trHeight = itemHeight + itemPadding * 2 + 1;
@@ -58,117 +64,148 @@ function TableBody() {
       await setData([...data]);
       await onChangeData?.(ri, ci, _values, column);
     },
-    [data, onChangeData, setData],
+    [data, onChangeData, setData]
   );
+
+  const { startCIdx, endCIdx } = React.useMemo(() => {
+    if (!scrollContainerRef.current) return {
+      startCIdx: 0,
+      endCIdx: columns.length - 1
+    };
+    const start = scrollContainerRef.current.scrollLeft,
+      end = scrollContainerRef.current.scrollLeft + width - (frozenColumnsWidth ?? 0);
+
+    let startCIdx, endCIdx;
+    // columns.
+    for (let i = frozenColumnIndex; i < columns.length; i++) {
+      const { left, width } = columns[i];
+      if (left + width >= start && left < end) {
+        if (startCIdx === undefined) {
+          startCIdx = i;
+        } else {
+          endCIdx = i;
+        }
+      }
+    }
+    return {
+      startCIdx: startCIdx ?? 0,
+      endCIdx: endCIdx ?? columns.length - 1
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scrollContainerRef.current?.scrollLeft, width, frozenColumnsWidth, columns, frozenColumnIndex]);
 
   return (
     <BodyTable>
       <TableColGroup />
-      <tbody role={'rfdg-body'}>
-        {Array.from({ length: endNumber - startIdx }, (_, i) => {
-          const ri = startIdx + i;
-          const item = data[ri];
-          if (!item) {
-            return null;
+      <tbody role={"rfdg-body"}>
+      {Array.from({ length: endNumber - startIdx }, (_, i) => {
+        const ri = startIdx + i;
+        const item = data[ri];
+        if (!item) {
+          return null;
+        }
+
+        const trProps = editable
+          ? {
+            editable: true,
+            hover: hoverItemIndex === ri,
+            onMouseOver: () => setHoverItemIndex(ri),
+            onMouseOut: () => setHoverItemIndex(undefined)
           }
+          : {
+            hover: hoverItemIndex === ri,
+            onMouseOver: () => setHoverItemIndex(ri),
+            onMouseOut: () => setHoverItemIndex(undefined)
+          };
 
-          const trProps = editable
-            ? {
-                editable: true,
-                hover: hoverItemIndex === ri,
-                onMouseOver: () => setHoverItemIndex(ri),
-                onMouseOut: () => setHoverItemIndex(undefined),
+        const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
+
+        return (
+          <TableBodyTr
+            key={ri}
+            itemHeight={itemHeight}
+            itemPadding={itemPadding}
+            active={active}
+            odd={ri % 2 === 0}
+            className={active ? "active" : ""}
+            {...trProps}
+          >
+            {startCIdx > frozenColumnIndex && <td colSpan={startCIdx - frozenColumnIndex} />}
+            {Array.from({ length: endCIdx - startCIdx + 1 }, (_, cidx) => {
+              const columnIndex = startCIdx + cidx;
+              const column = columns[columnIndex];
+              const tdProps: Record<string, any> = {};
+              if (editable) {
+                tdProps.onDoubleClick = () => setEditItem(ri, frozenColumnIndex + columnIndex);
               }
-            : {
-                hover: hoverItemIndex === ri,
-                onMouseOver: () => setHoverItemIndex(ri),
-                onMouseOut: () => setHoverItemIndex(undefined),
-              };
+              tdProps.onClick = () => handleClick(ri, columnIndex);
+              tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
 
-          const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
+              const tdEditable =
+                editable && editItemIndex === ri && editItemColIndex === frozenColumnIndex + columnIndex;
 
-          return (
-            <TableBodyTr
-              key={ri}
-              itemHeight={itemHeight}
-              itemPadding={itemPadding}
-              active={active}
-              odd={ri % 2 === 0}
-              className={active ? 'active' : ''}
-              {...trProps}
-            >
-              {columns.slice(frozenColumnIndex).map((column, columnIndex) => {
-                const tdProps: Record<string, any> = {};
-                if (editable) {
-                  tdProps.onDoubleClick = () => setEditItem(ri, frozenColumnIndex + columnIndex);
-                }
-                tdProps.onClick = () => handleClick(ri, columnIndex);
-                tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
+              return (
+                <td
+                  key={columnIndex}
+                  style={{
+                    textAlign: column.align
+                  }}
+                  {...tdProps}
+                >
+                  <TableBodyCell
+                    index={ri}
+                    columnIndex={frozenColumnIndex + columnIndex}
+                    column={column}
+                    item={item}
+                    valueByRowKey={getCellValueByRowKey(column.key, item.values)}
+                    {...{
+                      handleSave: async (newValue, columnDirection, rowDirection) => {
+                        await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
 
-                const tdEditable =
-                  editable && editItemIndex === ri && editItemColIndex === frozenColumnIndex + columnIndex;
-
-                return (
-                  <td
-                    key={columnIndex}
-                    style={{
-                      textAlign: column.align,
-                    }}
-                    {...tdProps}
-                  >
-                    <TableBodyCell
-                      index={ri}
-                      columnIndex={frozenColumnIndex + columnIndex}
-                      column={column}
-                      item={item}
-                      valueByRowKey={getCellValueByRowKey(column.key, item.values)}
-                      {...{
-                        handleSave: async (newValue, columnDirection, rowDirection) => {
-                          await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
-
-                          if (columnDirection && rowDirection) {
-                            let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
-                            let _ri = ri + DIRC_MAP[rowDirection];
-                            if (_ci > columns.length - 1) _ci = 0;
-                            if (_ri > data.length - 1) _ri = 0;
-
-                            await setEditItem(_ri, _ci);
-                          } else {
-                            await setEditItem(-1, -1);
-                          }
-                        },
-                        handleCancel: async () => {
-                          await setEditItem(-1, -1);
-                        },
-                        handleMove: async (columnDirection, rowDirection) => {
+                        if (columnDirection && rowDirection) {
                           let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
                           let _ri = ri + DIRC_MAP[rowDirection];
                           if (_ci > columns.length - 1) _ci = 0;
                           if (_ri > data.length - 1) _ri = 0;
 
                           await setEditItem(_ri, _ci);
-                        },
-                        editable: tdEditable,
-                      }}
-                    />
-                  </td>
-                );
-              })}
-              <td onClick={() => handleClick(ri, -1)} />
-            </TableBodyTr>
-          );
-        })}
+                        } else {
+                          await setEditItem(-1, -1);
+                        }
+                      },
+                      handleCancel: async () => {
+                        await setEditItem(-1, -1);
+                      },
+                      handleMove: async (columnDirection, rowDirection) => {
+                        let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
+                        let _ri = ri + DIRC_MAP[rowDirection];
+                        if (_ci > columns.length - 1) _ci = 0;
+                        if (_ri > data.length - 1) _ri = 0;
 
-        {endNumber - startIdx < 1 && (
-          <NoDataTr>
-            {msg?.emptyList && (
-              <>
-                <td colSpan={columns.slice(frozenColumnIndex).length}>{msg?.emptyList}</td>
-                <td />
-              </>
-            )}
-          </NoDataTr>
-        )}
+                        await setEditItem(_ri, _ci);
+                      },
+                      editable: tdEditable
+                    }}
+                  />
+                </td>
+              );
+            })}
+
+            <td onClick={() => handleClick(ri, -1)} />
+          </TableBodyTr>
+        );
+      })}
+
+      {endNumber - startIdx < 1 && (
+        <NoDataTr>
+          {msg?.emptyList && (
+            <>
+              <td colSpan={columns.slice(frozenColumnIndex).length}>{msg?.emptyList}</td>
+              <td />
+            </>
+          )}
+        </NoDataTr>
+      )}
       </tbody>
     </BodyTable>
   );
@@ -205,6 +242,7 @@ export const TableBodyTr = styled.tr<{
     if (editable) {
       return css`
         cursor: default;
+
         > td {
           line-height: ${itemHeight}px;
           padding: 0 6.5px;
@@ -214,6 +252,7 @@ export const TableBodyTr = styled.tr<{
     }
     return css`
       cursor: pointer;
+
       > td {
         line-height: ${itemHeight}px; // - border
         padding: 0 6.5px;
@@ -229,7 +268,7 @@ export const TableBodyTr = styled.tr<{
       `;
     }
   }}
-  
+
   ${({ odd, hover }) => {
     if (odd && hover) {
       return css`
@@ -254,6 +293,7 @@ export const TableBodyTr = styled.tr<{
 
 export const NoDataTr = styled.tr`
   border-color: var(--axfdg-scroll-track-bg) !important;
+
   td {
     text-align: center;
     padding: 20px 0;
