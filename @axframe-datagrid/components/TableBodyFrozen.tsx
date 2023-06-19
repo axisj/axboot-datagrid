@@ -6,6 +6,7 @@ import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
 import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
 import styled from '@emotion/styled';
+import { TableBodyCell } from "./TableBodyCell";
 
 interface Props {
   style?: React.CSSProperties;
@@ -143,39 +144,41 @@ function TableBodyFrozen(props: Props) {
                     }}
                     {...tdProps}
                   >
-                    {getCellValue(
-                      ri,
-                      columnIndex,
-                      column,
-                      item,
-                      getCellValueByRowKey(column.key, item.values),
-                      async (newValue, columnDirection, rowDirection) => {
-                        await setItemValue(ri, columnIndex, column, newValue);
+                    <TableBodyCell
+                      index={ri}
+                      columnIndex={columnIndex}
+                      column={column}
+                      item={item}
+                      valueByRowKey={getCellValueByRowKey(column.key, item.values)}
+                      {...{
+                        handleSave: async (newValue, columnDirection, rowDirection) => {
+                          await setItemValue(ri, columnIndex, column, newValue);
 
-                        if (columnDirection && rowDirection) {
+                          if (columnDirection && rowDirection) {
+                            let _ci = columnIndex + DIRC_MAP[columnDirection];
+                            let _ri = ri + DIRC_MAP[rowDirection];
+                            if (_ci > columns.length - 1) _ci = 0;
+                            if (_ri > data.length - 1) _ri = 0;
+
+                            await setEditItem(_ri, _ci);
+                          } else {
+                            await setEditItem(-1, -1);
+                          }
+                        },
+                        handleCancel: async () => {
+                          await setEditItem(-1, -1);
+                        },
+                        handleMove: async (columnDirection, rowDirection) => {
                           let _ci = columnIndex + DIRC_MAP[columnDirection];
                           let _ri = ri + DIRC_MAP[rowDirection];
                           if (_ci > columns.length - 1) _ci = 0;
                           if (_ri > data.length - 1) _ri = 0;
 
                           await setEditItem(_ri, _ci);
-                        } else {
-                          await setEditItem(-1, -1);
-                        }
-                      },
-                      async () => {
-                        await setEditItem(-1, -1);
-                      },
-                      async (columnDirection, rowDirection) => {
-                        let _ci = columnIndex + DIRC_MAP[columnDirection];
-                        let _ri = ri + DIRC_MAP[rowDirection];
-                        if (_ci > columns.length - 1) _ci = 0;
-                        if (_ri > data.length - 1) _ri = 0;
-
-                        await setEditItem(_ri, _ci);
-                      },
-                      editable && editItemIndex === ri && editItemColIndex === columnIndex,
-                    )}
+                        },
+                        editable: editable && editItemIndex === ri && editItemColIndex === columnIndex
+                      }}
+                    />
                   </td>
                 );
               })}
