@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { useAppStore } from '../store';
-import styled from '@emotion/styled';
-import TableColGroup from './TableColGroup';
-import ColResizer from './ColResizer';
-import TableHeadColumn from './TableHeadColumn';
-import { css } from '@emotion/react';
+import * as React from "react";
+import { useAppStore } from "../store";
+import styled from "@emotion/styled";
+import TableColGroup from "./TableColGroup";
+import ColResizer from "./ColResizer";
+import TableHeadColumn from "./TableHeadColumn";
+import { css } from "@emotion/react";
 
 interface Props {
   container: React.RefObject<HTMLDivElement>;
@@ -34,24 +34,24 @@ function TableHead({ container }: Props) {
           if (!prevItem || prevItem.cgi !== findCgIndex) {
             const cifi = columnsGroup[findCgIndex].columnIndexes.findIndex(n => n === ci);
             row.push({
-              type: 'column-group',
+              type: "column-group",
               cgi: findCgIndex,
               colspan: columnsGroup[findCgIndex].columnIndexes.length - cifi,
-              ...columnsGroup[findCgIndex],
+              ...columnsGroup[findCgIndex]
             });
           }
 
           secondRow.push({
-            type: 'column',
+            type: "column",
             columnIndex: ci,
-            ...column,
+            ...column
           });
         } else {
           row.push({
-            type: 'column',
+            type: "column",
             columnIndex: ci,
             ...column,
-            rowspan: 2,
+            rowspan: 2
           });
         }
       });
@@ -63,9 +63,9 @@ function TableHead({ container }: Props) {
         const ci = frozenColumnIndex + index;
 
         row.push({
-          type: 'column',
+          type: "column",
           columnIndex: ci,
-          ...column,
+          ...column
         });
       });
       rows.push(row);
@@ -77,50 +77,50 @@ function TableHead({ container }: Props) {
   return (
     <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1}>
       <TableColGroup />
-      <tbody role={'rfdg-head'}>
-        {columnsTable.map((row, ri) => {
-          return (
-            <tr key={ri}>
-              {row.map((c: any, index: any) => {
-                if (c.type === 'column-group') {
-                  return (
-                    <HeadGroupTd
-                      key={index}
-                      colSpan={c.colspan}
-                      className={c.headerClassName}
-                      style={{
-                        textAlign: c.headerAlign ?? 'center',
-                      }}
-                    >
-                      {c.label}
-                    </HeadGroupTd>
-                  );
-                }
+      <tbody role={"rfdg-head"}>
+      {columnsTable.map((row, ri) => {
+        return (
+          <tr key={ri}>
+            {row.map((c: any, index: any) => {
+              if (c.type === "column-group") {
                 return (
-                  <HeadTd
-                    data-column-index={c.columnIndex}
+                  <HeadGroupTd
                     key={index}
-                    rowSpan={c.rowspan}
-                    style={{
-                      textAlign: c.headerAlign ?? 'center',
-                    }}
+                    colSpan={c.colspan}
                     className={c.headerClassName}
-                    hasOnClick={sort && !c.sortDisable}
-                    columnResizing={columnResizing}
-                    onClick={evt => {
-                      evt.preventDefault();
-                      toggleColumnSort(c.columnIndex);
+                    style={{
+                      textAlign: c.headerAlign ?? "center"
                     }}
                   >
-                    <TableHeadColumn column={c} />
-                    <ColResizer columnIndex={c.columnIndex} container={container} bordered={columnsTable.length > 1} />
-                  </HeadTd>
+                    {c.label}
+                  </HeadGroupTd>
                 );
-              })}
-              {ri === 0 && <HeadTd rowSpan={2} />}
-            </tr>
-          );
-        })}
+              }
+              return (
+                <HeadTd
+                  data-column-index={c.columnIndex}
+                  key={index}
+                  rowSpan={c.rowspan}
+                  style={{
+                    textAlign: c.headerAlign ?? "center"
+                  }}
+                  className={c.headerClassName}
+                  hasOnClick={sort && !c.sortDisable}
+                  columnResizing={columnResizing}
+                  onClick={evt => {
+                    evt.preventDefault();
+                    toggleColumnSort(c.columnIndex);
+                  }}
+                >
+                  <TableHeadColumn column={c} />
+                  <ColResizer columnIndex={c.columnIndex} container={container} bordered={columnsTable.length > 1} />
+                </HeadTd>
+              );
+            })}
+            {ri === 0 && <HeadTd rowSpan={2} />}
+          </tr>
+        );
+      })}
       </tbody>
     </HeadTable>
   );
@@ -171,7 +171,6 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
       `;
     }
   }}
-
   &.rfdg-tr-line-number {
     border-right: 1px solid var(--axfdg-border-color-base);
   }

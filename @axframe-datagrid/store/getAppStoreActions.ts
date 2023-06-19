@@ -1,5 +1,5 @@
-import { CheckedAll, StoreActions } from '../types';
-import { getCellValueByRowKey, getFrozenColumnsWidth } from '../utils';
+import { CheckedAll, StoreActions } from "../types";
+import { getCellValueByRowKey, getFrozenColumnsWidth } from "../utils";
 
 export const getAppStoreActions: StoreActions = (set, get) => ({
   setInitialized: initialized => set({ initialized }),
@@ -180,4 +180,5 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setOnLoadMore: onLoadMore => set({ onLoadMore }),
   setShowLineNumber: showLineNumber => set({ showLineNumber }),
   setMsg: msg => set({ msg }),
+  setDisplayPaginationLength: length => set({ displayPaginationLength: length }),
 });

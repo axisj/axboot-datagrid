@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useAppStore } from '../store';
+import * as React from "react";
+import { useAppStore } from "../store";
 
 function TableColGroup() {
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);

@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { AppStoreProvider, getAppStoreActions } from './store';
-import Table from './components/Table';
-import { AppStore, AXFDGColumnGroup, AXFDGProps, AXFDGSortParam } from './types';
-import create from 'zustand';
-import { getCellValueByRowKey, getFrozenColumnsWidth } from './utils';
+import * as React from "react";
+import { AppStoreProvider, getAppStoreActions } from "./store";
+import Table from "./components/Table";
+import { AppModelColumn, AppStore, AXFDGProps, AXFDGSortParam } from "./types";
+import create from "zustand";
+import { getCellValueByRowKey } from "./utils";
 
 export function AXFDataGrid<T = Record<string, any>>({
   width,
@@ -52,19 +52,6 @@ export function AXFDataGrid<T = Record<string, any>>({
     return new Map();
   }, [data, rowChecked?.checkedIndexes, rowChecked?.checkedRowKeys, rowKey]);
 
-  const frozenColumnsWidth = React.useMemo(
-    () =>
-      getFrozenColumnsWidth({
-        showLineNumber,
-        rowChecked,
-        itemHeight,
-        frozenColumnIndex,
-        columns,
-        dataLength: data.length,
-      }),
-    [columns, frozenColumnIndex, itemHeight, showLineNumber, rowChecked, data.length],
-  );
-
   const sortParams = React.useMemo(() => {
     if (sort) {
       return sort.sortParams.reduce((acc, cur, currentIndex) => {
@@ -77,9 +64,27 @@ export function AXFDataGrid<T = Record<string, any>>({
     return {};
   }, [sort]);
 
-  const displayPaginationLength = React.useMemo(() => {
-    return page?.displayPaginationLength ?? 5;
-  }, [page?.displayPaginationLength]);
+  const computedColumns: AppModelColumn<T>[] = React.useMemo(() => {
+    let left = 0;
+    let prevWidth = 0;
+
+    return [
+      ...columns.slice(0, frozenColumnIndex).map(column => {
+        return {
+          ...column,
+          left: -1,
+        };
+      }),
+      ...columns.slice(frozenColumnIndex).map(column => {
+        left += prevWidth;
+        prevWidth = column.width;
+        return {
+          ...column,
+          left,
+        };
+      }),
+    ];
+  }, [columns, frozenColumnIndex]);
 
   return (
     <AppStoreProvider
@@ -87,7 +92,6 @@ export function AXFDataGrid<T = Record<string, any>>({
         create<AppStore<T>>((set, get) => ({
           initialized: false,
           containerBorderWidth: 1,
-          displayPaginationLength,
           width,
           height,
           headerHeight,
@@ -96,7 +100,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           itemPadding,
           data,
           page,
-          columns,
+          columns: computedColumns,
           onChangeColumns,
           columnsGroup,
           columnResizing: false,
@@ -109,7 +113,6 @@ export function AXFDataGrid<T = Record<string, any>>({
           rowChecked,
           checkedIndexesMap,
           checkedAll: false,
-          frozenColumnsWidth,
           sort,
           sortParams,
           onClick,
@@ -127,7 +130,7 @@ export function AXFDataGrid<T = Record<string, any>>({
     >
       <Table
         {...{
-          columns,
+          columns: computedColumns,
           columnsGroup,
           onChangeColumns,
           width,

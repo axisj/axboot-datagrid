@@ -1,8 +1,9 @@
-import * as React from 'react';
-import { useAppStore } from '../store';
-import { getLineNumberWidth } from '../utils';
+import * as React from "react";
+import { useAppStore } from "../store";
+import { getLineNumberWidth } from "../utils";
 
-interface Props {}
+interface Props {
+}
 
 function TableColGroupFrozen(props: Props) {
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);

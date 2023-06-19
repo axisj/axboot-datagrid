@@ -1,10 +1,11 @@
-import * as React from 'react';
-import styled from '@emotion/styled';
-import Pagination from './Pagination';
-import { useAppStore } from '../store';
-import { toMoney } from '../utils/number';
+import * as React from "react";
+import styled from "@emotion/styled";
+import Pagination from "./Pagination";
+import { useAppStore } from "../store";
+import { toMoney } from "../utils/number";
 
-interface Props {}
+interface Props {
+}
 
 function TableFooter(props: Props) {
   const page = useAppStore(s => s.page);
