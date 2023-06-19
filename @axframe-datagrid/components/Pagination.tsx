@@ -21,7 +21,7 @@ function Pagination(props: Props) {
     [page, setPage],
   );
 
-  if (page && page.totalPages !== undefined && page.currentPage !== undefined) {
+  if (page && page.totalPages !== undefined && page.currentPage !== undefined && page.totalPages > 0) {
     const displayLength = Math.min(displayPaginationLength ?? 0, page.totalPages ?? 5);
     const pageStartNumber = (() => {
       const pageEndNumber = Math.min(page.currentPage + Math.floor(displayLength / 2), page.totalPages);

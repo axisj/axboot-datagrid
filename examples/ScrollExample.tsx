@@ -68,6 +68,8 @@ function ScrollExample(props: Props) {
         }}
         onClick={item => console.log(item)}
         page={{
+          currentPage: 0,
+          totalPages: 0,
           totalElements: list.length,
         }}
       />
