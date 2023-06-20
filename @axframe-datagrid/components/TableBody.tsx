@@ -4,7 +4,7 @@ import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
 import { getCellValueByRowKey } from '../utils';
 import { css } from '@emotion/react';
-import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
+import { AXFDGColumn, AXFDGDataItemStatus, MoveDirection } from '../types';
 import { TableBodyCell } from './TableBodyCell';
 
 const DIRC_MAP = {
@@ -67,6 +67,23 @@ function TableBody({ scrollContainerRef }: Props) {
     [data, onChangeData, setData],
   );
 
+  const handleMoveEditFocus = React.useCallback(
+    async (rowIndex: number, columnIndex: number, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => {
+      if (columnDirection && rowDirection) {
+        let _ci = columnIndex + DIRC_MAP[columnDirection];
+        let _ri = rowIndex + DIRC_MAP[rowDirection];
+
+        if (_ci > columns.length - 1) _ci = 0;
+        if (_ri > data.length - 1) _ri = 0;
+
+        await setEditItem(_ri, _ci);
+      } else {
+        await setEditItem(-1, -1);
+      }
+    },
+    [columns.length, data.length, setEditItem],
+  );
+
   const { startCIdx, endCIdx } = React.useMemo(() => {
     if (!scrollContainerRef.current)
       return {
@@ -88,6 +105,18 @@ function TableBody({ scrollContainerRef }: Props) {
         }
       }
     }
+
+    startCIdx = startCIdx ?? frozenColumnIndex;
+    endCIdx = endCIdx ?? columns.length - 1;
+
+    if (startCIdx > frozenColumnIndex) {
+      startCIdx -= 1;
+    }
+
+    if (endCIdx < columns.length - 1) {
+      endCIdx += 1;
+    }
+
     return {
       startCIdx: startCIdx ?? 0,
       endCIdx: endCIdx ?? columns.length - 1,
@@ -137,13 +166,12 @@ function TableBody({ scrollContainerRef }: Props) {
                 const column = columns[columnIndex];
                 const tdProps: Record<string, any> = {};
                 if (editable) {
-                  tdProps.onDoubleClick = () => setEditItem(ri, frozenColumnIndex + columnIndex);
+                  tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
                 }
                 tdProps.onClick = () => handleClick(ri, columnIndex);
                 tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
 
-                const tdEditable =
-                  editable && editItemIndex === ri && editItemColIndex === frozenColumnIndex + columnIndex;
+                const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
 
                 return (
                   <td
@@ -155,35 +183,20 @@ function TableBody({ scrollContainerRef }: Props) {
                   >
                     <TableBodyCell
                       index={ri}
-                      columnIndex={frozenColumnIndex + columnIndex}
+                      columnIndex={columnIndex}
                       column={column}
                       item={item}
                       valueByRowKey={getCellValueByRowKey(column.key, item.values)}
                       {...{
                         handleSave: async (newValue, columnDirection, rowDirection) => {
-                          await setItemValue(ri, frozenColumnIndex + columnIndex, column, newValue);
-
-                          if (columnDirection && rowDirection) {
-                            let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
-                            let _ri = ri + DIRC_MAP[rowDirection];
-                            if (_ci > columns.length - 1) _ci = 0;
-                            if (_ri > data.length - 1) _ri = 0;
-
-                            await setEditItem(_ri, _ci);
-                          } else {
-                            await setEditItem(-1, -1);
-                          }
+                          await setItemValue(ri, columnIndex, column, newValue);
+                          await handleMoveEditFocus(ri, columnIndex, columnDirection, rowDirection);
                         },
                         handleCancel: async () => {
                           await setEditItem(-1, -1);
                         },
                         handleMove: async (columnDirection, rowDirection) => {
-                          let _ci = frozenColumnIndex + columnIndex + DIRC_MAP[columnDirection];
-                          let _ri = ri + DIRC_MAP[rowDirection];
-                          if (_ci > columns.length - 1) _ci = 0;
-                          if (_ri > data.length - 1) _ri = 0;
-
-                          await setEditItem(_ri, _ci);
+                          await handleMoveEditFocus(ri, columnIndex, columnDirection, rowDirection);
                         },
                         editable: tdEditable,
                       }}

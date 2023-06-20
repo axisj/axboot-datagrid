@@ -346,6 +346,7 @@ function Table<T>(props: Props<T>) {
             role={'rfdg-frozen-scroll-container'}
           >
             <TableBodyFrozen
+              scrollContainerRef={scrollContainerRef}
               style={{
                 marginTop: -scrollTop % trHeight,
               }}

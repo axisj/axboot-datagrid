@@ -4,11 +4,12 @@ import { getCellValueByRowKey } from '../utils';
 import { BodyTable, NoDataTr, TableBodyTr } from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
-import { AXFDGColumn, AXFDGDataItemStatus } from '../types';
+import { AXFDGColumn, AXFDGDataItemStatus, MoveDirection } from '../types';
 import styled from '@emotion/styled';
 import { TableBodyCell } from './TableBodyCell';
 
 interface Props {
+  scrollContainerRef: React.RefObject<HTMLDivElement>;
   style?: React.CSSProperties;
 }
 
@@ -85,6 +86,27 @@ function TableBodyFrozen(props: Props) {
     [data, onChangeData, setData],
   );
 
+  const handleMoveEditFocus = React.useCallback(
+    async (rowIndex: number, columnIndex: number, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => {
+      if (columnDirection && rowDirection) {
+        let _ci = columnIndex + DIRC_MAP[columnDirection];
+        let _ri = rowIndex + DIRC_MAP[rowDirection];
+
+        if (_ci > columns.length - 1) _ci = 0;
+        if (_ri > data.length - 1) _ri = 0;
+
+        await setEditItem(_ri, _ci);
+
+        if (_ci > frozenColumnIndex - 1 && props.scrollContainerRef.current) {
+          props.scrollContainerRef.current.scrollLeft = 0;
+        }
+      } else {
+        await setEditItem(-1, -1);
+      }
+    },
+    [columns.length, data.length, setEditItem, frozenColumnIndex, props.scrollContainerRef],
+  );
+
   return (
     <BodyTable style={props.style}>
       <TableColGroupFrozen />
@@ -154,28 +176,13 @@ function TableBodyFrozen(props: Props) {
                       {...{
                         handleSave: async (newValue, columnDirection, rowDirection) => {
                           await setItemValue(ri, columnIndex, column, newValue);
-
-                          if (columnDirection && rowDirection) {
-                            let _ci = columnIndex + DIRC_MAP[columnDirection];
-                            let _ri = ri + DIRC_MAP[rowDirection];
-                            if (_ci > columns.length - 1) _ci = 0;
-                            if (_ri > data.length - 1) _ri = 0;
-
-                            await setEditItem(_ri, _ci);
-                          } else {
-                            await setEditItem(-1, -1);
-                          }
+                          await handleMoveEditFocus(ri, columnIndex, columnDirection, rowDirection);
                         },
                         handleCancel: async () => {
                           await setEditItem(-1, -1);
                         },
                         handleMove: async (columnDirection, rowDirection) => {
-                          let _ci = columnIndex + DIRC_MAP[columnDirection];
-                          let _ri = ri + DIRC_MAP[rowDirection];
-                          if (_ci > columns.length - 1) _ci = 0;
-                          if (_ri > data.length - 1) _ri = 0;
-
-                          await setEditItem(_ri, _ci);
+                          await handleMoveEditFocus(ri, columnIndex, columnDirection, rowDirection);
                         },
                         editable: editable && editItemIndex === ri && editItemColIndex === columnIndex,
                       }}
