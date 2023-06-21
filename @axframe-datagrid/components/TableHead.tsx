@@ -109,7 +109,7 @@ function TableHead({ container }: Props) {
                     columnResizing={columnResizing}
                     onClick={evt => {
                       evt.preventDefault();
-                      toggleColumnSort(c.columnIndex);
+                      if (!c.sortDisable) toggleColumnSort(c.columnIndex);
                     }}
                   >
                     <TableHeadColumn column={c} />

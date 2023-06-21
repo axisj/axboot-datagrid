@@ -26,12 +26,12 @@ function BasicExample(props: Props) {
   const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
     {
       key: 'id',
-      label: '아이디 IS LONG !',
+      label: 'No',
       width: 100,
     },
     {
       key: 'title',
-      label: '제목',
+      label: 'Title',
       width: 300,
       itemRender: ({ values }) => {
         return (
@@ -43,7 +43,7 @@ function BasicExample(props: Props) {
     },
     {
       key: 'writer',
-      label: '작성자',
+      label: 'Writer',
       width: 100,
       itemRender: ({ values: values }) => {
         return <>{values.writer} / A</>;
@@ -51,27 +51,27 @@ function BasicExample(props: Props) {
     },
     {
       key: 'createAt',
-      label: '작성일A',
+      label: 'Date-A',
       width: 100,
     },
     {
       key: 'createAt',
-      label: '작성일B',
+      label: 'Date-B',
       width: 100,
     },
     {
       key: 'createAt',
-      label: '작성일C',
+      label: 'Date-C',
       width: 100,
     },
     {
       key: 'createAt',
-      label: '작성일D',
+      label: 'Date-D',
       width: 100,
     },
     {
       key: 'createAt',
-      label: '작성일E',
+      label: 'Date-E',
       width: 100,
     },
   ]);
