@@ -311,7 +311,7 @@ function Table<T>(props: Props<T>) {
       frozenScrollContainerRefCurrent?.removeEventListener('wheel', onWheel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.scrollTop, props.scrollLeft]);
+  }, [props.scrollTop, props.scrollLeft, scrollContainerRef?.current, frozenScrollContainerRef?.current]);
 
   return (
     <Container
