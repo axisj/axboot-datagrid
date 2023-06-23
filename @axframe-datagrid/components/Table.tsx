@@ -150,6 +150,7 @@ function Table<T>(props: Props<T>) {
       }
 
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollTop + delta.y;
+      scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollLeft + delta.x;
     }
   }, []);
 
@@ -299,6 +300,8 @@ function Table<T>(props: Props<T>) {
       scrollContainerRefCurrent.addEventListener('scroll', onScroll, { passive: true, capture: true });
       scrollContainerRefCurrent.scrollLeft = props.scrollLeft ?? scrollLeft;
       scrollContainerRefCurrent.scrollTop = props.scrollTop ?? scrollTop;
+      scrollContainerRefCurrent.removeEventListener('wheel', onWheel);
+      scrollContainerRefCurrent.addEventListener('wheel', onWheel);
     }
 
     if (frozenScrollContainerRefCurrent) {
@@ -308,6 +311,7 @@ function Table<T>(props: Props<T>) {
 
     return () => {
       scrollContainerRefCurrent?.removeEventListener('scroll', onScroll);
+      scrollContainerRefCurrent?.removeEventListener('wheel', onWheel);
       frozenScrollContainerRefCurrent?.removeEventListener('wheel', onWheel);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
