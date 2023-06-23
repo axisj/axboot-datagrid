@@ -75,7 +75,7 @@ function TableHead({ container }: Props) {
   }, [columns, columnsGroup, frozenColumnIndex]);
 
   return (
-    <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1}>
+    <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1} rowLength={columnsTable.length}>
       <TableColGroup />
       <tbody role={'rfdg-head'}>
         {columnsTable.map((row, ri) => {
@@ -126,7 +126,7 @@ function TableHead({ container }: Props) {
   );
 }
 
-export const HeadTable = styled.table<{ headerHeight: number; hasGroup: boolean }>`
+export const HeadTable = styled.table<{ headerHeight: number; hasGroup: boolean; rowLength: number }>`
   table-layout: fixed;
   width: 100%;
   border-collapse: unset;
@@ -138,6 +138,9 @@ export const HeadTable = styled.table<{ headerHeight: number; hasGroup: boolean 
   tbody {
     height: ${p => p.headerHeight}px;
     overflow: hidden;
+    tr {
+      height: ${p => `${100 / p.rowLength}%`};
+    }
   }
 `;
 
