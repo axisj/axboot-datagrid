@@ -77,7 +77,7 @@ function TableHeadFrozen({ container }: Props) {
   }, [columns, columnsGroup, frozenColumnIndex]);
 
   return (
-    <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1}>
+    <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1} rowLength={columnsTable.length}>
       <TableColGroupFrozen />
       <tbody role={'rfdg-head-frozen'}>
         {columnsTable.map((row, ri) => {
