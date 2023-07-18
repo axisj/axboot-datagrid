@@ -40,6 +40,7 @@ function TableBody({ scrollContainerRef }: Props) {
   const setData = useAppStore(s => s.setData);
   const onChangeData = useAppStore(s => s.onChangeData);
   const msg = useAppStore(s => s.msg);
+  const getRowClassName = useAppStore(s => s.getRowClassName);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -149,6 +150,7 @@ function TableBody({ scrollContainerRef }: Props) {
               };
 
           const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
+          const className = getRowClassName?.(ri, item) ?? '';
 
           return (
             <TableBodyTr
@@ -157,7 +159,7 @@ function TableBody({ scrollContainerRef }: Props) {
               itemPadding={itemPadding}
               active={active}
               odd={ri % 2 === 0}
-              className={active ? 'active' : ''}
+              className={className + (active ? ' active' : '')}
               {...trProps}
             >
               {startCIdx > frozenColumnIndex && <td colSpan={startCIdx - frozenColumnIndex} />}

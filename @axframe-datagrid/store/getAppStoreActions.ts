@@ -191,4 +191,5 @@ export const getAppStoreActions: StoreActions = (set, get) => ({
   setShowLineNumber: showLineNumber => set({ showLineNumber }),
   setMsg: msg => set({ msg }),
   setDisplayPaginationLength: length => set({ displayPaginationLength: length }),
+  setRowClassName: getRowClassName => set({ getRowClassName }),
 });

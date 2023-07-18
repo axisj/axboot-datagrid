@@ -44,6 +44,7 @@ function TableBodyFrozen(props: Props) {
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
   const setData = useAppStore(s => s.setData);
   const onChangeData = useAppStore(s => s.onChangeData);
+  const getRowClassName = useAppStore(s => s.getRowClassName);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -130,6 +131,7 @@ function TableBodyFrozen(props: Props) {
                 onMouseOut: () => setHoverItemIndex(undefined),
               };
           const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
+          const className = getRowClassName?.(ri, item) ?? '';
 
           return (
             <TableBodyTr
@@ -138,7 +140,7 @@ function TableBodyFrozen(props: Props) {
               itemPadding={itemPadding}
               active={active}
               odd={ri % 2 === 0}
-              className={active ? 'active' : ''}
+              className={className + (active ? ' active' : '')}
               {...trProps}
             >
               {showLineNumber && <LineNumberTd>{ri + 1}</LineNumberTd>}

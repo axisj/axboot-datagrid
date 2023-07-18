@@ -51,6 +51,7 @@ interface Props<T> {
   editable?: boolean;
   showLineNumber?: boolean;
   msg?: AXFDGProps<T>['msg'];
+  getRowClassName?: AXFDGProps<T>['getRowClassName'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -111,6 +112,7 @@ function Table<T>(props: Props<T>) {
   const setOnLoadMore = useAppStore(s => s.setOnLoadMore);
   const setShowLineNumber = useAppStore(s => s.setShowLineNumber);
   const setMsg = useAppStore(s => s.setMsg);
+  const setRowClassName = useAppStore(s => s.setRowClassName);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -288,6 +290,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     setMsg(props.msg);
   }, [setMsg, props.msg]);
+  React.useEffect(() => {
+    setRowClassName(props.getRowClassName);
+  }, [setRowClassName, props.getRowClassName]);
 
   //setInitialized
   React.useEffect(() => {
