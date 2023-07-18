@@ -126,6 +126,8 @@ export interface AXFDGProps<T> {
   selectedRowKey?: React.Key | React.Key[];
   editable?: boolean;
   showLineNumber?: boolean;
+
+  getRowClassName?: (ri: number, item: AXFDGDataItem<T>) => string | undefined;
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -205,6 +207,8 @@ export interface AppActions<T> {
   setShowLineNumber: (showLineNumber?: boolean) => void;
   setMsg: (msg?: AXFDGProps<T>['msg']) => void;
   setDisplayPaginationLength: (length: number) => void;
+
+  setRowClassName: (getRowClassName?: AXFDGProps<T>['getRowClassName']) => void;
 }
 
 export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}

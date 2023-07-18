@@ -34,6 +34,7 @@ function Nav(props: Props) {
           { label: `Focus`, key: '/focus' },
           { label: `Editor`, key: '/editor' },
           { label: `VirtualScroll`, key: '/virtualScroll' },
+          { label: `GetRowClassName`, key: '/getRowClassName' },
           { label: `Props Change`, key: '/propsChange' },
         ]}
         onTabClick={async activeKey => {
