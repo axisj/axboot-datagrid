@@ -66,6 +66,7 @@ export default function GetRowClassName(props: Props) {
     <>
       <Container ref={containerRef}>
         <AXFDataGrid<IListItem>
+          showLineNumber
           width={containerWidth}
           height={containerHeight}
           headerHeight={35}
