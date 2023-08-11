@@ -228,10 +228,10 @@ function Table<T>(props: Props<T>) {
     if (props.checkedIndexesMap !== undefined) setCheckedIndexesMap(props.checkedIndexesMap);
   }, [setCheckedIndexesMap, props.checkedIndexesMap]);
   React.useEffect(() => {
-    if (props.rowChecked !== undefined) setRowChecked(props.rowChecked);
+    setRowChecked(props.rowChecked);
   }, [setRowChecked, props.rowChecked]);
   React.useEffect(() => {
-    if (props.sortParams !== undefined) setSortParams(props.sortParams);
+    setSortParams(props.sortParams);
   }, [setSortParams, props.sortParams]);
   React.useEffect(() => {
     if (props.page !== undefined) {

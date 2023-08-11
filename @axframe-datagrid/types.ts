@@ -192,8 +192,8 @@ export interface AppActions<T> {
   setFrozenColumnIndex: (frozenColumnIndex: number) => void;
   setCheckedIndexesMap: (checkedIndexesMap: Map<number, any>) => void;
 
-  setRowChecked: (rowChecked: AXFDGRowChecked) => void;
-  setSortParams: (sortParams: Record<string, AXFDGSortParam>) => void;
+  setRowChecked: (rowChecked?: AXFDGRowChecked) => void;
+  setSortParams: (sortParams?: Record<string, AXFDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
   setRowKey: (rowKey: React.Key | React.Key[]) => void;
   setSelectedRowKey: (rowKey: React.Key | React.Key[]) => void;
