@@ -306,12 +306,12 @@ function Table<T>(props: Props<T>) {
       scrollContainerRefCurrent.scrollLeft = props.scrollLeft ?? scrollLeft;
       scrollContainerRefCurrent.scrollTop = props.scrollTop ?? scrollTop;
       scrollContainerRefCurrent.removeEventListener('wheel', onWheel);
-      scrollContainerRefCurrent.addEventListener('wheel', onWheel);
+      scrollContainerRefCurrent.addEventListener('wheel', onWheel, { passive: false, capture: true });
     }
 
     if (frozenScrollContainerRefCurrent) {
       frozenScrollContainerRefCurrent.removeEventListener('wheel', onWheel);
-      frozenScrollContainerRefCurrent.addEventListener('wheel', onWheel);
+      frozenScrollContainerRefCurrent.addEventListener('wheel', onWheel, { passive: false, capture: true });
     }
 
     return () => {
