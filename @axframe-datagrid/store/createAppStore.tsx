@@ -1,6 +1,6 @@
-import { createStore, useStore } from 'zustand';
-
+import * as React from 'react';
 import { createContext, useContext, useRef } from 'react';
+import { createStore, useStore } from 'zustand';
 import { AppStore, CheckedAll } from '../types';
 import { getCellValueByRowKey, getFrozenColumnsWidth } from '../utils';
 
