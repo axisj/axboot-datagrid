@@ -34,6 +34,7 @@ function TableBody({ scrollContainerRef }: Props) {
   const rowKey = useAppStore(s => s.rowKey);
   const selectedRowKey = useAppStore(s => s.selectedRowKey);
   const editable = useAppStore(s => s.editable);
+  const editTrigger = useAppStore(s => s.editTrigger);
   const setEditItem = useAppStore(s => s.setEditItem);
   const editItemIndex = useAppStore(s => s.editItemIndex);
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
@@ -168,9 +169,18 @@ function TableBody({ scrollContainerRef }: Props) {
                 const column = columns[columnIndex];
                 const tdProps: Record<string, any> = {};
                 if (editable) {
-                  tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
+                  if (editTrigger === 'dblclick') {
+                    tdProps.onDoubleClick = () => setEditItem(ri, columnIndex);
+                    tdProps.onClick = () => handleClick(ri, columnIndex);
+                  } else {
+                    tdProps.onClick = () => {
+                      setEditItem(ri, columnIndex);
+                      handleClick(ri, columnIndex);
+                    };
+                  }
+                } else {
+                  tdProps.onClick = () => handleClick(ri, columnIndex);
                 }
-                tdProps.onClick = () => handleClick(ri, columnIndex);
                 tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
 
                 const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
