@@ -1,6 +1,6 @@
 {
   "name": "@axframe/datagrid",
-  "version": "0.6.11",
+  "version": "0.6.12",
   "jsnext:main": "dist/es6/index.js",
   "module": "dist/es6/index.js",
   "main": "dist/commonjs/index.js",
