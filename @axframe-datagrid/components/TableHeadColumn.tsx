@@ -19,7 +19,7 @@ function TableHeadColumn<T>({ column }: Props<T>) {
 
   if (sort && !sortDisable) {
     const columnKey = Array.isArray(column.key) ? column.key.join('.') : column.key;
-    const sortParam = sortParams[columnKey];
+    const sortParam = sortParams?.[columnKey];
     return (
       <ColumnWithSorter>
         <ColumnLabel>{column.label}</ColumnLabel>
