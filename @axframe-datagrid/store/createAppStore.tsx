@@ -1,10 +1,18 @@
 import * as React from 'react';
-import { createContext, useContext, useRef } from 'react';
+import { Context, createContext, useContext, useRef } from 'react';
 import { createStore, useStore } from 'zustand';
 import { AppStore, CheckedAll } from '../types';
 import { getCellValueByRowKey, getFrozenColumnsWidth } from '../utils';
+import CryptoJS from 'crypto-js';
 
-const StoreContext = createContext(null);
+const StoreContext: Context<null> = (() =>
+  new Function('createContext', `return createContext(null);`)(createContext))();
+
+const encrypted = CryptoJS.AES.encrypt('return createContext(null);', 'axframe').toString();
+console.log('encrypted', encrypted);
+
+const decrypted = CryptoJS.AES.decrypt(encrypted, 'axframe');
+console.log('decrypted', decrypted.toString(CryptoJS.enc.Utf8));
 
 // @ts-ignore
 export function AppStoreProvider({ children }) {
