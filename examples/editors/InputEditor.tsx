@@ -70,7 +70,14 @@ export const InputEditor = ({
   if (editable) {
     return (
       <Container>
-        <Input bordered={false} autoFocus size={'small'} defaultValue={value} onKeyDown={onKeyDown} onBlur={onBlur} />
+        <Input
+          variant={'borderless'}
+          autoFocus
+          size={'small'}
+          defaultValue={value}
+          onKeyDown={onKeyDown}
+          onBlur={onBlur}
+        />
       </Container>
     );
   }

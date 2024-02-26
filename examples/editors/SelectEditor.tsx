@@ -71,7 +71,7 @@ export const SelectEditor = ({
     return (
       <Container>
         <Select
-          bordered={false}
+          variant={'borderless'}
           size={'small'}
           autoFocus
           open

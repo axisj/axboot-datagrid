@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { AXFDGItemRenderProps } from '../../@axframe-datagrid';
-import { delay, getCellValueByRowKey } from '../../@axframe-datagrid/utils';
 import { Item } from '../useEditorGrid';
-import { DatePicker, Select } from 'antd';
+import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
 
 export const DateEditor = ({
@@ -29,30 +28,32 @@ export const DateEditor = ({
     [value, handleCancel, handleSave, handleMove],
   );
 
-  const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
-    async evt => {
+  const onKeyDown = React.useCallback<React.KeyboardEventHandler<HTMLElement>>(
+    evt => {
+      const input = evt.currentTarget as HTMLInputElement;
+
       switch (evt.key) {
         case 'Down':
         case 'ArrowDown':
-          handleSaveEdit(evt.currentTarget.value, 'current', 'next');
+          handleSaveEdit(input.value, 'current', 'next');
           break;
         case 'Up':
         case 'ArrowUp':
-          handleSaveEdit(evt.currentTarget.value, 'current', 'prev');
+          handleSaveEdit(input.value, 'current', 'prev');
           break;
         case 'Tab':
           evt.preventDefault();
           if (evt.shiftKey) {
-            handleSaveEdit(evt.currentTarget.value, 'prev', 'current');
+            handleSaveEdit(input.value, 'prev', 'current');
           } else {
-            handleSaveEdit(evt.currentTarget.value, 'next', 'current');
+            handleSaveEdit(input.value, 'next', 'current');
           }
           break;
         case 'Enter':
           break;
         case 'Esc':
         case 'Escape':
-          await handleCancel?.();
+          handleCancel?.();
           break;
         default:
           return; // 키 이벤트를 처리하지 않는다면 종료합니다.
@@ -61,19 +62,12 @@ export const DateEditor = ({
     [handleCancel, handleSaveEdit],
   );
 
-  const onBlur = React.useCallback<React.FocusEventHandler<HTMLInputElement>>(
-    async evt => {
-      await handleCancel?.();
-    },
-    [handleCancel],
-  );
-
   const onSelect = React.useCallback(
-    async (value: dayjs.Dayjs) => {
-      await handleSaveEdit(dayjs(value).format('YYYY-MM-DD'));
-      await handleCancel?.();
+    (value: dayjs.Dayjs) => {
+      console.log('onSelect', value);
+      handleSaveEdit(dayjs(value).format('YYYY-MM-DD'));
     },
-    [handleSaveEdit, handleCancel],
+    [handleSaveEdit],
   );
 
   if (editable) {
@@ -85,10 +79,12 @@ export const DateEditor = ({
           autoFocus
           open
           size={'small'}
-          bordered={false}
+          variant={'borderless'}
           defaultValue={defaultValue}
-          onSelect={onSelect}
-          onBlur={onBlur}
+          onChange={onSelect}
+          onOpenChange={open => {
+            if (!open) handleCancel?.();
+          }}
           onKeyDown={onKeyDown}
         />
       </Container>
