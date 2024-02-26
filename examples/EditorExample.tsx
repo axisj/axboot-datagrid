@@ -23,13 +23,13 @@ function EditorExample(props: Props) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
-  const [editTrigger, setEditTrigger] = React.useState<'dblclick' | 'click'>('dblclick');
+  const [editTrigger, setEditTrigger] = React.useState<'dblclick' | 'click'>('click');
 
   return (
     <Wrap>
       <Buttons>
         Edit Trigger:
-        <Radio.Group defaultValue='dblclick' onChange={e => setEditTrigger(e.target.value)}>
+        <Radio.Group defaultValue={editTrigger} onChange={e => setEditTrigger(e.target.value)}>
           <Radio value='dblclick'>dblclick</Radio>
           <Radio value='click'>click</Radio>
         </Radio.Group>

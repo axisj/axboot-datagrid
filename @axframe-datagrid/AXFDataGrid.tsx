@@ -32,7 +32,7 @@ export function AXFDataGrid<T = Record<string, any>>({
   showLineNumber,
   msg,
   getRowClassName,
-  editTrigger = 'dblclick',
+  editTrigger = 'click',
 }: AXFDGProps<T>) {
   const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
     if (rowChecked?.checkedRowKeys && rowKey) {
