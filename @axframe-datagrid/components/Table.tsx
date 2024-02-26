@@ -15,6 +15,7 @@ import {
   AXFDGPage,
   AXFDGProps,
   AXFDGRowChecked,
+  AXFDGSortInfo,
   AXFDGSortParam,
 } from '../types';
 import { getFrozenColumnsWidth } from '../utils';
@@ -36,6 +37,7 @@ interface Props<T> {
 
   rowChecked?: AXFDGRowChecked;
   checkedIndexesMap: Map<number, any>;
+  sort?: AXFDGSortInfo;
   sortParams?: Record<string, AXFDGSortParam>;
   columns: AppModelColumn<T>[];
   columnsGroup: AXFDGColumnGroup[];
@@ -52,6 +54,7 @@ interface Props<T> {
   showLineNumber?: boolean;
   msg?: AXFDGProps<T>['msg'];
   getRowClassName?: AXFDGProps<T>['getRowClassName'];
+  editTrigger: AXFDGProps<T>['editTrigger'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -94,6 +97,7 @@ function Table<T>(props: Props<T>) {
   const setFrozenColumnIndex = useAppStore(s => s.setFrozenColumnIndex);
   const setRowChecked = useAppStore(s => s.setRowChecked);
   const setCheckedIndexesMap = useAppStore(s => s.setCheckedIndexesMap);
+  const setSort = useAppStore(s => s.setSort);
   const setSortParams = useAppStore(s => s.setSortParams);
   const setFrozenColumnsWidth = useAppStore(s => s.setFrozenColumnsWidth);
   const setPage = useAppStore(s => s.setPage);
@@ -105,6 +109,7 @@ function Table<T>(props: Props<T>) {
   const setDisplayPaginationLength = useAppStore(s => s.setDisplayPaginationLength);
 
   const setEditable = useAppStore(s => s.setEditable);
+  const setEditTrigger = useAppStore(s => s.setEditTrigger);
 
   const setOnClick = useAppStore(s => s.setOnClick);
   const setOnChangeColumns = useAppStore(s => s.setOnChangeColumns);
@@ -231,6 +236,9 @@ function Table<T>(props: Props<T>) {
     setRowChecked(props.rowChecked);
   }, [setRowChecked, props.rowChecked]);
   React.useEffect(() => {
+    setSort(props.sort);
+  }, [setSort, props.sort]);
+  React.useEffect(() => {
     setSortParams(props.sortParams);
   }, [setSortParams, props.sortParams]);
   React.useEffect(() => {
@@ -271,6 +279,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     if (props.editable !== undefined) setEditable(props.editable);
   }, [setEditable, props.editable]);
+  React.useEffect(() => {
+    if (props.editTrigger !== undefined) setEditTrigger(props.editTrigger);
+  }, [setEditTrigger, props.editTrigger]);
 
   React.useEffect(() => {
     setOnClick(props.onClick);

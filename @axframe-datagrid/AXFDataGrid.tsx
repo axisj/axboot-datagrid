@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { AppStoreProvider, getAppStoreActions } from './store';
 import Table from './components/Table';
 import { AppModelColumn, AppStore, AXFDGProps, AXFDGSortParam } from './types';
-import create from 'zustand';
 import { getCellValueByRowKey } from './utils';
+import { AppStoreProvider } from './store';
 
 export function AXFDataGrid<T = Record<string, any>>({
   width,
@@ -33,6 +32,7 @@ export function AXFDataGrid<T = Record<string, any>>({
   showLineNumber,
   msg,
   getRowClassName,
+  editTrigger = 'dblclick',
 }: AXFDGProps<T>) {
   const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
     if (rowChecked?.checkedRowKeys && rowKey) {
@@ -88,48 +88,7 @@ export function AXFDataGrid<T = Record<string, any>>({
   }, [columns, frozenColumnIndex]);
 
   return (
-    <AppStoreProvider
-      createStore={() =>
-        create<AppStore<T>>((set, get) => ({
-          initialized: false,
-          containerBorderWidth: 1,
-          width,
-          height,
-          headerHeight,
-          footerHeight,
-          itemHeight,
-          itemPadding,
-          data,
-          page,
-          columns: computedColumns,
-          onChangeColumns,
-          columnsGroup,
-          columnResizing: false,
-          frozenColumnIndex,
-          scrollTop,
-          scrollLeft,
-          contentBodyHeight: 0,
-          displayItemCount: 0,
-          className,
-          rowChecked,
-          checkedIndexesMap,
-          checkedAll: false,
-          sort,
-          sortParams,
-          onClick,
-          loading,
-          spinning,
-          rowKey,
-          selectedRowKey,
-          editable,
-          onChangeData,
-          showLineNumber,
-          msg,
-          getRowClassName,
-          ...getAppStoreActions(set, get),
-        }))
-      }
-    >
+    <AppStoreProvider>
       <Table
         {...{
           columns: computedColumns,
@@ -148,6 +107,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           frozenColumnIndex,
           rowChecked,
           checkedIndexesMap,
+          sort,
           sortParams,
           page,
           data,
@@ -155,6 +115,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           rowKey,
           selectedRowKey,
           editable,
+          editTrigger,
           onChangeData,
           showLineNumber,
           msg,

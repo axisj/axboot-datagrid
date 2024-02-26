@@ -4,7 +4,7 @@ import { AXFDataGrid } from '../@axframe-datagrid';
 import ExampleContainer from '../components/ExampleContainer';
 import { useContainerSize } from '../hooks/useContainerSize';
 import useEditorGrid, { Item } from './useEditorGrid';
-import { Button, Divider } from 'antd';
+import { Button, Divider, Radio } from 'antd';
 
 interface Props {}
 
@@ -23,9 +23,16 @@ function EditorExample(props: Props) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
+  const [editTrigger, setEditTrigger] = React.useState<'dblclick' | 'click'>('dblclick');
+
   return (
     <Wrap>
       <Buttons>
+        Edit Trigger:
+        <Radio.Group defaultValue='dblclick' onChange={e => setEditTrigger(e.target.value)}>
+          <Radio value='dblclick'>dblclick</Radio>
+          <Radio value='click'>click</Radio>
+        </Radio.Group>
         <Button size={'small'} type='primary' onClick={handleAddList}>
           Add
         </Button>
@@ -61,6 +68,7 @@ function EditorExample(props: Props) {
             setSelectedRowKey(item.item.uuid);
           }}
           editable
+          editTrigger={editTrigger}
           rowKey={'uuid'}
           selectedRowKey={selectedRowKey}
         />

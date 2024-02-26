@@ -125,6 +125,7 @@ export interface AXFDGProps<T> {
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
   editable?: boolean;
+  editTrigger?: 'dblclick' | 'click';
   showLineNumber?: boolean;
 
   getRowClassName?: (ri: number, item: AXFDGDataItem<T>) => string | undefined;
@@ -155,12 +156,13 @@ export interface AppModel<T> extends AXFDGProps<T> {
   scrollLeft: number;
   checkedIndexesMap: Map<number, any>;
   checkedAll: CheckedAll;
-  sortParams: Record<string, AXFDGSortParam>;
+  sortParams?: Record<string, AXFDGSortParam>;
   displayPaginationLength?: number;
   hoverItemIndex?: number;
   loading: boolean;
   editItemIndex?: number;
   editItemColIndex?: number;
+  editTrigger?: 'dblclick' | 'click';
 }
 
 export interface AppActions<T> {
@@ -193,6 +195,7 @@ export interface AppActions<T> {
   setCheckedIndexesMap: (checkedIndexesMap: Map<number, any>) => void;
 
   setRowChecked: (rowChecked?: AXFDGRowChecked) => void;
+  setSort: (sort?: AXFDGSortInfo) => void;
   setSortParams: (sortParams?: Record<string, AXFDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
   setRowKey: (rowKey: React.Key | React.Key[]) => void;
@@ -209,9 +212,10 @@ export interface AppActions<T> {
   setDisplayPaginationLength: (length: number) => void;
 
   setRowClassName: (getRowClassName?: AXFDGProps<T>['getRowClassName']) => void;
+  setEditTrigger: (editTrigger: 'dblclick' | 'click') => void;
 }
 
-export interface AppStore<T = Record<string, any>> extends AppModel<T>, AppActions<T> {}
+export interface AppStore<T = any> extends AppModel<T>, AppActions<T> {}
 
 export type ZustandSetter<T> = (partial: Partial<T>, replace?: boolean | undefined) => void;
 export type ZustandGetter<T> = () => T;
