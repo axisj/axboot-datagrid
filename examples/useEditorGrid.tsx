@@ -10,6 +10,9 @@ export interface Item {
   selectDate?: string;
   startDate?: string;
   endDate?: string;
+  d?: {
+    selectDate?: string;
+  };
 }
 
 export default function useEditorGrid() {
@@ -22,6 +25,9 @@ export default function useEditorGrid() {
         selectDate: '',
         startDate: '',
         endDate: '',
+        d: {
+          selectDate: '',
+        },
       },
     },
     {
@@ -32,6 +38,9 @@ export default function useEditorGrid() {
         selectDate: '',
         startDate: '',
         endDate: '',
+        d: {
+          selectDate: '',
+        },
       },
     },
   ]);
@@ -119,7 +128,7 @@ export default function useEditorGrid() {
             className: 'editable',
           },
           {
-            key: 'selectDate',
+            key: ['d', 'selectDate'],
             label: 'DatePicker',
             width: 150,
             itemRender: DateEditor,

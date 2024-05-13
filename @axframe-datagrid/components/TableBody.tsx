@@ -52,15 +52,18 @@ function TableBody({ scrollContainerRef }: Props) {
         data[ri].status = AXFDGDataItemStatus.edit;
       }
       let _values = data[ri].values;
-
-      if (Array.isArray(column.key)) {
-        column.key.forEach((k, i) => {
-          if (column.key.length - 1 === i) {
+      const columnKey = column.key;
+      if (Array.isArray(columnKey)) {
+        columnKey.forEach((k, i) => {
+          if (columnKey.length - 1 === i) {
             _values[k] = newValue;
+          } else {
+            if (_values[k] === undefined) _values[k] = {};
+            _values = _values[k];
           }
         });
       } else {
-        _values[column.key] = newValue;
+        _values[columnKey] = newValue;
       }
 
       await setData([...data]);

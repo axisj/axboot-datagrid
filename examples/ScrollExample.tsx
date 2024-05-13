@@ -13,7 +13,7 @@ interface IListItem {
   createAt: string;
 }
 
-const list = Array.from(Array(500)).map((v, i) => ({
+const list = Array.from(Array(1000000)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
     title: `title_${i}`,
