@@ -5,7 +5,7 @@ export function getCellValueByRowKey<T>(rowKey: React.Key | React.Key[], values:
     return rowKey.reduce((acc, cur) => {
       if (!acc) return acc;
       if (cur in acc) return acc[cur];
-      return acc;
+      return '';
     }, values as Record<string, any>);
   } else {
     return (values as Record<string, any>)[rowKey];

@@ -114,7 +114,7 @@ export default function useEditorGrid() {
           },
           { key: 'uuid', label: 'UUID', width: 150, itemRender: InputEditor },
           {
-            key: 'code',
+            key: ['d', 'code'],
             label: 'Code',
             width: 150,
             itemRender: InputEditor,
