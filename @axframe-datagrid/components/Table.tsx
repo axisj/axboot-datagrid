@@ -24,37 +24,42 @@ import { css } from '@emotion/react';
 interface Props<T> {
   width?: number;
   height?: number;
-  loading?: boolean;
-  spinning?: boolean;
-  scrollTop?: number;
-  scrollLeft?: number;
-
   headerHeight?: number;
   footerHeight?: number;
   itemHeight?: number;
   itemPadding?: number;
   frozenColumnIndex?: number;
 
+  columns: AppModelColumn<T>[];
+  columnsGroup: AXFDGColumnGroup[];
+  onChangeColumns?: AXFDGProps<T>['onChangeColumns'];
+  data?: AXFDGDataItem<T>[];
+  onChangeData?: AXFDGProps<T>['onChangeData'];
+
+  page?: AXFDGPage;
+  onLoadMore?: AXFDGProps<T>['onLoadMore'];
+
+  loading?: boolean;
+  spinning?: boolean;
+  scrollTop?: number;
+  scrollLeft?: number;
+
   rowChecked?: AXFDGRowChecked;
   checkedIndexesMap: Map<number, any>;
   sort?: AXFDGSortInfo;
   sortParams?: Record<string, AXFDGSortParam>;
-  columns: AppModelColumn<T>[];
-  columnsGroup: AXFDGColumnGroup[];
-  page?: AXFDGPage;
-  data?: AXFDGDataItem<T>[];
   onClick?: AXFDGProps<T>['onClick'];
-  onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
-  onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXFDGColumn<T> | null) => void;
-  onLoadMore?: (params: { scrollLeft: number; scrollTop: number }) => void;
+
+  msg?: AXFDGProps<T>['msg'];
 
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
   editable?: boolean;
-  showLineNumber?: boolean;
-  msg?: AXFDGProps<T>['msg'];
-  getRowClassName?: AXFDGProps<T>['getRowClassName'];
   editTrigger: AXFDGProps<T>['editTrigger'];
+  showLineNumber?: boolean;
+
+  getRowClassName?: AXFDGProps<T>['getRowClassName'];
+  cellMergeOptions?: AXFDGProps<T>['cellMergeOptions'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -118,6 +123,7 @@ function Table<T>(props: Props<T>) {
   const setShowLineNumber = useAppStore(s => s.setShowLineNumber);
   const setMsg = useAppStore(s => s.setMsg);
   const setRowClassName = useAppStore(s => s.setRowClassName);
+  const setCellMergeOptions = useAppStore(s => s.setCellMergeOptions);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -304,6 +310,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     setRowClassName(props.getRowClassName);
   }, [setRowClassName, props.getRowClassName]);
+  React.useEffect(() => {
+    setCellMergeOptions(props.cellMergeOptions);
+  }, [setCellMergeOptions, props.cellMergeOptions]);
 
   //setInitialized
   React.useEffect(() => {

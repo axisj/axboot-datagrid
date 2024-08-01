@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { AXFDGColumn, AXFDGDataItem, AXFDGDataItemStatus } from '../@axframe-datagrid';
 import { v4 as uuidv4 } from 'uuid';
+import { AXFDGColumn, AXFDGDataItem, AXFDGDataItemStatus } from '../@axframe-datagrid';
 import { DateEditor, InputEditor, SelectEditor } from './editors';
 
 export interface Item {

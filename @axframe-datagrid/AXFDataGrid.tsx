@@ -33,6 +33,7 @@ export function AXFDataGrid<T = Record<string, any>>({
   msg,
   getRowClassName,
   editTrigger = 'click',
+  cellMergeOptions,
 }: AXFDGProps<T>) {
   const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
     if (rowChecked?.checkedRowKeys && rowKey) {
@@ -120,6 +121,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           showLineNumber,
           msg,
           getRowClassName,
+          cellMergeOptions,
         }}
       />
     </AppStoreProvider>

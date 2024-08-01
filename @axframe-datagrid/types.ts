@@ -37,6 +37,10 @@ export interface AXFDGColumnGroup {
   headerAlign?: AlignDirection;
 }
 
+export interface AXFDGCellMergeColumn {
+  wordWrap?: boolean;
+}
+
 export enum AXFDGDataItemStatus {
   new,
   edit,
@@ -94,10 +98,11 @@ export interface AXFDGProps<T> {
   footerHeight?: number;
   itemHeight?: number;
   itemPadding?: number;
+  frozenColumnIndex?: number;
+
   columns: AXFDGColumn<T>[];
   columnsGroup?: AXFDGColumnGroup[];
   onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
-  frozenColumnIndex?: number;
   data?: AXFDGDataItem<T>[];
   onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXFDGColumn<T> | null) => void;
 
@@ -108,9 +113,9 @@ export interface AXFDGProps<T> {
 
   className?: string;
   style?: React.CSSProperties;
+
   loading?: boolean;
   spinning?: boolean;
-
   scrollTop?: number;
   scrollLeft?: number;
 
@@ -129,6 +134,9 @@ export interface AXFDGProps<T> {
   showLineNumber?: boolean;
 
   getRowClassName?: (ri: number, item: AXFDGDataItem<T>) => string | undefined;
+  cellMergeOptions?: {
+    columnsMap: Record<number, AXFDGCellMergeColumn>;
+  };
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -213,6 +221,7 @@ export interface AppActions<T> {
 
   setRowClassName: (getRowClassName?: AXFDGProps<T>['getRowClassName']) => void;
   setEditTrigger: (editTrigger: 'dblclick' | 'click') => void;
+  setCellMergeOptions: (cellMergeOptions: AXFDGProps<T>['cellMergeOptions']) => void;
 }
 
 export interface AppStore<T = any> extends AppModel<T>, AppActions<T> {}

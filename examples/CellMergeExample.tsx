@@ -90,12 +90,11 @@ function BasicExample(props: Props) {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
-        // rowChecked={{
-        //   checkedIndexes: [],
-        //   onChange: (ids, selectedAll) => {
-        //     console.log('onChange rowSelection', ids, selectedAll);
-        //   },
-        // }}
+        cellMergeOptions={{
+          columnsMap: {
+            3: { wordWrap: true },
+          },
+        }}
         onClick={item => console.log(item)}
       />
     </Container>
