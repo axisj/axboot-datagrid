@@ -17,6 +17,7 @@ function Nav(props: Props) {
         <Version>{pkg.version}</Version>
 
         <GithubFilled
+          rev={0}
           style={{ fontSize: 20 }}
           onClick={() => window.open('https://github.com/axisj/axframe-datagrid')}
         />
@@ -36,6 +37,7 @@ function Nav(props: Props) {
           { label: `VirtualScroll`, key: '/virtualScroll' },
           { label: `GetRowClassName`, key: '/getRowClassName' },
           { label: `Props Change`, key: '/propsChange' },
+          { label: `Cell Merge`, key: '/cellMerge' },
         ]}
         onTabClick={async activeKey => {
           await router.push(activeKey);
