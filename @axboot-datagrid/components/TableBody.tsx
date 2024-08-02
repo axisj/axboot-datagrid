@@ -141,6 +141,8 @@ function TableBody({ scrollContainerRef }: Props) {
                 const rowSpan = mergeColumns?.[columnIndex] ? item.meta?.[column.key.toString()]?.rowSpan : 1;
                 if (rowSpan === 0) return null;
 
+                tdProps.className = tdProps.className + (rowSpan > 1 ? ' merged' : '');
+
                 return (
                   <td
                     key={columnIndex}
@@ -217,8 +219,12 @@ export const BodyTable = styled.table<{ variant: AXDGProps<any>['variant'] }>`
         }
       }}
 
-      &[rowspan] {
+      &.merged {
         background-color: var(--axdg-body-bg);
+
+        &:hover {
+          background: var(--axdg-body-hover-bg);
+        }
       }
 
       &:last-child {

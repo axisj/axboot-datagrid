@@ -36,6 +36,7 @@ function TableBodyFrozen(props: Props) {
   const editItemIndex = useAppStore(s => s.editItemIndex);
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
   const getRowClassName = useAppStore(s => s.getRowClassName);
+  const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
   const variant = useAppStore(s => s.variant);
 
   const startIdx = Math.floor(scrollTop / trHeight);
@@ -65,6 +66,7 @@ function TableBodyFrozen(props: Props) {
 
           const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
           const className = getRowClassName?.(ri, item) ?? '';
+          const mergeColumns = cellMergeOptions?.columnsMap;
 
           return (
             <TableBodyTr
@@ -101,6 +103,11 @@ function TableBodyFrozen(props: Props) {
                   tdProps.onClick = () => handleClick(ri, columnIndex);
                 }
                 tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
+
+                const rowSpan = mergeColumns?.[columnIndex] ? item.meta?.[column.key.toString()]?.rowSpan : 1;
+                if (rowSpan === 0) return null;
+
+                tdProps.className = tdProps.className + (rowSpan > 1 ? ' merged' : '');
 
                 return (
                   <td
