@@ -2,8 +2,8 @@
 
 DataGrid, DataSheet for React
 
-[![NPM version](https://img.shields.io/npm/v/@axframe/datagrid.svg?style=flat)](https://npmjs.org/package/@axframe/datagrid)
-[![NPM downloads](http://img.shields.io/npm/dm/@axframe/datagrid.svg?style=flat)](https://npmjs.org/package/@axframe/datagrid)
+[![NPM version](https://img.shields.io/npm/v/@axboot/datagrid.svg?style=flat)](https://npmjs.org/package/@axboot/datagrid)
+[![NPM downloads](http://img.shields.io/npm/dm/@axboot/datagrid.svg?style=flat)](https://npmjs.org/package/@axboot/datagrid)
 
 ## Install
 
