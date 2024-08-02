@@ -141,7 +141,7 @@ function TableBody({ scrollContainerRef }: Props) {
                 const rowSpan = mergeColumns?.[columnIndex] ? item.meta?.[column.key.toString()]?.rowSpan : 1;
                 if (rowSpan === 0) return null;
 
-                tdProps.className = tdProps.className + (rowSpan > 1 ? ' merged' : '');
+                tdProps.className = tdProps.className + (mergeColumns?.[columnIndex] ? ' merged' : '');
 
                 return (
                   <td
