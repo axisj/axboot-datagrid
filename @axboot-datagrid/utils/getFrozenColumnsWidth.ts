@@ -1,12 +1,12 @@
-import { AXFDGColumn, AXFDGRowChecked } from '../types';
+import { AXDGColumn, AXDGRowChecked } from '../types';
 import { getLineNumberWidth } from './getLineNumber';
 
 interface Props<T> {
   showLineNumber?: boolean;
-  rowChecked?: AXFDGRowChecked;
+  rowChecked?: AXDGRowChecked;
   itemHeight: number;
   frozenColumnIndex: number;
-  columns: AXFDGColumn<T>[];
+  columns: AXDGColumn<T>[];
   dataLength: number;
 }
 

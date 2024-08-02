@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid } from '../@axframe-datagrid';
+import { AXDataGrid } from '../@axboot-datagrid';
 import ExampleContainer from '../components/ExampleContainer';
 import { useContainerSize } from '../hooks/useContainerSize';
 import useEditorGrid, { Item } from './useEditorGrid';
@@ -40,13 +40,19 @@ function EditorExample(props: Props) {
           Remove
         </Button>
         <Divider type='vertical' />
-        <Button size={'small'} type='default'>
+        <Button
+          size={'small'}
+          type='default'
+          onClick={() => {
+            console.log('Save', JSON.stringify(list));
+          }}
+        >
           Save
         </Button>
       </Buttons>
 
       <Container ref={containerRef}>
-        <AXFDataGrid<Item>
+        <AXDataGrid<Item>
           frozenColumnIndex={3}
           width={containerWidth}
           height={containerHeight}

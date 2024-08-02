@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { AXFDGColumn, AXFDGDataItem, MoveDirection } from '../types';
+import { AXDGColumn, AXDGDataItem, MoveDirection } from '../types';
 
 interface Props<T> {
   index: number;
   columnIndex: number;
-  column: AXFDGColumn<T>;
-  item: AXFDGDataItem<any>;
+  column: AXDGColumn<T>;
+  item: AXDGDataItem<any>;
   valueByRowKey: any;
   handleSave?: (value: any, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => void;
   handleCancel?: () => void;

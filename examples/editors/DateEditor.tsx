@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDGItemRenderProps } from '../../@axframe-datagrid';
+import { AXDGItemRenderProps } from '../../@axboot-datagrid';
 import { Item } from '../useEditorGrid';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
@@ -14,7 +14,7 @@ export const DateEditor = ({
   handleSave,
   handleCancel,
   handleMove,
-}: AXFDGItemRenderProps<Item>) => {
+}: AXDGItemRenderProps<Item>) => {
   const handleSaveEdit = React.useCallback(
     (newValue: any, ...rest: any) => {
       if (value === newValue) {

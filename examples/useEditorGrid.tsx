@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { AXFDGColumn, AXFDGDataItem, AXFDGDataItemStatus } from '../@axframe-datagrid';
 import { v4 as uuidv4 } from 'uuid';
+import { AXDGColumn, AXDGDataItem, AXDGDataItemStatus } from '../@axboot-datagrid';
 import { DateEditor, InputEditor, SelectEditor } from './editors';
 
 export interface Item {
@@ -16,7 +16,7 @@ export interface Item {
 }
 
 export default function useEditorGrid() {
-  const [list, setList] = React.useState<AXFDGDataItem<Item>[]>([
+  const [list, setList] = React.useState<AXDGDataItem<Item>[]>([
     {
       values: {
         uuid: uuidv4(),
@@ -48,7 +48,7 @@ export default function useEditorGrid() {
   const [checkedKeys, setCheckedKeys] = React.useState<React.Key[]>([]);
   const [selectedRowKey, setSelectedRowKey] = React.useState('');
 
-  const handleColumnsChange = React.useCallback((columnIndex: number, width: number, columns: AXFDGColumn<Item>[]) => {
+  const handleColumnsChange = React.useCallback((columnIndex: number, width: number, columns: AXDGColumn<Item>[]) => {
     setColWidths(columns.map(column => column.width));
   }, []);
 
@@ -56,7 +56,7 @@ export default function useEditorGrid() {
     setList([
       ...list,
       {
-        status: AXFDGDataItemStatus.new,
+        status: AXDGDataItemStatus.new,
         values: {
           uuid: uuidv4(),
           code: 'S0001',
@@ -74,18 +74,18 @@ export default function useEditorGrid() {
       list
         .map(item => {
           if (checkedKeys.includes(item.values['uuid'])) {
-            if (item.status === AXFDGDataItemStatus.new) {
+            if (item.status === AXDGDataItemStatus.new) {
               return false;
             }
             return {
-              status: AXFDGDataItemStatus.remove,
+              status: AXDGDataItemStatus.remove,
               values: item.values,
             };
           }
 
           return item;
         })
-        .filter(Boolean) as AXFDGDataItem<Item>[],
+        .filter(Boolean) as AXDGDataItem<Item>[],
     );
     setCheckedKeys([]);
   }, [list, checkedKeys]);
@@ -106,7 +106,7 @@ export default function useEditorGrid() {
             width: 60,
             align: 'center',
             itemRender: ({ item }) => {
-              return item.status !== undefined ? AXFDGDataItemStatus[item.status] : '';
+              return item.status !== undefined ? AXDGDataItemStatus[item.status] : '';
             },
             getClassName: item => {
               return item.checked ? 'editable' : '';
@@ -148,7 +148,7 @@ export default function useEditorGrid() {
               return values.code + '/' + values.useYn;
             },
           },
-        ] as AXFDGColumn<Item>[]
+        ] as AXDGColumn<Item>[]
       ).map((column, colIndex) => {
         if (colWidths.length > 0) {
           column.width = colWidths[colIndex];

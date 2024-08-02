@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDGItemRenderProps } from '../../@axframe-datagrid';
+import { AXDGItemRenderProps } from '../../@axboot-datagrid';
 import { Item } from '../useEditorGrid';
 import { Select } from 'antd';
 
@@ -13,7 +13,7 @@ export const SelectEditor = ({
   handleSave,
   handleCancel,
   handleMove,
-}: AXFDGItemRenderProps<Item>) => {
+}: AXDGItemRenderProps<Item>) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleSaveEdit = React.useCallback(
     (newValue: any, ...rest: any) => {

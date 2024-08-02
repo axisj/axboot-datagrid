@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid, AXFDGColumn, AXFDGDataItem, AXFDGItemRenderProps, AXFDGSortParam } from '../@axframe-datagrid';
+import { AXDataGrid, AXDGColumn, AXDGDataItem, AXDGItemRenderProps, AXDGSortParam } from '../@axboot-datagrid';
 import { useContainerSize } from '../hooks/useContainerSize';
 import ExampleContainer from '../components/ExampleContainer';
-import { toMoney } from '../@axframe-datagrid/utils/number';
+import { toMoney } from '../@axboot-datagrid/utils/number';
 import { Progress } from 'antd';
 
 interface Props {}
@@ -68,11 +68,11 @@ const list = rawData.map((data, index) => {
   };
 });
 
-const numRender = (item: AXFDGItemRenderProps<IListItem>) => <>{toMoney(item.value)}</>;
+const numRender = (item: AXDGItemRenderProps<IListItem>) => <>{toMoney(item.value)}</>;
 
 function SortExample(props: Props) {
-  const [sortParams, setSortParams] = React.useState<AXFDGSortParam[]>([]);
-  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
+  const [sortParams, setSortParams] = React.useState<AXDGSortParam[]>([]);
+  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
       key: 'nation',
       label: 'Nation',
@@ -108,34 +108,36 @@ function SortExample(props: Props) {
     let i = 0,
       l = sortParams.length;
 
-    return list.sort((a, b) => {
-      for (i = 0; i < l; i++) {
-        const sortInfo = sortParams[i];
-        if (sortInfo.key === undefined) {
-          continue;
+    return list
+      .sort((a, b) => {
+        for (i = 0; i < l; i++) {
+          const sortInfo = sortParams[i];
+          if (sortInfo.key === undefined) {
+            continue;
+          }
+
+          let valueA = a.values[sortInfo.key as keyof IListItem],
+            valueB = b.values[sortInfo.key as keyof IListItem];
+
+          if (typeof valueA !== typeof valueB) {
+            valueA = '' + valueA;
+            valueB = '' + valueB;
+          }
+          if (valueA < valueB) {
+            return sortInfo.orderBy === 'asc' ? -1 : 1;
+          } else if (valueA > valueB) {
+            return sortInfo.orderBy === 'asc' ? 1 : -1;
+          }
         }
 
-        let valueA = a.values[sortInfo.key as keyof IListItem],
-          valueB = b.values[sortInfo.key as keyof IListItem];
-
-        if (typeof valueA !== typeof valueB) {
-          valueA = '' + valueA;
-          valueB = '' + valueB;
-        }
-        if (valueA < valueB) {
-          return sortInfo.orderBy === 'asc' ? -1 : 1;
-        } else if (valueA > valueB) {
-          return sortInfo.orderBy === 'asc' ? 1 : -1;
-        }
-      }
-
-      return 0;
-    }) as AXFDGDataItem<IListItem>[];
+        return 0;
+      })
+      .slice() as AXDGDataItem<IListItem>[];
   }, [sortParams]);
 
   return (
     <Container ref={containerRef}>
-      <AXFDataGrid<IListItem>
+      <AXDataGrid<IListItem>
         width={containerWidth}
         height={containerHeight}
         headerHeight={35}

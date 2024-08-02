@@ -1,10 +1,9 @@
 import * as React from 'react';
 import RowSelector from './RowSelector';
-import { getCellValueByRowKey } from '../utils';
+import { getCellValueByRowKey, useBodyData } from '../utils';
 import { BodyTable, NoDataTr, TableBodyTr } from './TableBody';
 import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
-import { AXFDGColumn, AXFDGDataItemStatus, MoveDirection } from '../types';
 import styled from '@emotion/styled';
 import { TableBodyCell } from './TableBodyCell';
 
@@ -12,12 +11,6 @@ interface Props {
   scrollContainerRef: React.RefObject<HTMLDivElement>;
   style?: React.CSSProperties;
 }
-
-const DIRC_MAP = {
-  next: 1,
-  prev: -1,
-  current: 0,
-};
 
 function TableBodyFrozen(props: Props) {
   const itemHeight = useAppStore(s => s.itemHeight);
@@ -28,7 +21,6 @@ function TableBodyFrozen(props: Props) {
   const data = useAppStore(s => s.data);
   const columns = useAppStore(s => s.columns);
   const selectedKeyMap = useAppStore(s => s.checkedIndexesMap);
-  const setSelectedKeys = useAppStore(s => s.setCheckedIndexes);
   const selectedAll = useAppStore(s => s.checkedAll);
   const hasRowChecked = useAppStore(s => !!s.rowChecked);
   const showLineNumber = useAppStore(s => s.showLineNumber);
@@ -43,83 +35,21 @@ function TableBodyFrozen(props: Props) {
   const setEditItem = useAppStore(s => s.setEditItem);
   const editItemIndex = useAppStore(s => s.editItemIndex);
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
-  const setData = useAppStore(s => s.setData);
-  const onChangeData = useAppStore(s => s.onChangeData);
   const getRowClassName = useAppStore(s => s.getRowClassName);
+  const variant = useAppStore(s => s.variant);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
 
-  const handleChangeChecked = React.useCallback(
-    async (index: number, checked: boolean) => {
-      if (checked) {
-        data[index].checked = true;
-        selectedKeyMap.set(index, true);
-      } else {
-        data[index].checked = false;
-        selectedKeyMap.delete(index);
-      }
-      setSelectedKeys([...selectedKeyMap.keys()]);
-      await setData([...data]);
-    },
-    [data, selectedKeyMap, setData, setSelectedKeys],
-  );
-
-  const setItemValue = React.useCallback(
-    async (ri: number, ci: number, column: AXFDGColumn<any>, newValue: any) => {
-      if (data[ri].status !== AXFDGDataItemStatus.new) {
-        data[ri].status = AXFDGDataItemStatus.edit;
-      }
-      let _values = data[ri].values;
-
-      if (Array.isArray(column.key)) {
-        column.key.forEach((k, i) => {
-          if (column.key.length - 1 === i) {
-            _values[k] = newValue;
-          }
-        });
-      } else {
-        _values[column.key] = newValue;
-      }
-
-      await setData([...data]);
-      await onChangeData?.(ri, ci, _values, column);
-    },
-    [data, onChangeData, setData],
-  );
-
-  const handleMoveEditFocus = React.useCallback(
-    async (rowIndex: number, columnIndex: number, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => {
-      if (columnDirection && rowDirection) {
-        let _ci = columnIndex + DIRC_MAP[columnDirection];
-        let _ri = rowIndex + DIRC_MAP[rowDirection];
-
-        if (_ci > columns.length - 1) _ci = 0;
-        if (_ri > data.length - 1) _ri = 0;
-
-        await setEditItem(_ri, _ci);
-
-        if (_ci > frozenColumnIndex - 1 && props.scrollContainerRef.current) {
-          props.scrollContainerRef.current.scrollLeft = 0;
-        }
-      } else {
-        await setEditItem(-1, -1);
-      }
-    },
-    [columns.length, data.length, setEditItem, frozenColumnIndex, props.scrollContainerRef],
-  );
+  const { dataSet, setItemValue, handleMoveEditFocus, handleChangeChecked } = useBodyData(startIdx, endNumber);
 
   return (
-    <BodyTable style={props.style}>
+    <BodyTable variant={variant} style={props.style}>
       <TableColGroupFrozen />
       <tbody role={'rfdg-body-frozen'}>
-        {Array.from({ length: endNumber - startIdx }, (_, i) => {
+        {dataSet.map((item, i) => {
           const ri = startIdx + i;
-          const item = data[ri];
-          if (!item) {
-            return null;
-          }
-          const trProps = editable
+          const trProps: Record<string, any> = editable
             ? {
                 editable: true,
                 hover: hoverItemIndex === ri,
@@ -131,6 +61,8 @@ function TableBodyFrozen(props: Props) {
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),
               };
+          trProps.odd = ri % 2 === 0;
+
           const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
           const className = getRowClassName?.(ri, item) ?? '';
 
@@ -140,7 +72,6 @@ function TableBodyFrozen(props: Props) {
               itemHeight={itemHeight}
               itemPadding={itemPadding}
               active={active}
-              odd={ri % 2 === 0}
               className={className + (active ? ' active' : '')}
               {...trProps}
             >
@@ -191,7 +122,7 @@ function TableBodyFrozen(props: Props) {
                           await handleMoveEditFocus(ri, columnIndex, columnDirection, rowDirection);
                         },
                         handleCancel: async () => {
-                          await setEditItem(-1, -1);
+                          setEditItem(-1, -1);
                         },
                         handleMove: async (columnDirection, rowDirection) => {
                           await handleMoveEditFocus(ri, columnIndex, columnDirection, rowDirection);
@@ -205,6 +136,7 @@ function TableBodyFrozen(props: Props) {
             </TableBodyTr>
           );
         })}
+
         {endNumber - startIdx < 1 && <NoDataTr />}
       </tbody>
     </BodyTable>
@@ -215,7 +147,7 @@ const LineNumberTd = styled.td`
   padding: 0 !important;
   text-align: center;
   &:not(:last-child) {
-    border-right: 1px solid var(--axfdg-border-color-base);
+    border-right: 1px solid var(--axdg-border-color-base);
   }
 `;
 

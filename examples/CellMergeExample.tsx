@@ -7,15 +7,17 @@ import ExampleContainer from '../components/ExampleContainer';
 interface Props {}
 
 interface IListItem {
-  id: string;
-  title: string;
-  writer: string;
-  createAt: string;
+  id?: string;
+  class?: string;
+  title?: string;
+  writer?: string;
+  createAt?: string;
 }
 
-const list = Array.from(Array(5)).map((v, i) => ({
+const list = Array.from(Array(50)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
+    class: `class_${Math.floor(i / 5)}`,
     title: `title_${i}`,
     writer: `writer_${i}`,
     createAt: `2022-09-08`,
@@ -28,6 +30,12 @@ function BasicExample(props: Props) {
       key: 'id',
       label: 'No',
       width: 100,
+    },
+    {
+      key: 'class',
+      label: 'class',
+      width: 100,
+      align: 'center',
     },
     {
       key: 'title',
@@ -53,16 +61,19 @@ function BasicExample(props: Props) {
       key: 'createAt',
       label: 'Date-A',
       width: 100,
+      align: 'center',
     },
     {
       key: 'createAt',
       label: 'Date-B',
       width: 100,
+      align: 'center',
     },
     {
       key: 'createAt',
       label: 'Date-C',
       width: 100,
+      align: 'center',
     },
     {
       key: 'createAt',
@@ -90,13 +101,16 @@ function BasicExample(props: Props) {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
-        // rowChecked={{
-        //   checkedIndexes: [],
-        //   onChange: (ids, selectedAll) => {
-        //     console.log('onChange rowSelection', ids, selectedAll);
-        //   },
-        // }}
+        cellMergeOptions={{
+          columnsMap: {
+            1: { wordWrap: true },
+            4: { wordWrap: true },
+            5: { wordWrap: true },
+            6: { wordWrap: true },
+          },
+        }}
         onClick={item => console.log(item)}
+        variant={'vertical-bordered'}
       />
     </Container>
   );

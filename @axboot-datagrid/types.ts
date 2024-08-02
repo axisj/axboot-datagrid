@@ -3,11 +3,17 @@ import React from 'react';
 export type AlignDirection = 'left' | 'center' | 'right';
 export type MoveDirection = 'prev' | 'next' | 'current';
 
-export interface AXFDGItemRenderProps<T> {
-  column: AXFDGColumn<T>;
+export const DIRC_MAP = {
+  next: 1,
+  prev: -1,
+  current: 0,
+};
+
+export interface AXDGItemRenderProps<T> {
+  column: AXDGColumn<T>;
   index: number;
   columnIndex: number;
-  item: AXFDGDataItem<T>;
+  item: AXDGDataItem<T>;
   values: T;
   value: any;
   editable?: boolean;
@@ -16,7 +22,7 @@ export interface AXFDGItemRenderProps<T> {
   handleMove?: (columnDirection: MoveDirection, rowDirection: MoveDirection) => void;
 }
 
-export interface AXFDGColumn<T> {
+export interface AXDGColumn<T> {
   key: string | string[];
   label: string;
   width: number;
@@ -24,33 +30,38 @@ export interface AXFDGColumn<T> {
   headerAlign?: AlignDirection;
   sortDisable?: boolean;
   className?: string;
-  getClassName?: (item: AXFDGDataItem<T>) => string;
+  getClassName?: (item: AXDGDataItem<T>) => string;
   headerClassName?: string;
-  itemRender?: React.FC<AXFDGItemRenderProps<T>>;
+  itemRender?: React.FC<AXDGItemRenderProps<T>>;
   editable?: boolean;
 }
 
-export interface AXFDGColumnGroup {
+export interface AXDGColumnGroup {
   label: string;
   columnIndexes: number[];
   align?: AlignDirection;
   headerAlign?: AlignDirection;
 }
 
-export enum AXFDGDataItemStatus {
+export interface AXDGCellMergeColumn {
+  wordWrap?: boolean;
+}
+
+export enum AXDGDataItemStatus {
   new,
   edit,
   remove,
 }
 
-export type AXFDGDataItem<T> = {
+export type AXDGDataItem<T> = {
   values: T;
-  status?: AXFDGDataItemStatus;
+  status?: AXDGDataItemStatus;
   checked?: boolean;
   parentItemIndex?: number;
+  meta?: Record<string, any>;
 };
 
-export interface AXFDGPage {
+export interface AXDGPage {
   currentPage?: number;
   pageSize?: number;
   totalPages?: number;
@@ -62,61 +73,62 @@ export interface AXFDGPage {
   paginationRender?: () => void;
 }
 
-export interface AXFDGRowChecked {
+export interface AXDGRowChecked {
   checkedIndexes?: number[];
   checkedRowKeys?: React.Key[];
   onChange: (checkedIndexes: number[], checkedRowKeys: React.Key[], checkedAll?: CheckedAll) => void;
 }
 
-export interface AXFDGSortParam {
+export interface AXDGSortParam {
   key?: string;
   index?: number;
   orderBy: 'asc' | 'desc';
 }
 
-export interface AXFDGSortInfo {
+export interface AXDGSortInfo {
   multiSort?: boolean;
-  sortParams: AXFDGSortParam[];
-  onChange: (sortParams: AXFDGSortParam[]) => void;
+  sortParams: AXDGSortParam[];
+  onChange: (sortParams: AXDGSortParam[]) => void;
 }
 
-export interface AXFDGClickParams<T> {
+export interface AXDGClickParams<T> {
   index: number;
   columnIndex: number;
   item: T;
-  column: AXFDGColumn<T>;
+  column: AXDGColumn<T>;
 }
 
-export interface AXFDGProps<T> {
+export interface AXDGProps<T> {
   width: number;
   height: number;
   headerHeight?: number;
   footerHeight?: number;
   itemHeight?: number;
   itemPadding?: number;
-  columns: AXFDGColumn<T>[];
-  columnsGroup?: AXFDGColumnGroup[];
-  onChangeColumns?: (columnIndex: number, width: number, columns: AXFDGColumn<T>[]) => void;
   frozenColumnIndex?: number;
-  data?: AXFDGDataItem<T>[];
-  onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXFDGColumn<T> | null) => void;
 
-  page?: AXFDGPage;
+  columns: AXDGColumn<T>[];
+  columnsGroup?: AXDGColumnGroup[];
+  onChangeColumns?: (columnIndex: number, width: number, columns: AXDGColumn<T>[]) => void;
+  data?: AXDGDataItem<T>[];
+  onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXDGColumn<T> | null) => void;
+
+  page?: AXDGPage;
   enableLoadMore?: boolean;
   onLoadMore?: (params: { scrollLeft: number; scrollTop: number }) => void;
   endLoadMoreRender?: () => React.ReactNode;
 
   className?: string;
   style?: React.CSSProperties;
+
   loading?: boolean;
   spinning?: boolean;
-
   scrollTop?: number;
   scrollLeft?: number;
 
-  rowChecked?: AXFDGRowChecked;
-  sort?: AXFDGSortInfo;
-  onClick?: (params: AXFDGClickParams<T>) => void;
+  rowChecked?: AXDGRowChecked;
+  sort?: AXDGSortInfo;
+  onClick?: (params: AXDGClickParams<T>) => void;
 
   msg?: {
     emptyList?: string;
@@ -128,16 +140,20 @@ export interface AXFDGProps<T> {
   editTrigger?: 'dblclick' | 'click';
   showLineNumber?: boolean;
 
-  getRowClassName?: (ri: number, item: AXFDGDataItem<T>) => string | undefined;
+  getRowClassName?: (ri: number, item: AXDGDataItem<T>) => string | undefined;
+  cellMergeOptions?: {
+    columnsMap: Record<number, AXDGCellMergeColumn>;
+  };
+  variant?: 'default' | 'vertical-bordered';
 }
 
 export type CheckedAll = true | false | 'indeterminate';
 
-export interface AppModelColumn<T> extends AXFDGColumn<T> {
+export interface AppModelColumn<T> extends AXDGColumn<T> {
   left: number;
 }
 
-export interface AppModel<T> extends AXFDGProps<T> {
+export interface AppModel<T> extends AXDGProps<T> {
   initialized: boolean;
   headerHeight: number;
   footerHeight: number;
@@ -146,8 +162,8 @@ export interface AppModel<T> extends AXFDGProps<T> {
   frozenColumnIndex: number;
   frozenColumnsWidth?: number;
   columns: AppModelColumn<T>[];
-  columnsGroup: AXFDGColumnGroup[];
-  data: AXFDGDataItem<T>[];
+  columnsGroup: AXDGColumnGroup[];
+  data: AXDGDataItem<T>[];
   columnResizing: boolean;
   containerBorderWidth: number;
   contentBodyHeight: number;
@@ -156,7 +172,7 @@ export interface AppModel<T> extends AXFDGProps<T> {
   scrollLeft: number;
   checkedIndexesMap: Map<number, any>;
   checkedAll: CheckedAll;
-  sortParams?: Record<string, AXFDGSortParam>;
+  sortParams?: Record<string, AXDGSortParam>;
   displayPaginationLength?: number;
   hoverItemIndex?: number;
   loading: boolean;
@@ -171,14 +187,14 @@ export interface AppActions<T> {
   setScrollLeft: (scrollLeft: number) => void;
   setScroll: (scrollTop: number, scrollLeft: number) => void;
   setColumns: (columns: AppModelColumn<T>[]) => void;
-  setColumnsGroup: (columnsGroup: AXFDGColumnGroup[]) => void;
-  setData: (data: AXFDGDataItem<T>[]) => void;
+  setColumnsGroup: (columnsGroup: AXDGColumnGroup[]) => void;
+  setData: (data: AXDGDataItem<T>[]) => void;
   setCheckedIndexes: (ids: number[]) => void;
   setCheckedAll: (checkedAll: CheckedAll) => void;
   setColumnWidth: (columnIndex: number, width?: number) => void;
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
-  setPage: (page: AXFDGPage) => void;
+  setPage: (page: AXDGPage) => void;
   setHoverItemIndex: (hoverItemIndex?: number) => void;
   handleClick: (index: number, columnIndex: number) => void;
   setWidth: (width: number) => void;
@@ -194,25 +210,27 @@ export interface AppActions<T> {
   setFrozenColumnIndex: (frozenColumnIndex: number) => void;
   setCheckedIndexesMap: (checkedIndexesMap: Map<number, any>) => void;
 
-  setRowChecked: (rowChecked?: AXFDGRowChecked) => void;
-  setSort: (sort?: AXFDGSortInfo) => void;
-  setSortParams: (sortParams?: Record<string, AXFDGSortParam>) => void;
+  setRowChecked: (rowChecked?: AXDGRowChecked) => void;
+  setSort: (sort?: AXDGSortInfo) => void;
+  setSortParams: (sortParams?: Record<string, AXDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;
   setRowKey: (rowKey: React.Key | React.Key[]) => void;
   setSelectedRowKey: (rowKey: React.Key | React.Key[]) => void;
   setEditable: (editable: boolean) => void;
   setEditItem: (index: number, columnIndex: number) => void;
 
-  setOnClick: (onClick?: AXFDGProps<T>['onClick']) => void;
-  setOnChangeColumns: (onChangeColumns?: AXFDGProps<T>['onChangeColumns']) => void;
-  setOnChangeData: (onChangeData?: AXFDGProps<T>['onChangeData']) => void;
-  setOnLoadMore: (onLoadMore?: AXFDGProps<T>['onLoadMore']) => void;
+  setOnClick: (onClick?: AXDGProps<T>['onClick']) => void;
+  setOnChangeColumns: (onChangeColumns?: AXDGProps<T>['onChangeColumns']) => void;
+  setOnChangeData: (onChangeData?: AXDGProps<T>['onChangeData']) => void;
+  setOnLoadMore: (onLoadMore?: AXDGProps<T>['onLoadMore']) => void;
   setShowLineNumber: (showLineNumber?: boolean) => void;
-  setMsg: (msg?: AXFDGProps<T>['msg']) => void;
+  setMsg: (msg?: AXDGProps<T>['msg']) => void;
   setDisplayPaginationLength: (length: number) => void;
 
-  setRowClassName: (getRowClassName?: AXFDGProps<T>['getRowClassName']) => void;
+  setRowClassName: (getRowClassName?: AXDGProps<T>['getRowClassName']) => void;
   setEditTrigger: (editTrigger: 'dblclick' | 'click') => void;
+  setCellMergeOptions: (cellMergeOptions: AXDGProps<T>['cellMergeOptions']) => void;
+  setVariant: (variant: AXDGProps<T>['variant']) => void;
 }
 
 export interface AppStore<T = any> extends AppModel<T>, AppActions<T> {}

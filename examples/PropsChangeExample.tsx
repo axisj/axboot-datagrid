@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid, AXFDGColumn, AXFDGDataItem, AXFDGSortParam } from '../@axframe-datagrid';
+import { AXDataGrid, AXDGColumn, AXDGDataItem, AXDGSortParam, delay } from '../@axboot-datagrid';
 import { Checkbox, Col, Divider, Form, InputNumber, Row, Select, Switch } from 'antd';
-import { delay } from '../@axframe-datagrid/utils';
 import ExampleContainer from '../components/ExampleContainer';
 import { useContainerSize } from '../hooks/useContainerSize';
+import { useState } from 'react';
 
 interface Props {}
 
@@ -15,7 +15,7 @@ interface IListItem {
   createAt: string;
 }
 
-const listFirst: AXFDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) => ({
+const listFirst: AXDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) => ({
   values: {
     id: `FIRST_${i}`,
     title: `F title_${i}`,
@@ -27,7 +27,7 @@ const listFirst: AXFDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) 
   },
 }));
 
-const listSecond: AXFDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i) => ({
+const listSecond: AXDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i) => ({
   values: {
     id: `SECOND ID_${i}`,
     title: `S title_${i}`,
@@ -39,7 +39,7 @@ const listSecond: AXFDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i)
   },
 }));
 
-const columnsFirst: AXFDGColumn<IListItem>[] = [
+const columnsFirst: AXDGColumn<IListItem>[] = [
   {
     key: ['group', 'k'],
     label: 'PK',
@@ -81,11 +81,12 @@ function PropsChangeExample(props: Props) {
   const [frozenColumnIndex, setFrozenColumnIndex] = React.useState(0);
   const [checkedIndexes, setCheckedIndexes] = React.useState<number[]>([]);
   const [checkedRowKeys, setCheckedRowKeys] = React.useState<string[]>([]);
-  const [sortParams, setSortParams] = React.useState<AXFDGSortParam[]>([]);
+  const [sortParams, setSortParams] = React.useState<AXDGSortParam[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([]);
+  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([]);
   const [selectedRowKey, setSelectedRowKey] = React.useState<string>();
   const [showLineNumber, setShowLineNumber] = React.useState(false);
+  const [variant, setVariant] = useState<'default' | 'vertical-bordered'>('default');
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
@@ -97,7 +98,7 @@ function PropsChangeExample(props: Props) {
     <>
       <Wrap style={{ width, height }}>
         <Container ref={containerRef} style={{ width, height }}>
-          <AXFDataGrid<IListItem>
+          <AXDataGrid<IListItem>
             width={containerWidth}
             height={containerHeight}
             headerHeight={headerHeight}
@@ -141,6 +142,7 @@ function PropsChangeExample(props: Props) {
             rowKey={['group', 'k']}
             selectedRowKey={selectedRowKey}
             showLineNumber={showLineNumber}
+            variant={variant}
           />
         </Container>
       </Wrap>
@@ -161,6 +163,7 @@ function PropsChangeExample(props: Props) {
           sortParams,
           currentPage,
           listName,
+          variant,
         }}
       >
         <Row gutter={20}>
@@ -236,6 +239,17 @@ function PropsChangeExample(props: Props) {
                 onChange={itemPadding => {
                   setItemPadding(Number(itemPadding));
                 }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Form.Item name={'variant'} label={'Variant'}>
+              <Select
+                options={[
+                  { value: 'default', label: 'default' },
+                  { value: 'vertical-bordered', label: 'vertical-bordered' },
+                ]}
+                onChange={value => setVariant(value as 'default' | 'vertical-bordered')}
               />
             </Form.Item>
           </Col>

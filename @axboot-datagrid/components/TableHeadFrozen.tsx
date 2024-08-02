@@ -1,20 +1,25 @@
+import styled from '@emotion/styled';
 import * as React from 'react';
 import { useAppStore } from '../store';
-import styled from '@emotion/styled';
-import TableColGroup from './TableColGroup';
+import RowSelector from './RowSelector';
+import TableColGroupFrozen from './TableColGroupFrozen';
+import { HeadGroupTd, HeadTable, HeadTd } from './TableHead';
 import ColResizer from './ColResizer';
 import TableHeadColumn from './TableHeadColumn';
-import { css } from '@emotion/react';
 
 interface Props {
   container: React.RefObject<HTMLDivElement>;
 }
 
-function TableHead({ container }: Props) {
+function TableHeadFrozen({ container }: Props) {
   const sort = useAppStore(s => s.sort);
+  const hasRowSelection = useAppStore(s => !!s.rowChecked);
+  const showLineNumber = useAppStore(s => s.showLineNumber);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
   const columnsGroup = useAppStore(s => s.columnsGroup);
+  const selectedAll = useAppStore(s => s.checkedAll);
+  const setSelectedAll = useAppStore(s => s.setCheckedAll);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
   const columnResizing = useAppStore(s => s.columnResizing);
   const toggleColumnSort = useAppStore(s => s.toggleColumnSort);
@@ -26,13 +31,12 @@ function TableHead({ container }: Props) {
     if (hasColumnsGroup) {
       const row: Record<string, any>[] = [];
       const secondRow: Record<string, any>[] = [];
-      columns.slice(frozenColumnIndex).forEach((column, index) => {
-        const ci = frozenColumnIndex + index;
-        const findCgIndex = columnsGroup.findIndex(cg => cg.columnIndexes.includes(ci));
+      columns.slice(0, frozenColumnIndex).forEach((column, index) => {
+        const findCgIndex = columnsGroup.findIndex(cg => cg.columnIndexes.includes(index));
         if (findCgIndex > -1) {
           const prevItem = row[row.length - 1];
           if (!prevItem || prevItem.cgi !== findCgIndex) {
-            const cifi = columnsGroup[findCgIndex].columnIndexes.findIndex(n => n === ci);
+            const cifi = columnsGroup[findCgIndex].columnIndexes.findIndex(n => n === index);
             row.push({
               type: 'column-group',
               cgi: findCgIndex,
@@ -43,13 +47,13 @@ function TableHead({ container }: Props) {
 
           secondRow.push({
             type: 'column',
-            columnIndex: ci,
+            columnIndex: index,
             ...column,
           });
         } else {
           row.push({
             type: 'column',
-            columnIndex: ci,
+            columnIndex: index,
             ...column,
             rowspan: 2,
           });
@@ -59,12 +63,10 @@ function TableHead({ container }: Props) {
       rows.push(row, secondRow);
     } else {
       const row: Record<string, any>[] = [];
-      columns.slice(frozenColumnIndex).forEach((column, index) => {
-        const ci = frozenColumnIndex + index;
-
+      columns.slice(0, frozenColumnIndex).forEach((column, index) => {
         row.push({
           type: 'column',
-          columnIndex: ci,
+          columnIndex: index,
           ...column,
         });
       });
@@ -76,11 +78,24 @@ function TableHead({ container }: Props) {
 
   return (
     <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1} rowLength={columnsTable.length}>
-      <TableColGroup />
-      <tbody role={'rfdg-head'}>
+      <TableColGroupFrozen />
+      <tbody role={'rfdg-head-frozen'}>
         {columnsTable.map((row, ri) => {
           return (
             <tr key={ri}>
+              {ri === 0 && showLineNumber && <LineNumberTd rowSpan={columnsTable.length}>&nbsp;</LineNumberTd>}
+              {ri === 0 && hasRowSelection && (
+                <HeadTd rowSpan={columnsTable.length}>
+                  <RowSelector
+                    checked={selectedAll === true}
+                    indeterminate={selectedAll === 'indeterminate'}
+                    handleChange={checked => {
+                      setSelectedAll(checked);
+                    }}
+                  />
+                </HeadTd>
+              )}
+
               {row.map((c: any, index: any) => {
                 if (c.type === 'column-group') {
                   return (
@@ -109,7 +124,7 @@ function TableHead({ container }: Props) {
                     columnResizing={columnResizing}
                     onClick={evt => {
                       evt.preventDefault();
-                      if (!c.sortDisable) toggleColumnSort(c.columnIndex);
+                      toggleColumnSort(index);
                     }}
                   >
                     <TableHeadColumn column={c} />
@@ -117,7 +132,6 @@ function TableHead({ container }: Props) {
                   </HeadTd>
                 );
               })}
-              {ri === 0 && <HeadTd rowSpan={2} />}
             </tr>
           );
         })}
@@ -126,57 +140,10 @@ function TableHead({ container }: Props) {
   );
 }
 
-export const HeadTable = styled.table<{ headerHeight: number; hasGroup: boolean; rowLength: number }>`
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: unset;
-  border-spacing: 0;
-  height: ${p => p.headerHeight}px;
-  color: var(--axfdg-header-color);
-  font-weight: var(--axfdg-header-font-weight);
-
-  tbody {
-    height: ${p => p.headerHeight}px;
-    overflow: hidden;
-    tr {
-      height: ${p => `${100 / p.rowLength}%`};
-    }
+const LineNumberTd = styled(HeadTd)`
+  &:not(:last-child) {
+    border-right: 1px solid var(--axdg-border-color-base);
   }
 `;
 
-export const HeadGroupTd = styled.td`
-  padding: 0 7px;
-  border-bottom-style: solid;
-  border-bottom-color: var(--axfdg-border-color-base);
-  border-bottom-width: 1px;
-  background-color: var(--axfdg-header-group-bg);
-
-  border-right-style: solid;
-  border-right-color: var(--axfdg-border-color-base);
-  border-right-width: 1px;
-`;
-
-export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean }>`
-  position: relative;
-  padding: 0 7px;
-  border-bottom-style: solid;
-  border-bottom-color: var(--axfdg-border-color-base);
-  border-width: 1px;
-
-  ${({ hasOnClick, columnResizing }) => {
-    if (hasOnClick && !columnResizing) {
-      return css`
-        cursor: pointer;
-
-        &:hover {
-          background: var(--axfdg-header-hover-bg);
-        }
-      `;
-    }
-  }}
-  &.rfdg-tr-line-number {
-    border-right: 1px solid var(--axfdg-border-color-base);
-  }
-`;
-
-export default TableHead;
+export default TableHeadFrozen;

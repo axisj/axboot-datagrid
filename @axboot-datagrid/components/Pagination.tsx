@@ -79,15 +79,15 @@ const No = styled.span<{ active?: boolean }>`
   height: 20px;
 
   &:hover {
-    color: var(--axfdg-primary-color);
+    color: var(--axdg-primary-color);
   }
 
   ${({ active }) => {
     if (active) {
       return css`
-        color: var(--axfdg-primary-color);
-        border: 1px solid var(--axfdg-primary-color);
-        background-color: var(--axfdg-body-bg);
+        color: var(--axdg-primary-color);
+        border: 1px solid var(--axdg-primary-color);
+        background-color: var(--axdg-body-bg);
         border-radius: 2px;
         margin: 0 3px;
       `;

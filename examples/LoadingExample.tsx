@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
+import { AXDataGrid, AXDGColumn } from '../@axboot-datagrid';
 import { Button, Space } from 'antd';
 import ExampleContainer from '../components/ExampleContainer';
 import { useContainerSize } from '../hooks/useContainerSize';
@@ -26,7 +26,7 @@ const list = Array.from(Array(1000)).map((v, i) => ({
 function LoadingExample(props: Props) {
   const [loading, setLoading] = React.useState(false);
   const [spinning, setSpinning] = React.useState(false);
-  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: '아이디 IS LONG !',
@@ -63,7 +63,7 @@ function LoadingExample(props: Props) {
       </Buttons>
 
       <Container ref={containerRef}>
-        <AXFDataGrid<IListItem>
+        <AXDataGrid<IListItem>
           width={containerWidth}
           height={containerHeight}
           headerHeight={35}
@@ -97,6 +97,5 @@ const Buttons = styled.div`
   justify-content: flex-start;
   align-items: center;
 `;
-
 
 export default LoadingExample;

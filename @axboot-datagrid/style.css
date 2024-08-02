@@ -1,0 +1,29 @@
+[role='ax-datagrid'] {
+    --axdg-primary-color: #3b82f6;
+    --axdg-header-bg: #f3f4f5;
+    --axdg-header-color: #222;
+    --axdg-header-font-weight: 500;
+    --axdg-header-hover-bg: #e2e5e5;
+    --axdg-header-group-bg: #e9e9e9;
+    --axdg-footer-bg: #f3f4f5;
+    --axdg-border-color-base: #d2d5d9;
+    --axdg-border-color-light: #d2d5d9;
+    --axdg-border-radius: 4px;
+    --axdg-row-selector-color: #ffffff;
+    --axdg-body-bg: #ffffff;
+    --axdg-body-odd-bg: #f8f8f8;
+    --axdg-body-hover-bg: #f3f4f5;
+    --axdg-body-hover-odd-bg: #eeeeee;
+    --axdg-body-active-bg: #e6f6ff;
+    --axdg-body-color: #444;
+
+    --axdg-scroll-size: 11px;
+    --axdg-scroll-track-bg: #f9f9f9;
+    --axdg-scroll-thumb-radius: 6px;
+    --axdg-scroll-thumb-bg: #c0c1c5;
+    --axdg-scroll-thumb-hover-bg: #a1a3a6;
+
+    --axdg-loading-bg: rgba(163, 163, 163, 0.1);
+    --axdg-loading-color: rgba(0, 0, 0, 0.1);
+    --axdg-loading-second-color: #767676;
+}

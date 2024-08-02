@@ -1,3 +1,3 @@
-export * from './AXFDataGrid';
+export * from './AXDataGrid';
 export * from './types';
 export * from './utils';

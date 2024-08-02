@@ -1,4 +1,4 @@
-# @axframe/datagrid
+# @axboot/datagrid
 
 DataGrid, DataSheet for React
 
@@ -8,7 +8,7 @@ DataGrid, DataSheet for React
 ## Install
 
 ```bash
-npm i @axframe/datagrid
+npm i @axboot/datagrid
 ```
 
 ## Development
@@ -23,7 +23,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Styling
 
 ```typescript jsx
-import '@axframe/datagrid/style.css';
+import '@axboot/datagrid/style.css';
 ```
 
 or
@@ -31,34 +31,36 @@ or
 Add the code below to your project.
 
 ```css
-[role='axframe-datagrid'] {
-  --axfdg-primary-color: #3b82f6;
-  --axfdg-header-bg: #f3f4f5;
-  --axfdg-header-color: #222;
-  --axfdg-header-font-weight: 500;
-  --axfdg-header-hover-bg: #e2e5e5;
-  --axfdg-header-group-bg: #e9e9e9;
-  --axfdg-footer-bg: #f3f4f5;
-  --axfdg-border-color-base: #d2d5d9;
-  --axfdg-border-radius: 4px;
-  --axfdg-row-selector-color: #ffffff;
-  --axfdg-body-bg: #ffffff;
-  --axfdg-body-odd-bg: #f8f8f8;
-  --axfdg-body-hover-bg: #f3f4f5;
-  --axfdg-body-hover-odd-bg: #eeeeee;
-  --axfdg-body-active-bg: #e6f6ff;
-  --axfdg-body-color: #444;
+[role='ax-datagrid'] {
+    --axdg-primary-color: #3b82f6;
+    --axdg-header-bg: #f3f4f5;
+    --axdg-header-color: #222;
+    --axdg-header-font-weight: 500;
+    --axdg-header-hover-bg: #e2e5e5;
+    --axdg-header-group-bg: #e9e9e9;
+    --axdg-footer-bg: #f3f4f5;
+    --axdg-border-color-base: #d2d5d9;
+    --axdg-border-color-light: #d2d5d9;
+    --axdg-border-radius: 4px;
+    --axdg-row-selector-color: #ffffff;
+    --axdg-body-bg: #ffffff;
+    --axdg-body-odd-bg: #f8f8f8;
+    --axdg-body-hover-bg: #f3f4f5;
+    --axdg-body-hover-odd-bg: #eeeeee;
+    --axdg-body-active-bg: #e6f6ff;
+    --axdg-body-color: #444;
 
-  --axfdg-scroll-size: 11px;
-  --axfdg-scroll-track-bg: #f9f9f9;
-  --axfdg-scroll-thumb-radius: 6px;
-  --axfdg-scroll-thumb-bg: #c0c1c5;
-  --axfdg-scroll-thumb-hover-bg: #a1a3a6;
+    --axdg-scroll-size: 11px;
+    --axdg-scroll-track-bg: #f9f9f9;
+    --axdg-scroll-thumb-radius: 6px;
+    --axdg-scroll-thumb-bg: #c0c1c5;
+    --axdg-scroll-thumb-hover-bg: #a1a3a6;
 
-  --axfdg-loading-bg: rgba(163, 163, 163, 0.1);
-  --axfdg-loading-color: rgba(0, 0, 0, 0.1);
-  --axfdg-loading-second-color: #767676;
+    --axdg-loading-bg: rgba(163, 163, 163, 0.1);
+    --axdg-loading-color: rgba(0, 0, 0, 0.1);
+    --axdg-loading-second-color: #767676;
 }
+
 ```
 
 ## USE
@@ -66,7 +68,7 @@ Add the code below to your project.
 ```typescript jsx
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid, AXFDGColumn } from '@axframe/datagrid';
+import { AXDataGrid, AXDGColumn } from '@axboot/datagrid';
 
 interface Props {}
 
@@ -87,7 +89,7 @@ const list = Array.from(Array(1000)).map((v, i) => ({
 }));
 
 function BasicExample(props: Props) {
-  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: '아이디 IS LONG !',
@@ -142,7 +144,7 @@ function BasicExample(props: Props) {
 
   return (
     <Container>
-      <AXFDataGrid<IListItem>
+      <AXDataGrid<IListItem>
         width={600}
         height={400}
         data={list}

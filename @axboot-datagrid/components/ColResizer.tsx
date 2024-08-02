@@ -110,12 +110,12 @@ const Container = styled.div<StyledProps>`
         width: 1px;
         height: ${bordered ? '100%' : '1em'};
         transform: translateY(-50%);
-        background: var(--axfdg-border-color-base);
+        background: var(--axdg-border-color-base);
       }
 
       &:hover {
         &:after {
-          background: var(--axfdg-primary-color);
+          background: var(--axdg-primary-color);
         }
       }
     `;
