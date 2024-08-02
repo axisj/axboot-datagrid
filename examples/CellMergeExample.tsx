@@ -7,15 +7,17 @@ import ExampleContainer from '../components/ExampleContainer';
 interface Props {}
 
 interface IListItem {
-  id: string;
-  title: string;
-  writer: string;
-  createAt: string;
+  id?: string;
+  class?: string;
+  title?: string;
+  writer?: string;
+  createAt?: string;
 }
 
-const list = Array.from(Array(5)).map((v, i) => ({
+const list = Array.from(Array(10)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
+    class: `class_${Math.floor(i / 3)}`,
     title: `title_${i}`,
     writer: `writer_${i}`,
     createAt: `2022-09-08`,
@@ -27,6 +29,11 @@ function BasicExample(props: Props) {
     {
       key: 'id',
       label: 'No',
+      width: 100,
+    },
+    {
+      key: 'class',
+      label: 'class',
       width: 100,
     },
     {

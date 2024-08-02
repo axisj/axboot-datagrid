@@ -2,16 +2,9 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { useAppStore } from '../store';
 import TableColGroup from './TableColGroup';
-import { getCellValueByRowKey } from '../utils';
+import { getCellValueByRowKey, useBodyData } from '../utils';
 import { css } from '@emotion/react';
-import { AXFDGColumn, AXFDGDataItemStatus, MoveDirection } from '../types';
 import { TableBodyCell } from './TableBodyCell';
-
-const DIRC_MAP = {
-  next: 1,
-  prev: -1,
-  current: 0,
-};
 
 interface Props {
   scrollContainerRef: React.RefObject<HTMLDivElement>;
@@ -38,56 +31,11 @@ function TableBody({ scrollContainerRef }: Props) {
   const setEditItem = useAppStore(s => s.setEditItem);
   const editItemIndex = useAppStore(s => s.editItemIndex);
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
-  const setData = useAppStore(s => s.setData);
-  const onChangeData = useAppStore(s => s.onChangeData);
   const msg = useAppStore(s => s.msg);
   const getRowClassName = useAppStore(s => s.getRowClassName);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
-
-  const setItemValue = React.useCallback(
-    async (ri: number, ci: number, column: AXFDGColumn<any>, newValue: any) => {
-      if (data[ri].status !== AXFDGDataItemStatus.new) {
-        data[ri].status = AXFDGDataItemStatus.edit;
-      }
-      let _values = data[ri].values;
-      const columnKey = column.key;
-      if (Array.isArray(columnKey)) {
-        columnKey.forEach((k, i) => {
-          if (columnKey.length - 1 === i) {
-            _values[k] = newValue;
-          } else {
-            if (_values[k] === undefined) _values[k] = {};
-            _values = _values[k];
-          }
-        });
-      } else {
-        _values[columnKey] = newValue;
-      }
-
-      await setData([...data]);
-      await onChangeData?.(ri, ci, _values, column);
-    },
-    [data, onChangeData, setData],
-  );
-
-  const handleMoveEditFocus = React.useCallback(
-    async (rowIndex: number, columnIndex: number, columnDirection?: MoveDirection, rowDirection?: MoveDirection) => {
-      if (columnDirection && rowDirection) {
-        let _ci = columnIndex + DIRC_MAP[columnDirection];
-        let _ri = rowIndex + DIRC_MAP[rowDirection];
-
-        if (_ci > columns.length - 1) _ci = 0;
-        if (_ri > data.length - 1) _ri = 0;
-
-        await setEditItem(_ri, _ci);
-      } else {
-        await setEditItem(-1, -1);
-      }
-    },
-    [columns.length, data.length, setEditItem],
-  );
 
   const { startCIdx, endCIdx } = React.useMemo(() => {
     if (!scrollContainerRef.current)
@@ -129,17 +77,13 @@ function TableBody({ scrollContainerRef }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollContainerRef.current?.scrollLeft, width, frozenColumnsWidth, columns, frozenColumnIndex]);
 
+  const { dataSet, setItemValue, handleMoveEditFocus } = useBodyData(startIdx, endNumber);
+
   return (
     <BodyTable>
       <TableColGroup />
       <tbody role={'rfdg-body'}>
-        {Array.from({ length: endNumber - startIdx }, (_, i) => {
-          const ri = startIdx + i;
-          const item = data[ri];
-          if (!item) {
-            return null;
-          }
-
+        {dataSet.map((item, ri) => {
           const trProps = editable
             ? {
                 editable: true,
@@ -208,7 +152,7 @@ function TableBody({ scrollContainerRef }: Props) {
                           await handleMoveEditFocus(ri, columnIndex, columnDirection, rowDirection);
                         },
                         handleCancel: async () => {
-                          await setEditItem(-1, -1);
+                          setEditItem(-1, -1);
                         },
                         handleMove: async (columnDirection, rowDirection) => {
                           await handleMoveEditFocus(ri, columnIndex, columnDirection, rowDirection);

@@ -5,3 +5,4 @@ export * from './common';
 export * from './useForceUpdate';
 export * from './delay';
 export * from './getLineNumber';
+export * from './useBodyData';

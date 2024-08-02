@@ -3,6 +3,12 @@ import React from 'react';
 export type AlignDirection = 'left' | 'center' | 'right';
 export type MoveDirection = 'prev' | 'next' | 'current';
 
+export const DIRC_MAP = {
+  next: 1,
+  prev: -1,
+  current: 0,
+};
+
 export interface AXFDGItemRenderProps<T> {
   column: AXFDGColumn<T>;
   index: number;
