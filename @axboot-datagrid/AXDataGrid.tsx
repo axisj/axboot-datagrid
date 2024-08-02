@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Table from './components/Table';
-import { AppModelColumn, AppStore, AXFDGProps, AXFDGSortParam } from './types';
+import { AppModelColumn, AppStore, AXDGProps, AXDGSortParam } from './types';
 import { getCellValueByRowKey } from './utils';
 import { AppStoreProvider } from './store';
 
-export function AXFDataGrid<T = Record<string, any>>({
+export function AXDataGrid<T = Record<string, any>>({
   width,
   height,
   headerHeight = 30,
@@ -34,7 +34,8 @@ export function AXFDataGrid<T = Record<string, any>>({
   getRowClassName,
   editTrigger = 'click',
   cellMergeOptions,
-}: AXFDGProps<T>) {
+  variant,
+}: AXDGProps<T>) {
   const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
     if (rowChecked?.checkedRowKeys && rowKey) {
       const checkedIndexesMap: Map<number, any> = new Map();
@@ -60,7 +61,7 @@ export function AXFDataGrid<T = Record<string, any>>({
         cur.index = currentIndex;
         if (cur.key) acc[cur.key] = cur;
         return acc;
-      }, {} as Record<string, AXFDGSortParam>);
+      }, {} as Record<string, AXDGSortParam>);
     }
 
     return {};
@@ -122,6 +123,7 @@ export function AXFDataGrid<T = Record<string, any>>({
           msg,
           getRowClassName,
           cellMergeOptions,
+          variant,
         }}
       />
     </AppStoreProvider>

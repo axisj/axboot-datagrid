@@ -30,7 +30,7 @@
     "node_modules/@types"
   ],
   "include": [
-    "@axframe-datagrid"
+    "@axboot-datagrid"
   ],
   "exclude": [
     "node_modules"

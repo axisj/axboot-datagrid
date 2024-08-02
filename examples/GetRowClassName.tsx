@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
+import { AXDataGrid, AXDGColumn } from '../@axboot-datagrid';
 import ExampleContainer from '../components/ExampleContainer';
 import { useContainerSize } from '../hooks/useContainerSize';
 
@@ -26,7 +26,7 @@ const list = Array.from(Array(1000)).map((v, i) => ({
 
 export default function GetRowClassName(props: Props) {
   const [selectedRowKey, setSelectedRowKey] = React.useState<number>();
-  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: '아이디 IS LONG !',
@@ -65,7 +65,7 @@ export default function GetRowClassName(props: Props) {
   return (
     <>
       <Container ref={containerRef}>
-        <AXFDataGrid<IListItem>
+        <AXDataGrid<IListItem>
           showLineNumber
           width={containerWidth}
           height={containerHeight}

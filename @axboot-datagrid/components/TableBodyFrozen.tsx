@@ -36,6 +36,7 @@ function TableBodyFrozen(props: Props) {
   const editItemIndex = useAppStore(s => s.editItemIndex);
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
   const getRowClassName = useAppStore(s => s.getRowClassName);
+  const variant = useAppStore(s => s.variant);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -43,11 +44,12 @@ function TableBodyFrozen(props: Props) {
   const { dataSet, setItemValue, handleMoveEditFocus, handleChangeChecked } = useBodyData(startIdx, endNumber);
 
   return (
-    <BodyTable style={props.style}>
+    <BodyTable variant={variant} style={props.style}>
       <TableColGroupFrozen />
       <tbody role={'rfdg-body-frozen'}>
-        {dataSet.map((item, ri) => {
-          const trProps = editable
+        {dataSet.map((item, i) => {
+          const ri = startIdx + i;
+          const trProps: Record<string, any> = editable
             ? {
                 editable: true,
                 hover: hoverItemIndex === ri,
@@ -59,6 +61,8 @@ function TableBodyFrozen(props: Props) {
                 onMouseOver: () => setHoverItemIndex(ri),
                 onMouseOut: () => setHoverItemIndex(undefined),
               };
+          trProps.odd = ri % 2 === 0;
+
           const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
           const className = getRowClassName?.(ri, item) ?? '';
 
@@ -68,7 +72,6 @@ function TableBodyFrozen(props: Props) {
               itemHeight={itemHeight}
               itemPadding={itemPadding}
               active={active}
-              odd={ri % 2 === 0}
               className={className + (active ? ' active' : '')}
               {...trProps}
             >
@@ -144,7 +147,7 @@ const LineNumberTd = styled.td`
   padding: 0 !important;
   text-align: center;
   &:not(:last-child) {
-    border-right: 1px solid var(--axfdg-border-color-base);
+    border-right: 1px solid var(--axdg-border-color-base);
   }
 `;
 

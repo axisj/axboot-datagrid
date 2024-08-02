@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
+import { AXDataGrid, AXDGColumn } from '../@axboot-datagrid';
 import { useContainerSize } from '../hooks/useContainerSize';
 import ExampleContainer from '../components/ExampleContainer';
 
@@ -23,7 +23,7 @@ const list = Array.from(Array(5)).map((v, i) => ({
 }));
 
 function BasicExample(props: Props) {
-  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: 'No',
@@ -81,7 +81,7 @@ function BasicExample(props: Props) {
 
   return (
     <Container ref={containerRef}>
-      <AXFDataGrid<IListItem>
+      <AXDataGrid<IListItem>
         width={containerWidth}
         height={containerHeight}
         data={list}

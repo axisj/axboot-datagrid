@@ -9,14 +9,14 @@ import TableFooter from './TableFooter';
 import Loading from './Loading';
 import {
   AppModelColumn,
-  AXFDGColumn,
-  AXFDGColumnGroup,
-  AXFDGDataItem,
-  AXFDGPage,
-  AXFDGProps,
-  AXFDGRowChecked,
-  AXFDGSortInfo,
-  AXFDGSortParam,
+  AXDGColumn,
+  AXDGColumnGroup,
+  AXDGDataItem,
+  AXDGPage,
+  AXDGProps,
+  AXDGRowChecked,
+  AXDGSortInfo,
+  AXDGSortParam,
 } from '../types';
 import { getFrozenColumnsWidth } from '../utils';
 import { css } from '@emotion/react';
@@ -31,35 +31,36 @@ interface Props<T> {
   frozenColumnIndex?: number;
 
   columns: AppModelColumn<T>[];
-  columnsGroup: AXFDGColumnGroup[];
-  onChangeColumns?: AXFDGProps<T>['onChangeColumns'];
-  data?: AXFDGDataItem<T>[];
-  onChangeData?: AXFDGProps<T>['onChangeData'];
+  columnsGroup: AXDGColumnGroup[];
+  onChangeColumns?: AXDGProps<T>['onChangeColumns'];
+  data?: AXDGDataItem<T>[];
+  onChangeData?: AXDGProps<T>['onChangeData'];
 
-  page?: AXFDGPage;
-  onLoadMore?: AXFDGProps<T>['onLoadMore'];
+  page?: AXDGPage;
+  onLoadMore?: AXDGProps<T>['onLoadMore'];
 
   loading?: boolean;
   spinning?: boolean;
   scrollTop?: number;
   scrollLeft?: number;
 
-  rowChecked?: AXFDGRowChecked;
+  rowChecked?: AXDGRowChecked;
   checkedIndexesMap: Map<number, any>;
-  sort?: AXFDGSortInfo;
-  sortParams?: Record<string, AXFDGSortParam>;
-  onClick?: AXFDGProps<T>['onClick'];
+  sort?: AXDGSortInfo;
+  sortParams?: Record<string, AXDGSortParam>;
+  onClick?: AXDGProps<T>['onClick'];
 
-  msg?: AXFDGProps<T>['msg'];
+  msg?: AXDGProps<T>['msg'];
 
   rowKey?: React.Key | React.Key[];
   selectedRowKey?: React.Key | React.Key[];
   editable?: boolean;
-  editTrigger: AXFDGProps<T>['editTrigger'];
+  editTrigger: AXDGProps<T>['editTrigger'];
   showLineNumber?: boolean;
 
-  getRowClassName?: AXFDGProps<T>['getRowClassName'];
-  cellMergeOptions?: AXFDGProps<T>['cellMergeOptions'];
+  getRowClassName?: AXDGProps<T>['getRowClassName'];
+  cellMergeOptions?: AXDGProps<T>['cellMergeOptions'];
+  variant?: AXDGProps<T>['variant'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -124,6 +125,7 @@ function Table<T>(props: Props<T>) {
   const setMsg = useAppStore(s => s.setMsg);
   const setRowClassName = useAppStore(s => s.setRowClassName);
   const setCellMergeOptions = useAppStore(s => s.setCellMergeOptions);
+  const setVariant = useAppStore(s => s.setVariant);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
@@ -313,6 +315,9 @@ function Table<T>(props: Props<T>) {
   React.useEffect(() => {
     setCellMergeOptions(props.cellMergeOptions);
   }, [setCellMergeOptions, props.cellMergeOptions]);
+  React.useEffect(() => {
+    setVariant(props.variant);
+  }, [setVariant, props.variant]);
 
   //setInitialized
   React.useEffect(() => {
@@ -345,7 +350,7 @@ function Table<T>(props: Props<T>) {
   return (
     <Container
       ref={containerRef}
-      role={'axframe-datagrid'}
+      role={'ax-datagrid'}
       style={{ width, height, borderWidth: `${containerBorderWidth}px` }}
       className={className}
     >
@@ -407,20 +412,20 @@ function Table<T>(props: Props<T>) {
 }
 
 const Container = styled.div`
-  border-color: var(--axfdg-border-color-base);
+  border-color: var(--axdg-border-color-base);
   border-style: solid;
-  border-radius: var(--axfdg-border-radius);
+  border-radius: var(--axdg-border-radius);
   box-sizing: border-box;
   position: relative;
 `;
 
 const HeaderContainer = styled.div`
-  background: var(--axfdg-header-bg);
+  background: var(--axdg-header-bg);
   position: relative;
   min-width: 100%;
   overflow: hidden;
-  border-top-left-radius: var(--axfdg-border-radius);
-  border-top-right-radius: var(--axfdg-border-radius);
+  border-top-left-radius: var(--axdg-border-radius);
+  border-top-right-radius: var(--axdg-border-radius);
 `;
 
 const Header = styled.div`
@@ -429,9 +434,9 @@ const Header = styled.div`
 
 const FrozenHeader = styled.div`
   position: absolute;
-  background-color: var(--axfdg-header-bg);
-  border-right: 1px solid var(--axfdg-border-color-base);
-  box-shadow: 0 0 2px var(--axfdg-border-color-base);
+  background-color: var(--axdg-header-bg);
+  border-right: 1px solid var(--axdg-border-color-base);
+  box-shadow: 0 0 2px var(--axdg-border-color-base);
   z-index: 3;
 `;
 
@@ -441,14 +446,14 @@ const BodyContainer = styled.div<{ isLast: boolean }>`
   align-items: stretch;
   justify-content: stretch;
   align-content: stretch;
-  background-color: var(--axfdg-scroll-track-bg);
+  background-color: var(--axdg-scroll-track-bg);
   overflow: hidden;
 
   ${({ isLast }) => {
     if (isLast) {
       return css`
-        border-bottom-left-radius: var(--axfdg-border-radius);
-        border-bottom-right-radius: var(--axfdg-border-radius);
+        border-bottom-left-radius: var(--axdg-border-radius);
+        border-bottom-right-radius: var(--axdg-border-radius);
       `;
     }
   }}
@@ -460,35 +465,35 @@ const ScrollContainer = styled.div`
   flex: 1;
 
   &::-webkit-scrollbar {
-    width: var(--axfdg-scroll-size);
-    height: var(--axfdg-scroll-size);
+    width: var(--axdg-scroll-size);
+    height: var(--axdg-scroll-size);
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: var(--axfdg-scroll-thumb-bg);
-    border-radius: var(--axfdg-scroll-thumb-radius);
-    border: 2px solid var(--axfdg-scroll-track-bg);
+    background-color: var(--axdg-scroll-thumb-bg);
+    border-radius: var(--axdg-scroll-thumb-radius);
+    border: 2px solid var(--axdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background-color: var(--axfdg-scroll-thumb-hover-bg);
-    border: 1px solid var(--axfdg-scroll-track-bg);
+    background-color: var(--axdg-scroll-thumb-hover-bg);
+    border: 1px solid var(--axdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track {
-    background-color: var(--axfdg-scroll-track-bg);
+    background-color: var(--axdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track:vertical {
-    background-color: var(--axfdg-scroll-track-bg);
+    background-color: var(--axdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-track:horizontal {
-    background-color: var(--axfdg-scroll-track-bg);
+    background-color: var(--axdg-scroll-track-bg);
   }
 
   &::-webkit-scrollbar-corner {
-    //background-color: var(--axfdg-scroll-track-corner-bg);
+    //background-color: var(--axdg-scroll-track-corner-bg);
   }
 `;
 
@@ -500,8 +505,8 @@ const ScrollContent = styled.div`
 
 const FrozenScrollContent = styled.div`
   flex: none;
-  border-right: 1px solid var(--axfdg-border-color-base);
-  box-shadow: 0 0 2px var(--axfdg-border-color-base);
+  border-right: 1px solid var(--axdg-border-color-base);
+  box-shadow: 0 0 2px var(--axdg-border-color-base);
   z-index: 2;
   overflow: hidden;
   position: relative;
@@ -511,11 +516,11 @@ const FooterContainer = styled.div`
   position: relative;
   min-width: 100%;
   overflow: hidden;
-  background: var(--axfdg-footer-bg);
-  border-top: 1px solid var(--axfdg-border-color-base);
+  background: var(--axdg-footer-bg);
+  border-top: 1px solid var(--axdg-border-color-base);
 
-  border-bottom-left-radius: var(--axfdg-border-radius);
-  border-bottom-right-radius: var(--axfdg-border-radius);
+  border-bottom-left-radius: var(--axdg-border-radius);
+  border-bottom-right-radius: var(--axdg-border-radius);
 `;
 
 export default Table;

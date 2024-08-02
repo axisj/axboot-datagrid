@@ -5,6 +5,7 @@ import TableColGroup from './TableColGroup';
 import { getCellValueByRowKey, useBodyData } from '../utils';
 import { css } from '@emotion/react';
 import { TableBodyCell } from './TableBodyCell';
+import { AXDGProps } from '../types';
 
 interface Props {
   scrollContainerRef: React.RefObject<HTMLDivElement>;
@@ -33,9 +34,14 @@ function TableBody({ scrollContainerRef }: Props) {
   const editItemColIndex = useAppStore(s => s.editItemColIndex);
   const msg = useAppStore(s => s.msg);
   const getRowClassName = useAppStore(s => s.getRowClassName);
+  const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
+  const variant = useAppStore(s => s.variant);
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
+  const mergeColumns = cellMergeOptions?.columnsMap;
+
+  const { dataSet, setItemValue, handleMoveEditFocus } = useBodyData(startIdx, endNumber);
 
   const { startCIdx, endCIdx } = React.useMemo(() => {
     if (!scrollContainerRef.current)
@@ -77,14 +83,13 @@ function TableBody({ scrollContainerRef }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollContainerRef.current?.scrollLeft, width, frozenColumnsWidth, columns, frozenColumnIndex]);
 
-  const { dataSet, setItemValue, handleMoveEditFocus } = useBodyData(startIdx, endNumber);
-
   return (
-    <BodyTable>
+    <BodyTable variant={variant}>
       <TableColGroup />
       <tbody role={'rfdg-body'}>
-        {dataSet.map((item, ri) => {
-          const trProps = editable
+        {dataSet.map((item, i) => {
+          const ri = startIdx + i;
+          const trProps: Record<string, any> = editable
             ? {
                 editable: true,
                 hover: hoverItemIndex === ri,
@@ -97,6 +102,8 @@ function TableBody({ scrollContainerRef }: Props) {
                 onMouseOut: () => setHoverItemIndex(undefined),
               };
 
+          trProps.odd = ri % 2 === 0;
+
           const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
           const className = getRowClassName?.(ri, item) ?? '';
 
@@ -106,7 +113,6 @@ function TableBody({ scrollContainerRef }: Props) {
               itemHeight={itemHeight}
               itemPadding={itemPadding}
               active={active}
-              odd={ri % 2 === 0}
               className={className + (active ? ' active' : '')}
               {...trProps}
             >
@@ -132,12 +138,16 @@ function TableBody({ scrollContainerRef }: Props) {
 
                 const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
 
+                const rowSpan = mergeColumns?.[columnIndex] ? item.meta?.[column.key.toString()]?.rowSpan : 1;
+                if (rowSpan === 0) return null;
+
                 return (
                   <td
                     key={columnIndex}
                     style={{
                       textAlign: column.align,
                     }}
+                    rowSpan={rowSpan > 1 ? rowSpan : undefined}
                     {...tdProps}
                   >
                     <TableBodyCell
@@ -184,21 +194,36 @@ function TableBody({ scrollContainerRef }: Props) {
   );
 }
 
-export const BodyTable = styled.table`
+export const BodyTable = styled.table<{ variant: AXDGProps<any>['variant'] }>`
   position: absolute;
   table-layout: fixed;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  background-color: var(--axfdg-body-bg);
-  color: var(--axfdg-body-color);
+  background-color: var(--axdg-body-bg);
+  color: var(--axdg-body-color);
 
   > tbody > tr {
     > td {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      border-bottom: 1px solid var(--axfdg-border-color-base);
+      border-bottom: 1px solid var(--axdg-border-color-base);
+      ${({ variant }) => {
+        if (variant === 'vertical-bordered') {
+          return css`
+            border-right: 1px solid var(--axdg-border-color-light, var(--axdg-border-color-base));
+          `;
+        }
+      }}
+
+      &[rowspan] {
+        background-color: var(--axdg-body-bg);
+      }
+
+      &:last-child {
+        border-right: none;
+      }
     }
   }
 `;
@@ -237,7 +262,7 @@ export const TableBodyTr = styled.tr<{
   ${({ hover }) => {
     if (hover) {
       return css`
-        background: var(--axfdg-body-hover-bg);
+        background: var(--axdg-body-hover-bg);
       `;
     }
   }}
@@ -245,11 +270,11 @@ export const TableBodyTr = styled.tr<{
   ${({ odd, hover }) => {
     if (odd && hover) {
       return css`
-        background: var(--axfdg-body-hover-odd-bg);
+        background: var(--axdg-body-hover-odd-bg);
       `;
     } else if (odd) {
       return css`
-        background: var(--axfdg-body-odd-bg);
+        background: var(--axdg-body-odd-bg);
       `;
     }
   }}
@@ -257,20 +282,20 @@ export const TableBodyTr = styled.tr<{
   ${({ active }) => {
     if (active) {
       return css`
-        background-color: var(--axfdg-body-active-bg) !important;
-        color: var(--axfdg-primary-color) !important;
+        background-color: var(--axdg-body-active-bg) !important;
+        color: var(--axdg-primary-color) !important;
       `;
     }
   }}
 `;
 
 export const NoDataTr = styled.tr`
-  border-color: var(--axfdg-scroll-track-bg) !important;
+  border-color: var(--axdg-scroll-track-bg) !important;
 
   td {
     text-align: center;
     padding: 20px 0;
-    //background: var(--axfdg-scroll-track-bg);
+    //background: var(--axdg-scroll-track-bg);
   }
 `;
 

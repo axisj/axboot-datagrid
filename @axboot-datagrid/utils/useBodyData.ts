@@ -1,21 +1,72 @@
 import { useAppStore } from '../store';
 import * as React from 'react';
-import { AXFDGColumn, AXFDGDataItemStatus, DIRC_MAP, MoveDirection } from '../types';
+import { AXDGColumn, AXDGDataItemStatus, DIRC_MAP, MoveDirection } from '../types';
+import { getCellValueByRowKey } from './getCellValue';
 
 export function useBodyData(startIdx: number, endNumber: number) {
   const columns = useAppStore(s => s.columns);
+  const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
   const data = useAppStore(s => s.data);
-  const dataSet = React.useMemo(() => data.slice(startIdx, endNumber), [data, startIdx, endNumber]);
   const setData = useAppStore(s => s.setData);
   const setEditItem = useAppStore(s => s.setEditItem);
   const selectedKeyMap = useAppStore(s => s.checkedIndexesMap);
   const setSelectedKeys = useAppStore(s => s.setCheckedIndexes);
   const onChangeData = useAppStore(s => s.onChangeData);
 
+  const dataSet = React.useMemo(() => {
+    const items = data.slice(startIdx, endNumber);
+
+    if (cellMergeOptions?.columnsMap) {
+      const { columnsMap } = cellMergeOptions;
+      const tColumns = Object.keys(columnsMap)
+        .map(k => columns[Number(k)])
+        .reduce((acc, cur) => {
+          const key = cur.key.toString();
+          acc[key] = cur;
+          return acc;
+        }, {} as Record<string, AXDGColumn<any>>);
+      const processMap: Record<string, number> = {};
+
+      for (let i = 0; i < items.length; i++) {
+        const prevItem = items[i - 1];
+        const item = items[i];
+        item.meta = {};
+
+        for (const cKey of Object.keys(tColumns)) {
+          const column = tColumns[cKey];
+          const keyString = column.key.toString();
+          const prevValue = prevItem ? getCellValueByRowKey(column.key, prevItem.values) : undefined;
+          const value = getCellValueByRowKey(column.key, item.values);
+
+          if (prevValue !== value) {
+            processMap[keyString] = i;
+
+            if (!item.meta[cKey]) {
+              item.meta[cKey] = {
+                rowSpan: 1,
+              };
+            }
+          } else {
+            item.meta[cKey] = {
+              rowSpan: 0,
+            };
+            const ii = processMap[keyString];
+            const pMeta = items[ii].meta?.[cKey];
+            if (pMeta && pMeta.rowSpan !== undefined) {
+              pMeta.rowSpan += 1;
+            }
+          }
+        }
+      }
+    }
+
+    return items;
+  }, [cellMergeOptions, columns, data, endNumber, startIdx]);
+
   const setItemValue = React.useCallback(
-    async (ri: number, ci: number, column: AXFDGColumn<any>, newValue: any) => {
-      if (data[ri].status !== AXFDGDataItemStatus.new) {
-        data[ri].status = AXFDGDataItemStatus.edit;
+    async (ri: number, ci: number, column: AXDGColumn<any>, newValue: any) => {
+      if (data[ri].status !== AXDGDataItemStatus.new) {
+        data[ri].status = AXDGDataItemStatus.edit;
       }
       let _values = data[ri].values;
       const columnKey = column.key;

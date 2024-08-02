@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid, AXFDGColumn } from '../@axframe-datagrid';
+import { AXDataGrid, AXDGColumn } from '../@axboot-datagrid';
 import { useContainerSize } from '../hooks/useContainerSize';
 import ExampleContainer from '../components/ExampleContainer';
 
@@ -14,10 +14,10 @@ interface IListItem {
   createAt?: string;
 }
 
-const list = Array.from(Array(10)).map((v, i) => ({
+const list = Array.from(Array(50)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
-    class: `class_${Math.floor(i / 3)}`,
+    class: `class_${Math.floor(i / 5)}`,
     title: `title_${i}`,
     writer: `writer_${i}`,
     createAt: `2022-09-08`,
@@ -25,7 +25,7 @@ const list = Array.from(Array(10)).map((v, i) => ({
 }));
 
 function BasicExample(props: Props) {
-  const [columns, setColumns] = React.useState<AXFDGColumn<IListItem>[]>([
+  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
       key: 'id',
       label: 'No',
@@ -35,6 +35,7 @@ function BasicExample(props: Props) {
       key: 'class',
       label: 'class',
       width: 100,
+      align: 'center',
     },
     {
       key: 'title',
@@ -60,16 +61,19 @@ function BasicExample(props: Props) {
       key: 'createAt',
       label: 'Date-A',
       width: 100,
+      align: 'center',
     },
     {
       key: 'createAt',
       label: 'Date-B',
       width: 100,
+      align: 'center',
     },
     {
       key: 'createAt',
       label: 'Date-C',
       width: 100,
+      align: 'center',
     },
     {
       key: 'createAt',
@@ -88,7 +92,7 @@ function BasicExample(props: Props) {
 
   return (
     <Container ref={containerRef}>
-      <AXFDataGrid<IListItem>
+      <AXDataGrid<IListItem>
         width={containerWidth}
         height={containerHeight}
         data={list}
@@ -99,10 +103,14 @@ function BasicExample(props: Props) {
         }}
         cellMergeOptions={{
           columnsMap: {
-            3: { wordWrap: true },
+            1: { wordWrap: true },
+            4: { wordWrap: true },
+            5: { wordWrap: true },
+            6: { wordWrap: true },
           },
         }}
         onClick={item => console.log(item)}
+        variant={'vertical-bordered'}
       />
     </Container>
   );

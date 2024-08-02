@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXFDataGrid } from '../@axframe-datagrid';
+import { AXDataGrid } from '../@axboot-datagrid';
 import { useContainerSize } from '../hooks/useContainerSize';
 import ExampleContainer from '../components/ExampleContainer';
 
@@ -28,7 +28,7 @@ function ColumnsGroupExample(props: Props) {
 
   return (
     <Container ref={containerRef}>
-      <AXFDataGrid<IListItem>
+      <AXDataGrid<IListItem>
         width={containerWidth}
         height={containerHeight}
         data={list}

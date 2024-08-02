@@ -34,6 +34,7 @@ export function AppStoreProvider({ children }) {
       loading: false,
       editTrigger: 'dblclick',
       cellMergeOptions: undefined,
+      variant: 'default',
       setInitialized: initialized => set({ initialized }),
       setScrollTop: scrollTop => set({ scrollTop }),
       setScrollLeft: scrollLeft => set({ scrollLeft }),
@@ -227,6 +228,7 @@ export function AppStoreProvider({ children }) {
       setRowClassName: getRowClassName => set({ getRowClassName }),
       setEditTrigger: editTrigger => set({ editTrigger }),
       setCellMergeOptions: cellMergeOptions => set({ cellMergeOptions }),
+      setVariant: variant => set({ variant }),
     }));
   }
   return <StoreContext.Provider value={storeRef.current}>{children}</StoreContext.Provider>;

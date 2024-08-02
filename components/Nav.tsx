@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { Tabs } from 'antd';
+import { Button, Tabs } from 'antd';
 import { useRouter } from 'next/router';
 import pkg from '../package.json';
-import { GithubFilled } from '@ant-design/icons';
+import { GithubFilled, LinkOutlined } from '@ant-design/icons';
 
 interface Props {}
 
@@ -13,14 +13,22 @@ function Nav(props: Props) {
   return (
     <Container>
       <Header>
-        <h1>@axframe/datagrid</h1>
+        <h1>@axboot/datagrid</h1>
         <Version>{pkg.version}</Version>
 
         <GithubFilled
           rev={0}
           style={{ fontSize: 20 }}
-          onClick={() => window.open('https://github.com/axisj/axframe-datagrid')}
+          onClick={() => window.open('https://github.com/axisj/axboot-datagrid')}
         />
+
+        <Button
+          type={'link'}
+          onClick={() => window.open('https://github.com/axisj/axboot-datagrid/tree/master/examples')}
+          icon={<LinkOutlined rev={undefined} />}
+        >
+          Examples
+        </Button>
       </Header>
       <Tabs
         animated={false}
@@ -36,8 +44,8 @@ function Nav(props: Props) {
           { label: `Editor`, key: '/editor' },
           { label: `VirtualScroll`, key: '/virtualScroll' },
           { label: `GetRowClassName`, key: '/getRowClassName' },
-          { label: `Props Change`, key: '/propsChange' },
           { label: `Cell Merge`, key: '/cellMerge' },
+          { label: `Props Change`, key: '/propsChange' },
         ]}
         onTabClick={async activeKey => {
           await router.push(activeKey);
