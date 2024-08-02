@@ -103,10 +103,10 @@ function BasicExample(props: Props) {
         }}
         cellMergeOptions={{
           columnsMap: {
-            1: { wordWrap: true },
-            4: { wordWrap: true },
-            5: { wordWrap: true },
-            6: { wordWrap: true },
+            1: { mergeBy: 'class' },
+            4: { mergeBy: 'class' },
+            5: { mergeBy: 'class' },
+            6: { mergeBy: 'class' },
           },
         }}
         onClick={item => console.log(item)}

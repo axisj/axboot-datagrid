@@ -43,9 +43,11 @@ export interface AXDGColumnGroup {
   headerAlign?: AlignDirection;
 }
 
-export interface AXDGCellMergeColumn {
+export interface AXDGCellMergeColumn<T> {
   wordWrap?: boolean;
+  mergeBy: string | string[];
 }
+// TODO 지원예정 : mergeBy: string | string[] | ((item: AXDGDataItem<T>) => string);
 
 export enum AXDGDataItemStatus {
   new,
@@ -142,7 +144,7 @@ export interface AXDGProps<T> {
 
   getRowClassName?: (ri: number, item: AXDGDataItem<T>) => string | undefined;
   cellMergeOptions?: {
-    columnsMap: Record<number, AXDGCellMergeColumn>;
+    columnsMap: Record<number, AXDGCellMergeColumn<T>>;
   };
   variant?: 'default' | 'vertical-bordered';
 }

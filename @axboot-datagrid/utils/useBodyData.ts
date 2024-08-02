@@ -3,6 +3,11 @@ import * as React from 'react';
 import { AXDGColumn, AXDGDataItemStatus, DIRC_MAP, MoveDirection } from '../types';
 import { getCellValueByRowKey } from './getCellValue';
 
+interface CellMergeColumn<T> {
+  mergeBy: string | string[];
+  column: AXDGColumn<T>;
+}
+
 export function useBodyData(startIdx: number, endNumber: number) {
   const columns = useAppStore(s => s.columns);
   const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
@@ -19,12 +24,18 @@ export function useBodyData(startIdx: number, endNumber: number) {
     if (cellMergeOptions?.columnsMap) {
       const { columnsMap } = cellMergeOptions;
       const tColumns = Object.keys(columnsMap)
-        .map(k => columns[Number(k)])
+        .map(k => {
+          return {
+            mergeBy: columnsMap[Number(k)].mergeBy,
+            column: columns[Number(k)],
+          };
+        })
         .reduce((acc, cur) => {
-          const key = cur.key.toString();
-          acc[key] = cur;
+          const key = cur.column.key.toString();
+          if (acc[key] === undefined) acc[key] = cur;
           return acc;
-        }, {} as Record<string, AXDGColumn<any>>);
+        }, {} as Record<string, CellMergeColumn<any>>);
+
       const processMap: Record<string, number> = {};
 
       for (let i = 0; i < items.length; i++) {
@@ -33,10 +44,11 @@ export function useBodyData(startIdx: number, endNumber: number) {
         item.meta = {};
 
         for (const cKey of Object.keys(tColumns)) {
-          const column = tColumns[cKey];
-          const keyString = column.key.toString();
-          const prevValue = prevItem ? getCellValueByRowKey(column.key, prevItem.values) : undefined;
-          const value = getCellValueByRowKey(column.key, item.values);
+          const cellMergeRule = tColumns[cKey];
+          const keyString = cellMergeRule.column.key.toString();
+          const mergeByKey = cellMergeRule.mergeBy;
+          const prevValue = prevItem ? getCellValueByRowKey(mergeByKey, prevItem.values) : undefined;
+          const value = getCellValueByRowKey(mergeByKey, item.values);
 
           if (prevValue !== value) {
             processMap[keyString] = i;
