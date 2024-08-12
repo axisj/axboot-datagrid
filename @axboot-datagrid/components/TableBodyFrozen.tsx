@@ -24,8 +24,8 @@ function TableBodyFrozen(props: Props) {
   const selectedAll = useAppStore(s => s.checkedAll);
   const hasRowChecked = useAppStore(s => !!s.rowChecked);
   const showLineNumber = useAppStore(s => s.showLineNumber);
-  const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
-  const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
+  const hoverItemIndexes = useAppStore(s => s.hoverItemIndexes);
+  const setHoverItemIndexes = useAppStore(s => s.setHoverItemIndexes);
   const handleClick = useAppStore(s => s.handleClick);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
   const rowKey = useAppStore(s => s.rowKey);
@@ -41,6 +41,7 @@ function TableBodyFrozen(props: Props) {
 
   const startIdx = Math.floor(scrollTop / trHeight);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
+  const mergeColumns = cellMergeOptions?.columnsMap;
 
   const { dataSet, setItemValue, handleMoveEditFocus, handleChangeChecked } = useBodyData(startIdx, endNumber);
 
@@ -50,23 +51,17 @@ function TableBodyFrozen(props: Props) {
       <tbody role={'rfdg-body-frozen'}>
         {dataSet.map((item, i) => {
           const ri = startIdx + i;
-          const trProps: Record<string, any> = editable
-            ? {
-                editable: true,
-                hover: hoverItemIndex === ri,
-                onMouseOver: () => setHoverItemIndex(ri),
-                onMouseOut: () => setHoverItemIndex(undefined),
-              }
-            : {
-                hover: hoverItemIndex === ri,
-                onMouseOver: () => setHoverItemIndex(ri),
-                onMouseOut: () => setHoverItemIndex(undefined),
-              };
-          trProps.odd = ri % 2 === 0;
+          const trProps: Record<string, any> = {
+            editable,
+            hover: hoverItemIndexes?.includes(ri),
+          };
+
+          if (!mergeColumns) {
+            trProps.odd = ri % 2 === 0;
+          }
 
           const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
           const className = getRowClassName?.(ri, item) ?? '';
-          const mergeColumns = cellMergeOptions?.columnsMap;
 
           return (
             <TableBodyTr
@@ -88,6 +83,9 @@ function TableBodyFrozen(props: Props) {
               )}
 
               {columns.slice(0, frozenColumnIndex).map((column, columnIndex) => {
+                const rowSpan = mergeColumns?.[columnIndex] ? item.meta?.[column.key.toString()]?.rowSpan : 1;
+                if (rowSpan === 0) return null;
+
                 const tdProps: Record<string, any> = {};
                 if (editable) {
                   if (editTrigger === 'dblclick') {
@@ -102,12 +100,13 @@ function TableBodyFrozen(props: Props) {
                 } else {
                   tdProps.onClick = () => handleClick(ri, columnIndex);
                 }
-                tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
 
-                const rowSpan = mergeColumns?.[columnIndex] ? item.meta?.[column.key.toString()]?.rowSpan : 1;
-                if (rowSpan === 0) return null;
-
-                tdProps.className = tdProps.className + (mergeColumns?.[columnIndex] ? ' merged' : '');
+                tdProps.onMouseOver = () =>
+                  setHoverItemIndexes(rowSpan > 1 ? Array.from({ length: rowSpan }, (_, i) => ri + i) : [ri]);
+                tdProps.onMouseOut = () => setHoverItemIndexes(undefined);
+                tdProps.className =
+                  (column.getClassName ? column.getClassName(item) : column.className) +
+                  (mergeColumns?.[columnIndex] ? ' merged' : '');
 
                 return (
                   <td

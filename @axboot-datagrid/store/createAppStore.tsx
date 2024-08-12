@@ -185,7 +185,7 @@ export function AppStoreProvider({ children }) {
       setPage: page => {
         set({ page });
       },
-      setHoverItemIndex: hoverItemIndex => set({ hoverItemIndex }),
+      setHoverItemIndexes: hoverItemIndexes => set({ hoverItemIndexes }),
       handleClick: (index, columnIndex) => {
         get().onClick?.({
           index,

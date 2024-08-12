@@ -176,7 +176,7 @@ export interface AppModel<T> extends AXDGProps<T> {
   checkedAll: CheckedAll;
   sortParams?: Record<string, AXDGSortParam>;
   displayPaginationLength?: number;
-  hoverItemIndex?: number;
+  hoverItemIndexes?: number[];
   loading: boolean;
   editItemIndex?: number;
   editItemColIndex?: number;
@@ -197,7 +197,7 @@ export interface AppActions<T> {
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
   setPage: (page: AXDGPage) => void;
-  setHoverItemIndex: (hoverItemIndex?: number) => void;
+  setHoverItemIndexes: (hoverItemIndexes?: number[]) => void;
   handleClick: (index: number, columnIndex: number) => void;
   setWidth: (width: number) => void;
   setHeight: (height: number) => void;

@@ -22,9 +22,9 @@ function TableBody({ scrollContainerRef }: Props) {
   const data = useAppStore(s => s.data);
   const columns = useAppStore(s => s.columns);
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
-  const hoverItemIndex = useAppStore(s => s.hoverItemIndex);
+  const hoverItemIndexes = useAppStore(s => s.hoverItemIndexes);
+  const setHoverItemIndexes = useAppStore(s => s.setHoverItemIndexes);
   const handleClick = useAppStore(s => s.handleClick);
-  const setHoverItemIndex = useAppStore(s => s.setHoverItemIndex);
   const rowKey = useAppStore(s => s.rowKey);
   const selectedRowKey = useAppStore(s => s.selectedRowKey);
   const editable = useAppStore(s => s.editable);
@@ -89,20 +89,14 @@ function TableBody({ scrollContainerRef }: Props) {
       <tbody role={'rfdg-body'}>
         {dataSet.map((item, i) => {
           const ri = startIdx + i;
-          const trProps: Record<string, any> = editable
-            ? {
-                editable: true,
-                hover: hoverItemIndex === ri,
-                onMouseOver: () => setHoverItemIndex(ri),
-                onMouseOut: () => setHoverItemIndex(undefined),
-              }
-            : {
-                hover: hoverItemIndex === ri,
-                onMouseOver: () => setHoverItemIndex(ri),
-                onMouseOut: () => setHoverItemIndex(undefined),
-              };
+          const trProps: Record<string, any> = {
+            editable,
+            hover: hoverItemIndexes?.includes(ri),
+          };
 
-          trProps.odd = ri % 2 === 0;
+          if (!mergeColumns) {
+            trProps.odd = ri % 2 === 0;
+          }
 
           const active = rowKey ? getCellValueByRowKey(rowKey, item.values) === selectedRowKey : false;
           const className = getRowClassName?.(ri, item) ?? '';
@@ -120,6 +114,11 @@ function TableBody({ scrollContainerRef }: Props) {
               {Array.from({ length: endCIdx - startCIdx + 1 }, (_, cidx) => {
                 const columnIndex = startCIdx + cidx;
                 const column = columns[columnIndex];
+
+                const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
+                const rowSpan = mergeColumns?.[columnIndex] ? item.meta?.[column.key.toString()]?.rowSpan : 1;
+                if (rowSpan === 0) return null;
+
                 const tdProps: Record<string, any> = {};
                 if (editable) {
                   if (editTrigger === 'dblclick') {
@@ -134,14 +133,13 @@ function TableBody({ scrollContainerRef }: Props) {
                 } else {
                   tdProps.onClick = () => handleClick(ri, columnIndex);
                 }
-                tdProps.className = column.getClassName ? column.getClassName(item) : column.className;
 
-                const tdEditable = editable && editItemIndex === ri && editItemColIndex === columnIndex;
-
-                const rowSpan = mergeColumns?.[columnIndex] ? item.meta?.[column.key.toString()]?.rowSpan : 1;
-                if (rowSpan === 0) return null;
-
-                tdProps.className = tdProps.className + (mergeColumns?.[columnIndex] ? ' merged' : '');
+                tdProps.onMouseOver = () =>
+                  setHoverItemIndexes(rowSpan > 1 ? Array.from({ length: rowSpan }, (_, i) => ri + i) : [ri]);
+                tdProps.onMouseOut = () => setHoverItemIndexes(undefined);
+                tdProps.className =
+                  (column.getClassName ? column.getClassName(item) : column.className) +
+                  (mergeColumns?.[columnIndex] ? ' merged' : '');
 
                 return (
                   <td
@@ -218,14 +216,6 @@ export const BodyTable = styled.table<{ variant: AXDGProps<any>['variant'] }>`
           `;
         }
       }}
-
-      &.merged {
-        background-color: var(--axdg-body-bg);
-
-        &:hover {
-          background: var(--axdg-body-hover-bg);
-        }
-      }
 
       &:last-child {
         border-right: none;
