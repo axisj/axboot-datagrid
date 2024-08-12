@@ -37,7 +37,7 @@ function TableBody({ scrollContainerRef }: Props) {
   const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
   const variant = useAppStore(s => s.variant);
 
-  const startIdx = Math.floor(scrollTop / trHeight);
+  const startIdx = Math.max(Math.floor(scrollTop / trHeight), 0);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
   const mergeColumns = cellMergeOptions?.columnsMap;
 
@@ -49,8 +49,8 @@ function TableBody({ scrollContainerRef }: Props) {
         startCIdx: 0,
         endCIdx: columns.length - 1,
       };
-    const start = scrollContainerRef.current.scrollLeft,
-      end = scrollContainerRef.current.scrollLeft + width - (frozenColumnsWidth ?? 0);
+    const start = Math.max(scrollContainerRef.current.scrollLeft, 0),
+      end = start + width - (frozenColumnsWidth ?? 0);
 
     let startCIdx, endCIdx;
     // columns.
