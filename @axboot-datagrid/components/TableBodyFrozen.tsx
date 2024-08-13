@@ -105,7 +105,7 @@ function TableBodyFrozen(props: Props) {
                   setHoverItemIndexes(rowSpan > 1 ? Array.from({ length: rowSpan }, (_, i) => ri + i) : [ri]);
                 tdProps.onMouseOut = () => setHoverItemIndexes(undefined);
                 tdProps.className =
-                  (column.getClassName ? column.getClassName(item) : column.className) +
+                  (column.getClassName ? column.getClassName(item) : column.className ?? '') +
                   (mergeColumns?.[columnIndex] ? ' merged' : '');
 
                 return (
@@ -114,6 +114,7 @@ function TableBodyFrozen(props: Props) {
                     style={{
                       textAlign: column.align,
                     }}
+                    rowSpan={rowSpan > 1 ? rowSpan : undefined}
                     {...tdProps}
                   >
                     <TableBodyCell

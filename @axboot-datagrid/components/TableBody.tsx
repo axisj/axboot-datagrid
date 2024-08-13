@@ -138,7 +138,7 @@ function TableBody({ scrollContainerRef }: Props) {
                   setHoverItemIndexes(rowSpan > 1 ? Array.from({ length: rowSpan }, (_, i) => ri + i) : [ri]);
                 tdProps.onMouseOut = () => setHoverItemIndexes(undefined);
                 tdProps.className =
-                  (column.getClassName ? column.getClassName(item) : column.className) +
+                  (column.getClassName ? column.getClassName(item) : column.className ?? '') +
                   (mergeColumns?.[columnIndex] ? ' merged' : '');
 
                 return (
@@ -218,7 +218,7 @@ export const BodyTable = styled.table<{ variant: AXDGProps<any>['variant'] }>`
       }}
 
       &:last-child {
-        border-right: none;
+        //border-right: none;
       }
     }
   }

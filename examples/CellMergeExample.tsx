@@ -27,15 +27,15 @@ const list = Array.from(Array(50)).map((v, i) => ({
 function BasicExample(props: Props) {
   const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
-      key: 'id',
-      label: 'No',
-      width: 100,
-    },
-    {
       key: 'class',
       label: 'class',
       width: 100,
       align: 'center',
+    },
+    {
+      key: 'id',
+      label: 'No',
+      width: 100,
     },
     {
       key: 'title',
@@ -93,6 +93,8 @@ function BasicExample(props: Props) {
   return (
     <Container ref={containerRef}>
       <AXDataGrid<IListItem>
+        showLineNumber
+        frozenColumnIndex={1}
         width={containerWidth}
         height={containerHeight}
         data={list}
@@ -103,7 +105,7 @@ function BasicExample(props: Props) {
         }}
         cellMergeOptions={{
           columnsMap: {
-            1: { mergeBy: 'class' },
+            0: { mergeBy: 'class' },
             4: { mergeBy: 'class' },
             5: { mergeBy: 'class' },
             6: { mergeBy: 'class' },
