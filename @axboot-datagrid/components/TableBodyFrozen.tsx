@@ -39,7 +39,7 @@ function TableBodyFrozen(props: Props) {
   const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
   const variant = useAppStore(s => s.variant);
 
-  const startIdx = Math.floor(scrollTop / trHeight);
+  const startIdx = Math.max(Math.floor(scrollTop / trHeight), 0);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
   const mergeColumns = cellMergeOptions?.columnsMap;
 
