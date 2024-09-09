@@ -13,8 +13,10 @@ function TableFooter(props: Props) {
 
   return (
     <Container>
-      <StatusContainer ref={statusContainerRef}>{page && `${toMoney(page?.totalElements ?? 0)} Items`}</StatusContainer>
-      <PagingContainer ref={pagingContainerRef}>
+      <StatusContainer ref={statusContainerRef} role={'status'}>
+        {page && `${toMoney(page?.totalElements ?? 0)} Items`}
+      </StatusContainer>
+      <PagingContainer ref={pagingContainerRef} role={'paging'}>
         <Pagination />
       </PagingContainer>
     </Container>

@@ -34,7 +34,9 @@ function Pagination(props: Props) {
       <Container>
         {pageStartNumber > 1 && (
           <>
-            <No onClick={() => onClickPageNo(1)}>1</No>
+            <No role={'page-number'} onClick={() => onClickPageNo(1)}>
+              1
+            </No>
             {pageStartNumber > 2 && '...'}
           </>
         )}
@@ -42,7 +44,7 @@ function Pagination(props: Props) {
           if (i <= (page.totalPages ?? 1)) {
             const num = (pageNumber = pageStartNumber + i);
             return (
-              <No key={num} active={page.currentPage === num} onClick={() => onClickPageNo(num)}>
+              <No role={'page-number'} key={num} active={page.currentPage === num} onClick={() => onClickPageNo(num)}>
                 {toMoney(num)}
               </No>
             );
@@ -51,7 +53,9 @@ function Pagination(props: Props) {
         {page.totalPages && pageNumber < page.totalPages && (
           <>
             {pageNumber < page.totalPages - 1 && '...'}
-            <No onClick={() => onClickPageNo(page.totalPages ?? 0)}>{toMoney(page.totalPages)}</No>
+            <No role={'page-number'} onClick={() => onClickPageNo(page.totalPages ?? 0)}>
+              {toMoney(page.totalPages)}
+            </No>
           </>
         )}
       </Container>
@@ -88,7 +92,7 @@ const No = styled.span<{ active?: boolean }>`
         color: var(--axdg-primary-color);
         border: 1px solid var(--axdg-primary-color);
         background-color: var(--axdg-body-bg);
-        border-radius: 2px;
+        border-radius: var(--axdg-page-number-active-border-radius);
         margin: 0 3px;
       `;
     }

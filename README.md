@@ -59,6 +59,8 @@ Add the code below to your project.
     --axdg-loading-bg: rgba(163, 163, 163, 0.1);
     --axdg-loading-color: rgba(0, 0, 0, 0.1);
     --axdg-loading-second-color: #767676;
+
+    --axdg-page-number-active-border-radius: 4px;
 }
 
 ```
