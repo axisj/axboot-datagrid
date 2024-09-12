@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useMemo } from 'react';
 import * as React from 'react';
@@ -19,12 +20,24 @@ export function TableSummary<T>({ container }: Props) {
   const data = useAppStore(s => s.data);
 
   const summaryColumns = useMemo(() => {
+    let ignoreColumnCnt = 0;
     return columns.slice(frozenColumnIndex).map((column, index) => {
-      const ci = frozenColumnIndex + index;
+      const columnIndex = frozenColumnIndex + index;
+      const summaryColumn = summary?.columns?.find(sc => sc.columnIndex === columnIndex);
+
+      if (summaryColumn && (summaryColumn.colSpan ?? 1) > 1) {
+        ignoreColumnCnt = (summaryColumn.colSpan ?? 1) - 1;
+      } else {
+        if (ignoreColumnCnt > 0) {
+          ignoreColumnCnt--;
+          return {};
+        }
+      }
+
       return {
         column,
-        columnIndex: ci,
-        summaryColumn: summary?.columns?.find(sc => sc.columnIndex === ci),
+        columnIndex,
+        summaryColumn,
       };
     });
   }, [columns, frozenColumnIndex, summary]);
@@ -35,9 +48,16 @@ export function TableSummary<T>({ container }: Props) {
       <tbody role={'rfdg-summary'}>
         <tr>
           {summaryColumns.map(({ column, summaryColumn, columnIndex }, index) => {
+            if (!column) return null;
             if (!summaryColumn) return <td key={index}></td>;
             return (
-              <td key={index} colSpan={summaryColumn.colSpan ?? 1}>
+              <td
+                key={index}
+                style={{
+                  textAlign: summaryColumn.align,
+                }}
+                colSpan={summaryColumn.colSpan ?? 1}
+              >
                 {summaryColumn.itemRender?.({
                   column,
                   columnIndex,
@@ -61,8 +81,19 @@ export const SummaryTable = styled.table<{ summaryHeight: number; variant: AXDGP
   color: var(--axdg-header-color);
   font-weight: var(--axdg-header-font-weight);
 
-  tbody {
-    height: ${p => p.summaryHeight}px;
+  > tbody > tr > td {
+    white-space: nowrap;
+    text-overflow: ellipsis;
     overflow: hidden;
+
+    padding: 0 6.5px;
+
+    ${({ variant }) => {
+      if (variant === 'vertical-bordered') {
+        return css`
+          border-right: 1px solid var(--axdg-border-color-light, var(--axdg-border-color-base));
+        `;
+      }
+    }}
   }
 `;

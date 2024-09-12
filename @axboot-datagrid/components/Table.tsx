@@ -392,7 +392,7 @@ function Table<T>(props: Props<T>) {
       </HeaderContainer>
 
       {summary && summary.position === 'top' && (
-        <SummaryContainer style={{ height: summaryHeight }} role={'rfdg-summary-container'}>
+        <SummaryContainer position={'top'} style={{ height: summaryHeight }} role={'rfdg-summary-container'}>
           {(frozenColumnsWidth ?? 0) > 0 && (
             <FrozenSummary
               style={{
@@ -441,7 +441,7 @@ function Table<T>(props: Props<T>) {
       </BodyContainer>
 
       {summary && summary.position === 'bottom' && (
-        <SummaryContainer style={{ height: summaryHeight }} role={'rfdg-summary-container'}>
+        <SummaryContainer position={'bottom'} style={{ height: summaryHeight }} role={'rfdg-summary-container'}>
           {(frozenColumnsWidth ?? 0) > 0 && (
             <FrozenSummary
               style={{
@@ -580,12 +580,28 @@ const FooterContainer = styled.div`
   border-bottom-right-radius: var(--axdg-border-radius);
 `;
 
-const SummaryContainer = styled.div`
+const SummaryContainer = styled.div<{ position: string }>`
   background: var(--axdg-summary-bg);
   position: relative;
   min-width: 100%;
   overflow: hidden;
-  border-top: 1px solid var(--axdg-border-color-base);
+
+  ${({ position }) => {
+    if (position === 'top') {
+      return css`
+        border-bottom: 1px solid var(--axdg-border-color-base);
+      `;
+    } else {
+      return css`
+        border-top: 1px solid var(--axdg-border-color-base);
+      `;
+    }
+  }}
+
+  &:last-child {
+    border-bottom-left-radius: var(--axdg-border-radius);
+    border-bottom-right-radius: var(--axdg-border-radius);
+  }
 `;
 
 const Summary = styled.div`
@@ -593,7 +609,7 @@ const Summary = styled.div`
 `;
 const FrozenSummary = styled.div`
   position: absolute;
-  background-color: var(--axdg-header-bg);
+  background: var(--axdg-summary-bg);
   border-right: 1px solid var(--axdg-border-color-base);
   box-shadow: 0 0 2px var(--axdg-border-color-base);
   z-index: 3;

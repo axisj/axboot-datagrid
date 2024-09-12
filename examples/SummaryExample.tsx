@@ -1,6 +1,8 @@
+import { Divider, Radio } from 'antd';
+import { useEffect, useState } from 'react';
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXDataGrid, AXDGColumn } from '../@axboot-datagrid';
+import { AXDataGrid, AXDGColumn, AXDGProps } from '../@axboot-datagrid';
 import { useContainerSize } from '../hooks/useContainerSize';
 import ExampleContainer from '../components/ExampleContainer';
 
@@ -24,7 +26,63 @@ const list = Array.from(Array(50)).map((v, i) => ({
   },
 }));
 
+const summary1: AXDGProps<any>['summary'] = {
+  position: 'top',
+  columns: [
+    {
+      columnIndex: 0,
+      align: 'center',
+      itemRender: ({ data }) => {
+        return <>합계</>;
+      },
+    },
+    {
+      columnIndex: 2,
+      itemRender: ({ data }) => {
+        return <>Summary</>;
+      },
+    },
+    {
+      columnIndex: 3,
+      colSpan: 2,
+      itemRender: ({ data }) => {
+        return <>COUNT : {data.length}</>;
+      },
+    },
+  ],
+};
+
+const summary2: AXDGProps<any>['summary'] = {
+  position: 'bottom',
+  columns: [
+    {
+      columnIndex: 0,
+      align: 'center',
+      itemRender: ({ data }) => {
+        return <>합계</>;
+      },
+    },
+    {
+      columnIndex: 2,
+      colSpan: 2,
+      align: 'right',
+      itemRender: ({ data }) => {
+        return <>Summary</>;
+      },
+    },
+    {
+      columnIndex: 5,
+      colSpan: 2,
+      itemRender: ({ data }) => {
+        return <>Summary</>;
+      },
+    },
+  ],
+};
+
 function SummaryExample(props: Props) {
+  const [summaryKey, setSummaryKey] = useState('summary1');
+  const [summary, setSummary] = useState<AXDGProps<any>['summary']>();
   const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
       key: 'class',
@@ -90,50 +148,56 @@ function SummaryExample(props: Props) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
 
+  useEffect(() => {
+    setSummary(summaryKey === 'summary1' ? summary1 : summary2);
+  }, [summaryKey]);
+
   return (
-    <Container ref={containerRef}>
-      <AXDataGrid<IListItem>
-        showLineNumber
-        frozenColumnIndex={0}
-        width={containerWidth}
-        height={containerHeight}
-        data={list}
-        columns={columns}
-        onChangeColumns={(columnIndex, width, columns) => {
-          console.log('onChangeColumnWidths', columnIndex, width, columns);
-          setColumns(columns);
+    <>
+      <Radio.Group
+        style={{ marginBottom: 10 }}
+        options={[
+          { label: 'TOP', value: 'summary1' },
+          { label: 'Bottom', value: 'summary2' },
+        ]}
+        onChange={e => {
+          setSummaryKey(e.target.value);
         }}
-        cellMergeOptions={{
-          columnsMap: {
-            0: { mergeBy: 'class' },
-            4: { mergeBy: 'class' },
-            5: { mergeBy: 'class' },
-            6: { mergeBy: 'class' },
-          },
-        }}
-        onClick={item => console.log(item)}
-        variant={'vertical-bordered'}
-        summary={{
-          position: 'top',
-          columns: [
-            {
-              columnIndex: 2,
-              colSpan: 2,
-              itemRender: ({ data }) => {
-                return <div>Summary</div>;
-              },
-            },
-            {
-              columnIndex: 5,
-              colSpan: 2,
-              itemRender: ({ data }) => {
-                return <div>Summary</div>;
-              },
-            },
-          ],
-        }}
+        value={summaryKey}
       />
-    </Container>
+
+      <Container ref={containerRef}>
+        <AXDataGrid<IListItem>
+          showLineNumber
+          rowChecked={{
+            checkedIndexes: [],
+            onChange: (ids, selectedAll) => {
+              console.log('onChange rowSelection', ids, selectedAll);
+            },
+          }}
+          frozenColumnIndex={1}
+          width={containerWidth}
+          height={containerHeight}
+          data={list}
+          columns={columns}
+          onChangeColumns={(columnIndex, width, columns) => {
+            console.log('onChangeColumnWidths', columnIndex, width, columns);
+            setColumns(columns);
+          }}
+          cellMergeOptions={{
+            columnsMap: {
+              0: { mergeBy: 'class' },
+              4: { mergeBy: 'class' },
+              5: { mergeBy: 'class' },
+              6: { mergeBy: 'class' },
+            },
+          }}
+          onClick={item => console.log(item)}
+          variant={'vertical-bordered'}
+          summary={summary}
+        />
+      </Container>
+    </>
   );
 }
 
