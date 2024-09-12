@@ -1,15 +1,10 @@
-import * as React from 'react';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import TableBody from './TableBody';
+import * as React from 'react';
+import { Key, useCallback, useEffect, useRef } from 'react';
 import { useAppStore } from '../store';
-import TableHead from './TableHead';
-import TableHeadFrozen from './TableHeadFrozen';
-import TableBodyFrozen from './TableBodyFrozen';
-import TableFooter from './TableFooter';
-import Loading from './Loading';
 import {
   AppModelColumn,
-  AXDGColumn,
   AXDGColumnGroup,
   AXDGDataItem,
   AXDGPage,
@@ -19,13 +14,21 @@ import {
   AXDGSortParam,
 } from '../types';
 import { getFrozenColumnsWidth } from '../utils';
-import { css } from '@emotion/react';
+import Loading from './Loading';
+import TableBody from './TableBody';
+import TableBodyFrozen from './TableBodyFrozen';
+import TableFooter from './TableFooter';
+import TableHead from './TableHead';
+import TableHeadFrozen from './TableHeadFrozen';
+import { TableSummary } from './TableSummary';
+import { TableSummaryFrozen } from './TableSummaryFronzen';
 
 interface Props<T> {
   width?: number;
   height?: number;
   headerHeight?: number;
   footerHeight?: number;
+  summaryHeight?: number;
   itemHeight?: number;
   itemPadding?: number;
   frozenColumnIndex?: number;
@@ -52,8 +55,8 @@ interface Props<T> {
 
   msg?: AXDGProps<T>['msg'];
 
-  rowKey?: React.Key | React.Key[];
-  selectedRowKey?: React.Key | React.Key[];
+  rowKey?: Key | Key[];
+  selectedRowKey?: Key | Key[];
   editable?: boolean;
   editTrigger: AXDGProps<T>['editTrigger'];
   showLineNumber?: boolean;
@@ -61,6 +64,7 @@ interface Props<T> {
   getRowClassName?: AXDGProps<T>['getRowClassName'];
   cellMergeOptions?: AXDGProps<T>['cellMergeOptions'];
   variant?: AXDGProps<T>['variant'];
+  summary?: AXDGProps<T>['summary'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -74,6 +78,7 @@ function Table<T>(props: Props<T>) {
 
   const headerHeight = useAppStore(s => s.headerHeight);
   const footerHeight = useAppStore(s => s.footerHeight);
+  const summaryHeight = useAppStore(s => s.summaryHeight);
   const scrollLeft = useAppStore(s => s.scrollLeft);
   const scrollTop = useAppStore(s => s.scrollTop);
   const contentBodyHeight = useAppStore(s => s.contentBodyHeight);
@@ -88,6 +93,7 @@ function Table<T>(props: Props<T>) {
   const loading = useAppStore(s => s.loading);
   const spinning = useAppStore(s => s.spinning);
   const showLineNumber = useAppStore(s => s.showLineNumber);
+  const summary = useAppStore(s => s.summary);
 
   const setHeight = useAppStore(s => s.setHeight);
   const setContentBodyHeight = useAppStore(s => s.setContentBodyHeight);
@@ -98,6 +104,7 @@ function Table<T>(props: Props<T>) {
 
   const setHeaderHeight = useAppStore(s => s.setHeaderHeight);
   const setFooterHeight = useAppStore(s => s.setFooterHeight);
+  const setSummaryHeight = useAppStore(s => s.setSummaryHeight);
   const setItemHeight = useAppStore(s => s.setItemHeight);
   const setItemPadding = useAppStore(s => s.setItemPadding);
   const setFrozenColumnIndex = useAppStore(s => s.setFrozenColumnIndex);
@@ -126,12 +133,13 @@ function Table<T>(props: Props<T>) {
   const setRowClassName = useAppStore(s => s.setRowClassName);
   const setCellMergeOptions = useAppStore(s => s.setCellMergeOptions);
   const setVariant = useAppStore(s => s.setVariant);
+  const setSummary = useAppStore(s => s.setSummary);
 
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
-  const frozenScrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const frozenScrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const onScroll = React.useCallback(() => {
+  const onScroll = useCallback(() => {
     if (scrollContainerRef.current) {
       const { scrollTop, scrollLeft } = scrollContainerRef.current;
 
@@ -146,7 +154,7 @@ function Table<T>(props: Props<T>) {
     }
   }, [setScroll]);
 
-  const onWheel: (this: HTMLDivElement, ev: HTMLElementEventMap['wheel']) => any = React.useCallback(evt => {
+  const onWheel: (this: HTMLDivElement, ev: HTMLElementEventMap['wheel']) => any = useCallback(evt => {
     evt.preventDefault();
 
     if (scrollContainerRef.current) {
@@ -169,11 +177,16 @@ function Table<T>(props: Props<T>) {
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.height !== undefined) {
       const propsHeight = Math.max(props.height, 100);
       setHeight(propsHeight);
-      const contentBodyHeight = propsHeight - headerHeight - (page ? footerHeight : 0) - containerBorderWidth * 2;
+      const contentBodyHeight =
+        propsHeight -
+        headerHeight -
+        (page ? footerHeight : 0) -
+        (summary ? summaryHeight : 0) -
+        containerBorderWidth * 2;
       const displayItemCount = Math.ceil(contentBodyHeight / (itemHeight + itemPadding * 2));
 
       setContentBodyHeight(contentBodyHeight);
@@ -191,32 +204,37 @@ function Table<T>(props: Props<T>) {
     itemPadding,
     setContentBodyHeight,
     setDisplayItemCount,
+    summary,
+    summaryHeight,
   ]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.width !== undefined) {
       setWidth(Math.max(props.width, 100));
     }
   }, [setWidth, props.width]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.loading !== undefined) setLoading(props.loading);
   }, [setLoading, props.loading]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.spinning !== undefined) setSpinning(props.spinning);
   }, [setSpinning, props.spinning]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.headerHeight !== undefined) setHeaderHeight(Math.max(props.headerHeight, 22));
   }, [setHeaderHeight, props.headerHeight]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.footerHeight !== undefined) setFooterHeight(props.footerHeight);
   }, [setFooterHeight, props.footerHeight]);
-  React.useEffect(() => {
+  useEffect(() => {
+    if (props.summaryHeight !== undefined) setSummaryHeight(props.summaryHeight);
+  }, [setSummaryHeight, props.summaryHeight]);
+  useEffect(() => {
     if (props.itemHeight !== undefined) setItemHeight(props.itemHeight);
   }, [setItemHeight, props.itemHeight]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.itemPadding !== undefined) setItemPadding(props.itemPadding);
   }, [setItemPadding, props.itemPadding]);
-  React.useEffect(() => {
+  useEffect(() => {
     const frozenColumnsWidth = getFrozenColumnsWidth({
       showLineNumber,
       rowChecked,
@@ -237,19 +255,19 @@ function Table<T>(props: Props<T>) {
     setFrozenColumnsWidth,
     data.length,
   ]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.checkedIndexesMap !== undefined) setCheckedIndexesMap(props.checkedIndexesMap);
   }, [setCheckedIndexesMap, props.checkedIndexesMap]);
-  React.useEffect(() => {
+  useEffect(() => {
     setRowChecked(props.rowChecked);
   }, [setRowChecked, props.rowChecked]);
-  React.useEffect(() => {
+  useEffect(() => {
     setSort(props.sort);
   }, [setSort, props.sort]);
-  React.useEffect(() => {
+  useEffect(() => {
     setSortParams(props.sortParams);
   }, [setSortParams, props.sortParams]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.page !== undefined) {
       setPage({ ...props.page });
       setDisplayPaginationLength(props.page?.displayPaginationLength ?? 5);
@@ -266,61 +284,64 @@ function Table<T>(props: Props<T>) {
     props.page?.onChange,
     props.page?.displayPaginationLength,
   ]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.data !== undefined) setData(props.data);
   }, [setData, props.data]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.columns !== undefined) {
       setColumns(props.columns);
     }
   }, [setColumns, props.columns]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.columnsGroup !== undefined) setColumnsGroup(props.columnsGroup);
   }, [setColumnsGroup, props.columnsGroup]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.rowKey !== undefined) setRowKey(props.rowKey);
   }, [setRowKey, props.rowKey]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.selectedRowKey !== undefined) setFocusedRowKey(props.selectedRowKey);
   }, [setFocusedRowKey, props.selectedRowKey]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.editable !== undefined) setEditable(props.editable);
   }, [setEditable, props.editable]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.editTrigger !== undefined) setEditTrigger(props.editTrigger);
   }, [setEditTrigger, props.editTrigger]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setOnClick(props.onClick);
   }, [setOnClick, props.onClick]);
-  React.useEffect(() => {
+  useEffect(() => {
     setOnChangeColumns(props.onChangeColumns);
   }, [setOnChangeColumns, props.onChangeColumns]);
-  React.useEffect(() => {
+  useEffect(() => {
     setOnChangeData(props.onChangeData);
   }, [setOnChangeData, props.onChangeData]);
-  React.useEffect(() => {
+  useEffect(() => {
     setOnLoadMore(props.onLoadMore);
   }, [setOnLoadMore, props.onLoadMore]);
-  React.useEffect(() => {
+  useEffect(() => {
     setShowLineNumber(props.showLineNumber);
   }, [setShowLineNumber, props.showLineNumber]);
-  React.useEffect(() => {
+  useEffect(() => {
     setMsg(props.msg);
   }, [setMsg, props.msg]);
-  React.useEffect(() => {
+  useEffect(() => {
     setRowClassName(props.getRowClassName);
   }, [setRowClassName, props.getRowClassName]);
-  React.useEffect(() => {
+  useEffect(() => {
     setCellMergeOptions(props.cellMergeOptions);
   }, [setCellMergeOptions, props.cellMergeOptions]);
-  React.useEffect(() => {
+  useEffect(() => {
     setVariant(props.variant);
   }, [setVariant, props.variant]);
+  useEffect(() => {
+    setSummary(props.summary);
+  }, [setSummary, props.summary]);
 
   //setInitialized
-  React.useEffect(() => {
+  useEffect(() => {
     setInitialized(true);
 
     const scrollContainerRefCurrent = scrollContainerRef?.current;
@@ -370,6 +391,24 @@ function Table<T>(props: Props<T>) {
         </Header>
       </HeaderContainer>
 
+      {summary && summary.position === 'top' && (
+        <SummaryContainer position={'top'} style={{ height: summaryHeight }} role={'rfdg-summary-container'}>
+          {(frozenColumnsWidth ?? 0) > 0 && (
+            <FrozenSummary
+              style={{
+                width: frozenColumnsWidth,
+              }}
+              role={'rfdg-frozen-summary'}
+            >
+              <TableSummaryFrozen container={containerRef} />
+            </FrozenSummary>
+          )}
+          <Summary style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rfdg-summary'}>
+            <TableSummary container={containerRef} />
+          </Summary>
+        </SummaryContainer>
+      )}
+
       <BodyContainer style={{ height: contentBodyHeight }} isLast={!page}>
         {(frozenColumnsWidth ?? 0) > 0 && (
           <FrozenScrollContent
@@ -400,6 +439,24 @@ function Table<T>(props: Props<T>) {
 
         <Loading active={!!spinning} size={'small'} />
       </BodyContainer>
+
+      {summary && summary.position === 'bottom' && (
+        <SummaryContainer position={'bottom'} style={{ height: summaryHeight }} role={'rfdg-summary-container'}>
+          {(frozenColumnsWidth ?? 0) > 0 && (
+            <FrozenSummary
+              style={{
+                width: frozenColumnsWidth,
+              }}
+              role={'rfdg-frozen-summary'}
+            >
+              <TableSummaryFrozen container={containerRef} />
+            </FrozenSummary>
+          )}
+          <Summary style={{ marginLeft: -scrollLeft, paddingLeft: frozenColumnsWidth }} role={'rfdg-summary'}>
+            <TableSummary container={containerRef} />
+          </Summary>
+        </SummaryContainer>
+      )}
 
       {page && (
         <FooterContainer style={{ height: footerHeight }} role={'rfdg-footer-container'}>
@@ -521,6 +578,41 @@ const FooterContainer = styled.div`
 
   border-bottom-left-radius: var(--axdg-border-radius);
   border-bottom-right-radius: var(--axdg-border-radius);
+`;
+
+const SummaryContainer = styled.div<{ position: string }>`
+  background: var(--axdg-summary-bg);
+  position: relative;
+  min-width: 100%;
+  overflow: hidden;
+
+  ${({ position }) => {
+    if (position === 'top') {
+      return css`
+        border-bottom: 1px solid var(--axdg-border-color-base);
+      `;
+    } else {
+      return css`
+        border-top: 1px solid var(--axdg-border-color-base);
+      `;
+    }
+  }}
+
+  &:last-child {
+    border-bottom-left-radius: var(--axdg-border-radius);
+    border-bottom-right-radius: var(--axdg-border-radius);
+  }
+`;
+
+const Summary = styled.div`
+  z-index: 1;
+`;
+const FrozenSummary = styled.div`
+  position: absolute;
+  background: var(--axdg-summary-bg);
+  border-right: 1px solid var(--axdg-border-color-base);
+  box-shadow: 0 0 2px var(--axdg-border-color-base);
+  z-index: 3;
 `;
 
 export default Table;

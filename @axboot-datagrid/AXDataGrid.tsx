@@ -9,6 +9,7 @@ export function AXDataGrid<T = Record<string, any>>({
   height,
   headerHeight = 30,
   footerHeight = 30,
+  summaryHeight = 30,
   itemHeight = 15,
   itemPadding = 7,
   columns,
@@ -35,6 +36,7 @@ export function AXDataGrid<T = Record<string, any>>({
   editTrigger = 'click',
   cellMergeOptions,
   variant,
+  summary,
 }: AXDGProps<T>) {
   const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
     if (rowChecked?.checkedRowKeys && rowKey) {
@@ -104,6 +106,7 @@ export function AXDataGrid<T = Record<string, any>>({
           scrollTop,
           headerHeight,
           footerHeight,
+          summaryHeight,
           itemHeight,
           itemPadding,
           frozenColumnIndex,
@@ -124,6 +127,7 @@ export function AXDataGrid<T = Record<string, any>>({
           getRowClassName,
           cellMergeOptions,
           variant,
+          summary,
         }}
       />
     </AppStoreProvider>

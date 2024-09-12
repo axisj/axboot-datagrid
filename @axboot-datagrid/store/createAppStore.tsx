@@ -16,6 +16,7 @@ export function AppStoreProvider({ children }) {
       height: 0,
       headerHeight: 30,
       footerHeight: 30,
+      summaryHeight: 30,
       itemHeight: 15,
       itemPadding: 7,
       frozenColumnIndex: 0,
@@ -203,6 +204,7 @@ export function AppStoreProvider({ children }) {
 
       setHeaderHeight: headerHeight => set({ headerHeight }),
       setFooterHeight: footerHeight => set({ footerHeight }),
+      setSummaryHeight: summaryHeight => set({ summaryHeight }),
       setItemHeight: itemHeight => set({ itemHeight }),
       setItemPadding: itemPadding => set({ itemPadding }),
       setFrozenColumnIndex: frozenColumnIndex => set({ frozenColumnIndex }),
@@ -229,6 +231,7 @@ export function AppStoreProvider({ children }) {
       setEditTrigger: editTrigger => set({ editTrigger }),
       setCellMergeOptions: cellMergeOptions => set({ cellMergeOptions }),
       setVariant: variant => set({ variant }),
+      setSummary: summary => set({ summary }),
     }));
   }
   return <StoreContext.Provider value={storeRef.current}>{children}</StoreContext.Provider>;
