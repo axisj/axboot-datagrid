@@ -43,11 +43,25 @@ export interface AXDGColumnGroup {
   headerAlign?: AlignDirection;
 }
 
-export interface AXDGCellMergeColumn<T> {
+export interface AXDGCellMergeColumn {
   wordWrap?: boolean;
   mergeBy: string | string[];
 }
-// TODO 지원예정 : mergeBy: string | string[] | ((item: AXDGDataItem<T>) => string);
+
+export interface AXDGSummaryItemRenderProps<T> {
+  column: AXDGColumn<T>;
+  columnIndex: number;
+  data: AXDGDataItem<T>[];
+}
+
+export interface AXDGSummaryColumn<T> {
+  columnIndex: number;
+  align?: AlignDirection;
+  colSpan?: number;
+  className?: string;
+  getClassName?: (key: string | string[]) => string;
+  itemRender?: React.FC<AXDGSummaryItemRenderProps<T>>;
+}
 
 export enum AXDGDataItemStatus {
   new,
@@ -105,6 +119,7 @@ export interface AXDGProps<T> {
   height: number;
   headerHeight?: number;
   footerHeight?: number;
+  summaryHeight?: number;
   itemHeight?: number;
   itemPadding?: number;
   frozenColumnIndex?: number;
@@ -144,9 +159,13 @@ export interface AXDGProps<T> {
 
   getRowClassName?: (ri: number, item: AXDGDataItem<T>) => string | undefined;
   cellMergeOptions?: {
-    columnsMap: Record<number, AXDGCellMergeColumn<T>>;
+    columnsMap: Record<number, AXDGCellMergeColumn>;
   };
   variant?: 'default' | 'vertical-bordered';
+  summary?: {
+    columns: AXDGSummaryColumn<T>[];
+    position: 'top' | 'bottom';
+  };
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -159,6 +178,7 @@ export interface AppModel<T> extends AXDGProps<T> {
   initialized: boolean;
   headerHeight: number;
   footerHeight: number;
+  summaryHeight: number;
   itemHeight: number;
   itemPadding: number;
   frozenColumnIndex: number;
@@ -207,6 +227,7 @@ export interface AppActions<T> {
   setSpinning: (spinning: boolean) => void;
   setHeaderHeight: (headerHeight: number) => void;
   setFooterHeight: (footerHeight: number) => void;
+  setSummaryHeight: (summaryHeight: number) => void;
   setItemHeight: (itemHeight: number) => void;
   setItemPadding: (itemPadding: number) => void;
   setFrozenColumnIndex: (frozenColumnIndex: number) => void;
@@ -233,6 +254,7 @@ export interface AppActions<T> {
   setEditTrigger: (editTrigger: 'dblclick' | 'click') => void;
   setCellMergeOptions: (cellMergeOptions: AXDGProps<T>['cellMergeOptions']) => void;
   setVariant: (variant: AXDGProps<T>['variant']) => void;
+  setSummary: (summary?: AXDGProps<T>['summary']) => void;
 }
 
 export interface AppStore<T = any> extends AppModel<T>, AppActions<T> {}

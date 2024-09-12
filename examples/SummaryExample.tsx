@@ -94,7 +94,7 @@ function SummaryExample(props: Props) {
     <Container ref={containerRef}>
       <AXDataGrid<IListItem>
         showLineNumber
-        frozenColumnIndex={1}
+        frozenColumnIndex={0}
         width={containerWidth}
         height={containerHeight}
         data={list}
@@ -113,6 +113,25 @@ function SummaryExample(props: Props) {
         }}
         onClick={item => console.log(item)}
         variant={'vertical-bordered'}
+        summary={{
+          position: 'top',
+          columns: [
+            {
+              columnIndex: 2,
+              colSpan: 2,
+              itemRender: ({ data }) => {
+                return <div>Summary</div>;
+              },
+            },
+            {
+              columnIndex: 5,
+              colSpan: 2,
+              itemRender: ({ data }) => {
+                return <div>Summary</div>;
+              },
+            },
+          ],
+        }}
       />
     </Container>
   );
