@@ -24,7 +24,7 @@ const list = Array.from(Array(50)).map((v, i) => ({
   },
 }));
 
-function CellMergeExample(props: Props) {
+function SummaryExample(props: Props) {
   const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
     {
       key: 'class',
@@ -120,4 +120,4 @@ function CellMergeExample(props: Props) {
 
 const Container = styled(ExampleContainer)``;
 
-export default CellMergeExample;
+export default SummaryExample;

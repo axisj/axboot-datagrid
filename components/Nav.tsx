@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { Button, Tabs } from 'antd';
+import { Badge, Button, Space, Tabs, Tag } from 'antd';
 import { useRouter } from 'next/router';
 import pkg from '../package.json';
 import { GithubFilled, LinkOutlined } from '@ant-design/icons';
@@ -44,7 +44,22 @@ function Nav(props: Props) {
           { label: `Editor`, key: '/editor' },
           { label: `VirtualScroll`, key: '/virtualScroll' },
           { label: `GetRowClassName`, key: '/getRowClassName' },
-          { label: `Cell Merge`, key: '/cellMerge' },
+          {
+            label: (
+              <Space>
+                CellMerge<Tag>v1.1.9</Tag>
+              </Space>
+            ),
+            key: '/cellMerge',
+          },
+          {
+            label: (
+              <Space>
+                Summary<Tag>v1.2</Tag>
+              </Space>
+            ),
+            key: '/summary',
+          },
           { label: `Props Change`, key: '/propsChange' },
         ]}
         onTabClick={async activeKey => {
