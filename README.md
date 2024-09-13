@@ -39,6 +39,7 @@ Add the code below to your project.
     --axdg-header-hover-bg: #e2e5e5;
     --axdg-header-group-bg: #e9e9e9;
     --axdg-footer-bg: #f3f4f5;
+    --axdg-summary-bg: #eaeef6;
     --axdg-border-color-base: #d2d5d9;
     --axdg-border-color-light: #d2d5d9;
     --axdg-border-radius: 4px;

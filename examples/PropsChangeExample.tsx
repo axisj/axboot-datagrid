@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXDataGrid, AXDGColumn, AXDGDataItem, AXDGSortParam, delay } from '../@axboot-datagrid';
-import { Checkbox, Col, Divider, Form, InputNumber, Row, Select, Switch } from 'antd';
+import { AXDataGrid, AXDGColumn, AXDGDataItem, AXDGProps, AXDGSortParam, delay } from '../@axboot-datagrid';
+import { Checkbox, Col, Divider, Form, InputNumber, Radio, Row, Select, Switch } from 'antd';
 import ExampleContainer from '../components/ExampleContainer';
 import { useContainerSize } from '../hooks/useContainerSize';
 import { useState } from 'react';
@@ -13,6 +13,8 @@ interface IListItem {
   title: string;
   writer: string;
   createAt: string;
+  qty: number;
+  price: number;
 }
 
 const listFirst: AXDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) => ({
@@ -21,6 +23,8 @@ const listFirst: AXDGDataItem<IListItem>[] = Array.from(Array(200)).map((v, i) =
     title: `F title_${i}`,
     writer: `F writer_${i}`,
     createAt: `2022-09-08`,
+    qty: Math.floor(Math.random() * 100),
+    price: Math.floor(Math.random() * 10000),
     group: {
       k: `K${i}`,
     },
@@ -33,6 +37,8 @@ const listSecond: AXDGDataItem<IListItem>[] = Array.from(Array(100)).map((v, i) 
     title: `S title_${i}`,
     writer: `S writer_${i}`,
     createAt: `2022-09-08`,
+    qty: Math.floor(Math.random() * 100),
+    price: Math.floor(Math.random() * 10000),
     group: {
       k: `K${i}`,
     },
@@ -52,18 +58,36 @@ const columnsFirst: AXDGColumn<IListItem>[] = [
   },
   {
     key: 'title',
-    label: '제목',
-    width: 300,
+    label: '상품명',
+    width: 200,
   },
   {
     key: 'writer',
-    label: '작성자',
+    label: '구분',
     width: 100,
   },
   {
     key: 'createAt',
-    label: '작성일',
+    label: '등록일',
     width: 100,
+  },
+  {
+    key: 'qty',
+    label: '수량',
+    width: 80,
+    align: 'right',
+    itemRender: ({ value }) => {
+      return <>{value.toLocaleString()}</>;
+    },
+  },
+  {
+    key: 'price',
+    label: '가격',
+    width: 120,
+    align: 'right',
+    itemRender: ({ value }) => {
+      return <>{value.toLocaleString()}</>;
+    },
   },
 ];
 
@@ -72,10 +96,11 @@ function PropsChangeExample(props: Props) {
   const [listName, setListName] = React.useState('listFirst');
   const [loading, setLoading] = React.useState(false);
   const [spinning, setSpinning] = React.useState(false);
-  const [width, setWidth] = React.useState(600);
+  const [width, setWidth] = React.useState(800);
   const [height, setHeight] = React.useState(300);
   const [headerHeight, setHeaderHeight] = React.useState(35);
   const [footerHeight, setFooterHeight] = React.useState(30);
+  const [summaryHeight, setSummaryHeight] = useState(30);
   const [itemHeight, setItemHeight] = React.useState(15);
   const [itemPadding, setItemPadding] = React.useState(7);
   const [frozenColumnIndex, setFrozenColumnIndex] = React.useState(0);
@@ -87,6 +112,8 @@ function PropsChangeExample(props: Props) {
   const [selectedRowKey, setSelectedRowKey] = React.useState<string>();
   const [showLineNumber, setShowLineNumber] = React.useState(false);
   const [variant, setVariant] = useState<'default' | 'vertical-bordered'>('default');
+  const [summary, setSummary] = useState<AXDGProps<any>['summary']>();
+  const [summaryPosition, setSummaryPosition] = useState<string>('');
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
@@ -103,6 +130,7 @@ function PropsChangeExample(props: Props) {
             height={containerHeight}
             headerHeight={headerHeight}
             footerHeight={footerHeight}
+            summaryHeight={summaryHeight}
             itemHeight={itemHeight}
             itemPadding={itemPadding}
             frozenColumnIndex={frozenColumnIndex}
@@ -143,6 +171,7 @@ function PropsChangeExample(props: Props) {
             selectedRowKey={selectedRowKey}
             showLineNumber={showLineNumber}
             variant={variant}
+            summary={summary}
           />
         </Container>
       </Wrap>
@@ -156,6 +185,7 @@ function PropsChangeExample(props: Props) {
           height,
           headerHeight,
           footerHeight,
+          summaryHeight,
           itemHeight,
           itemPadding,
           frozenColumnIndex,
@@ -164,6 +194,7 @@ function PropsChangeExample(props: Props) {
           currentPage,
           listName,
           variant,
+          summaryPosition,
         }}
       >
         <Row gutter={20}>
@@ -218,6 +249,16 @@ function PropsChangeExample(props: Props) {
                 min={22}
                 onChange={footerHeight => {
                   setFooterHeight(Number(footerHeight));
+                }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Form.Item name={'summaryHeight'} label={'Summary Height'}>
+              <InputNumber
+                min={22}
+                onChange={summaryHeight => {
+                  setSummaryHeight(Number(summaryHeight));
                 }}
               />
             </Form.Item>
@@ -337,6 +378,45 @@ function PropsChangeExample(props: Props) {
                   },
                   ...Array.from({ length: 10 }).map((_, i) => ({ label: `K${i}`, value: `K${i}` })),
                 ]}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Form.Item name={'summaryPosition'} label={'Summary'}>
+              <Radio.Group
+                options={[
+                  { label: 'NONE', value: '' },
+                  { label: 'TOP', value: 'top' },
+                  { label: 'Bottom', value: 'bottom' },
+                ]}
+                onChange={e => {
+                  if (e.target.value === '') {
+                    setSummary(undefined);
+                  } else {
+                    setSummary({
+                      position: e.target.value as 'top' | 'bottom',
+                      columns: [
+                        {
+                          columnIndex: 0,
+                          itemRender: ({}) => {
+                            return <>합계</>;
+                          },
+                        },
+                        {
+                          columnIndex: 5,
+                          colSpan: 2,
+                          align: 'right',
+                          itemRender: ({ data }) => {
+                            const sum = data.reduce((acc, cur) => {
+                              return acc + cur.values.price;
+                            }, 0);
+                            return <>합 : {sum.toLocaleString()}</>;
+                          },
+                        },
+                      ],
+                    });
+                  }
+                }}
               />
             </Form.Item>
           </Col>
