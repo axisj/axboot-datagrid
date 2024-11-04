@@ -63,7 +63,7 @@ function Nav(props: Props) {
           {
             label: (
               <Space>
-                ColumnSort<Tag>v1.2.2</Tag>
+                ColumnSort<Tag>v1.3</Tag>
               </Space>
             ),
             key: '/columnSort',
