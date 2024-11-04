@@ -60,6 +60,14 @@ function Nav(props: Props) {
             ),
             key: '/summary',
           },
+          {
+            label: (
+              <Space>
+                ColumnSort<Tag>v1.2.2</Tag>
+              </Space>
+            ),
+            key: '/columnSort',
+          },
           { label: `Props Change`, key: '/propsChange' },
         ]}
         onTabClick={async activeKey => {

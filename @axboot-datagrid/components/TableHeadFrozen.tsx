@@ -6,7 +6,7 @@ import TableColGroupFrozen from './TableColGroupFrozen';
 import { HeadGroupTd, HeadTable, HeadTd } from './TableHead';
 import ColResizer from './ColResizer';
 import TableHeadColumn from './TableHeadColumn';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Sortable from 'sortablejs';
 
 interface Props {
@@ -25,6 +25,9 @@ function TableHeadFrozen({ container }: Props) {
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
   const columnResizing = useAppStore(s => s.columnResizing);
   const toggleColumnSort = useAppStore(s => s.toggleColumnSort);
+  const sortColumns = useAppStore(s => s.sortColumn);
+  const columnSortable = useAppStore(s => s.columnSortable);
+  const [sorted, setSorted] = useState(false);
   const tbodyRef = React.useRef<HTMLTableSectionElement>(null);
 
   const columnsTable = React.useMemo(() => {
@@ -80,27 +83,38 @@ function TableHeadFrozen({ container }: Props) {
   }, [columns, columnsGroup, frozenColumnIndex]);
 
   useEffect(() => {
-    const tbody = tbodyRef.current;
-    if (tbody) {
-      columnsTable.forEach((row, ri) => {
-        const el = tbody.querySelector(`[data-columns-tr="${ri}"]`);
-        if (!el) return;
-        row['sortable'] = Sortable.create(el as HTMLElement, {
-          animation: 150,
-          draggable: '.drag-item',
-          onSort: evt => {
-            console.log(evt);
-          },
+    if (!sorted && columnSortable) {
+      const tbody = tbodyRef.current;
+      if (tbody) {
+        columnsTable.forEach((row, ri) => {
+          const el = tbody.querySelector(`[data-columns-tr="${ri}"]`);
+          if (!el) return;
+
+          row['sortable']?.destroy();
+          row['sortable'] = Sortable.create(el as HTMLElement, {
+            animation: 150,
+            draggable: '.drag-item',
+            onSort: evt => {
+              if (evt.oldIndex === evt.newIndex) return;
+              if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
+              sortColumns(evt.oldIndex, evt.newIndex);
+              setSorted(true);
+            },
+          });
         });
-      });
+      }
     }
 
-    return () => {
-      columnsTable.forEach(row => {
-        row['sortable']?.destroy();
-      });
-    };
-  }, [columnsTable]);
+    return () => {};
+  }, [columnSortable, columnsTable, sortColumns, sorted]);
+
+  useEffect(() => {
+    setSorted(false);
+  }, [sorted]);
+
+  if (sorted) {
+    return null;
+  }
 
   return (
     <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1} rowLength={columnsTable.length}>

@@ -239,8 +239,11 @@ export function AppStoreProvider({ children }) {
         const cc = columns.splice(oldIndex, 1)[0];
         columns.splice(newIndex, 0, cc);
 
-        get().onChangeColumns?.(null, null, columns);
-        // get().setColumns(columns);
+        if (get().onChangeColumns) {
+          get().onChangeColumns?.(null, null, columns);
+        } else {
+          get().setColumns(columns);
+        }
       },
     }));
   }
