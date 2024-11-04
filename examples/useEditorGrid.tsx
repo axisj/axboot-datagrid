@@ -48,9 +48,12 @@ export default function useEditorGrid() {
   const [checkedKeys, setCheckedKeys] = React.useState<React.Key[]>([]);
   const [selectedRowKey, setSelectedRowKey] = React.useState('');
 
-  const handleColumnsChange = React.useCallback((columnIndex: number, width: number, columns: AXDGColumn<Item>[]) => {
-    setColWidths(columns.map(column => column.width));
-  }, []);
+  const handleColumnsChange = React.useCallback(
+    (columnIndex: number | null, width: number | null, columns: AXDGColumn<Item>[]) => {
+      setColWidths(columns.map(column => column.width));
+    },
+    [],
+  );
 
   const handleAddList = React.useCallback(() => {
     setList([
