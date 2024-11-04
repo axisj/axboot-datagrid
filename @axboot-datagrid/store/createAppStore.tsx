@@ -36,6 +36,7 @@ export function AppStoreProvider({ children }) {
       editTrigger: 'dblclick',
       cellMergeOptions: undefined,
       variant: 'default',
+      columnSortable: false,
       setInitialized: initialized => set({ initialized }),
       setScrollTop: scrollTop => set({ scrollTop }),
       setScrollLeft: scrollLeft => set({ scrollLeft }),
@@ -232,6 +233,18 @@ export function AppStoreProvider({ children }) {
       setCellMergeOptions: cellMergeOptions => set({ cellMergeOptions }),
       setVariant: variant => set({ variant }),
       setSummary: summary => set({ summary }),
+      setColumnSortable: columnSortable => set({ columnSortable }),
+      sortColumn: (oldIndex, newIndex) => {
+        const columns = [...get().columns];
+        const cc = columns.splice(oldIndex, 1)[0];
+        columns.splice(newIndex, 0, cc);
+
+        if (get().onChangeColumns) {
+          get().onChangeColumns?.(null, null, columns);
+        } else {
+          get().setColumns(columns);
+        }
+      },
     }));
   }
   return <StoreContext.Provider value={storeRef.current}>{children}</StoreContext.Provider>;

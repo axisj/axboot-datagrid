@@ -126,7 +126,7 @@ export interface AXDGProps<T> {
 
   columns: AXDGColumn<T>[];
   columnsGroup?: AXDGColumnGroup[];
-  onChangeColumns?: (columnIndex: number, width: number, columns: AXDGColumn<T>[]) => void;
+  onChangeColumns?: (columnIndex: number | null, width: number | null, columns: AXDGColumn<T>[]) => void;
   data?: AXDGDataItem<T>[];
   onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXDGColumn<T> | null) => void;
 
@@ -166,6 +166,7 @@ export interface AXDGProps<T> {
     columns: AXDGSummaryColumn<T>[];
     position: 'top' | 'bottom';
   };
+  columnSortable?: boolean;
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -255,6 +256,8 @@ export interface AppActions<T> {
   setCellMergeOptions: (cellMergeOptions: AXDGProps<T>['cellMergeOptions']) => void;
   setVariant: (variant: AXDGProps<T>['variant']) => void;
   setSummary: (summary?: AXDGProps<T>['summary']) => void;
+  setColumnSortable: (columnSortable?: boolean) => void;
+  sortColumn: (oldIndex: number, newIndex: number) => void;
 }
 
 export interface AppStore<T = any> extends AppModel<T>, AppActions<T> {}
