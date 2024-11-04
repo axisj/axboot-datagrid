@@ -37,6 +37,7 @@ export function AXDataGrid<T = Record<string, any>>({
   cellMergeOptions,
   variant,
   summary,
+  columnSortable,
 }: AXDGProps<T>) {
   const checkedIndexesMap: Map<number, any> = React.useMemo(() => {
     if (rowChecked?.checkedRowKeys && rowKey) {
@@ -128,6 +129,7 @@ export function AXDataGrid<T = Record<string, any>>({
           cellMergeOptions,
           variant,
           summary,
+          columnSortable,
         }}
       />
     </AppStoreProvider>

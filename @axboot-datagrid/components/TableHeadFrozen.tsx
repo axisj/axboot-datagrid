@@ -6,6 +6,8 @@ import TableColGroupFrozen from './TableColGroupFrozen';
 import { HeadGroupTd, HeadTable, HeadTd } from './TableHead';
 import ColResizer from './ColResizer';
 import TableHeadColumn from './TableHeadColumn';
+import { useEffect } from 'react';
+import Sortable from 'sortablejs';
 
 interface Props {
   container: React.RefObject<HTMLDivElement>;
@@ -23,6 +25,7 @@ function TableHeadFrozen({ container }: Props) {
   const frozenColumnIndex = useAppStore(s => s.frozenColumnIndex);
   const columnResizing = useAppStore(s => s.columnResizing);
   const toggleColumnSort = useAppStore(s => s.toggleColumnSort);
+  const tbodyRef = React.useRef<HTMLTableSectionElement>(null);
 
   const columnsTable = React.useMemo(() => {
     const hasColumnsGroup = columnsGroup.length > 0;
@@ -76,13 +79,36 @@ function TableHeadFrozen({ container }: Props) {
     return rows;
   }, [columns, columnsGroup, frozenColumnIndex]);
 
+  useEffect(() => {
+    const tbody = tbodyRef.current;
+    if (tbody) {
+      columnsTable.forEach((row, ri) => {
+        const el = tbody.querySelector(`[data-columns-tr="${ri}"]`);
+        if (!el) return;
+        row['sortable'] = Sortable.create(el as HTMLElement, {
+          animation: 150,
+          draggable: '.drag-item',
+          onSort: evt => {
+            console.log(evt);
+          },
+        });
+      });
+    }
+
+    return () => {
+      columnsTable.forEach(row => {
+        row['sortable']?.destroy();
+      });
+    };
+  }, [columnsTable]);
+
   return (
     <HeadTable headerHeight={headerHeight} hasGroup={columnsTable.length > 1} rowLength={columnsTable.length}>
       <TableColGroupFrozen />
-      <tbody role={'rfdg-head-frozen'}>
+      <tbody role={'rfdg-head-frozen'} ref={tbodyRef}>
         {columnsTable.map((row, ri) => {
           return (
-            <tr key={ri}>
+            <tr key={ri} data-columns-tr={ri}>
               {ri === 0 && showLineNumber && <LineNumberTd rowSpan={columnsTable.length}>&nbsp;</LineNumberTd>}
               {ri === 0 && hasRowSelection && (
                 <HeadTd rowSpan={columnsTable.length}>
@@ -102,7 +128,7 @@ function TableHeadFrozen({ container }: Props) {
                     <HeadGroupTd
                       key={index}
                       colSpan={c.colspan}
-                      className={c.headerClassName}
+                      className={'drag-item ' + c.headerClassName}
                       style={{
                         textAlign: c.headerAlign ?? 'center',
                       }}
@@ -119,7 +145,7 @@ function TableHeadFrozen({ container }: Props) {
                     style={{
                       textAlign: c.headerAlign ?? 'center',
                     }}
-                    className={c.headerClassName}
+                    className={'drag-item ' + c.headerClassName}
                     hasOnClick={sort && !c.sortDisable}
                     columnResizing={columnResizing}
                     onClick={evt => {

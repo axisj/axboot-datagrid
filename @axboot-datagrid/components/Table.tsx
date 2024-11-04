@@ -65,6 +65,7 @@ interface Props<T> {
   cellMergeOptions?: AXDGProps<T>['cellMergeOptions'];
   variant?: AXDGProps<T>['variant'];
   summary?: AXDGProps<T>['summary'];
+  columnSortable?: AXDGProps<T>['columnSortable'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -134,6 +135,7 @@ function Table<T>(props: Props<T>) {
   const setCellMergeOptions = useAppStore(s => s.setCellMergeOptions);
   const setVariant = useAppStore(s => s.setVariant);
   const setSummary = useAppStore(s => s.setSummary);
+  const setColumnSortable = useAppStore(s => s.setColumnSortable);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -295,7 +297,6 @@ function Table<T>(props: Props<T>) {
   useEffect(() => {
     if (props.columnsGroup !== undefined) setColumnsGroup(props.columnsGroup);
   }, [setColumnsGroup, props.columnsGroup]);
-
   useEffect(() => {
     if (props.rowKey !== undefined) setRowKey(props.rowKey);
   }, [setRowKey, props.rowKey]);
@@ -339,6 +340,9 @@ function Table<T>(props: Props<T>) {
   useEffect(() => {
     setSummary(props.summary);
   }, [setSummary, props.summary]);
+  useEffect(() => {
+    setColumnSortable(props.columnSortable);
+  }, [setColumnSortable, props.columnSortable]);
 
   //setInitialized
   useEffect(() => {
