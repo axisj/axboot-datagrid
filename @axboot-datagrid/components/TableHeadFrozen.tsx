@@ -38,15 +38,19 @@ function TableHeadFrozen({ container }: Props) {
       const row: Record<string, any>[] = [];
       const secondRow: Record<string, any>[] = [];
       columns.slice(0, frozenColumnIndex).forEach((column, index) => {
-        const findCgIndex = columnsGroup.findIndex(cg => cg.columnIndexes.includes(index));
+        const ci = index;
+        const findCgIndex = columnsGroup.findIndex(cg => cg.groupStartIndex <= ci && cg.groupEndIndex >= ci);
         if (findCgIndex > -1) {
           const prevItem = row[row.length - 1];
           if (!prevItem || prevItem.cgi !== findCgIndex) {
-            const cifi = columnsGroup[findCgIndex].columnIndexes.findIndex(n => n === index);
+            const colspan =
+              Math.max(columnsGroup[findCgIndex].groupEndIndex, frozenColumnIndex) -
+              columnsGroup[findCgIndex].groupStartIndex +
+              1;
             row.push({
               type: 'column-group',
               cgi: findCgIndex,
-              colspan: columnsGroup[findCgIndex].columnIndexes.length - cifi,
+              colspan,
               ...columnsGroup[findCgIndex],
             });
           }

@@ -140,9 +140,10 @@ function SortExample(props: Props) {
       <AXDataGrid<IListItem>
         width={containerWidth}
         height={containerHeight}
-        headerHeight={35}
+        headerHeight={48}
         data={sortedList}
         columns={columns}
+        columnsGroup={[{ label: 'Group', groupStartIndex: 2, groupEndIndex: 4, align: 'center' }]}
         columnSortable
         onChangeColumns={(columnIndex, width, columns) => {
           console.log('onChangeColumnWidths', columnIndex, width, columns);

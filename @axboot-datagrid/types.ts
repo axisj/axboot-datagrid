@@ -38,7 +38,8 @@ export interface AXDGColumn<T> {
 
 export interface AXDGColumnGroup {
   label: string;
-  columnIndexes: number[];
+  groupStartIndex: number;
+  groupEndIndex: number;
   align?: AlignDirection;
   headerAlign?: AlignDirection;
 }
