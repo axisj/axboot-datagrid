@@ -174,4 +174,10 @@ const Container = styled.div`
 export default BasicExample;
 ```
 
-TBD Examples
+## V1.4 Upgrade Guide
+
+### columnsGroup 타입변경
+```typescript jsx
+[{ label: '묶음', groupStartIndex: 2, groupEndIndex: 4, align: 'center' }]
+```
+기존 columnsIndex: []에서 start, end 지정 형태로 변경되었습니다.

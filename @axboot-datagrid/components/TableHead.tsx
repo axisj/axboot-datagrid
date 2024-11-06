@@ -45,6 +45,7 @@ function TableHead({ container }: Props) {
             row.push({
               type: 'column-group',
               cgi: findCgIndex,
+              columnIndex: ci,
               colspan,
               ...columnsGroup[findCgIndex],
             });
@@ -98,7 +99,13 @@ function TableHead({ container }: Props) {
             onSort: evt => {
               if (evt.oldIndex === evt.newIndex) return;
               if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
-              sortColumns(evt.oldIndex + frozenColumnIndex, evt.newIndex + frozenColumnIndex);
+
+              // console.log(evt.oldIndex, evt.newIndex, row[evt.oldIndex].columnIndex, row[evt.newIndex].columnIndex);
+
+              const oldI = row[evt.oldIndex].columnIndex;
+              const newI = row[evt.newIndex].columnIndex;
+
+              sortColumns(oldI, newI);
               setSorted(true);
             },
           });
@@ -129,8 +136,9 @@ function TableHead({ container }: Props) {
                   return (
                     <HeadGroupTd
                       key={index}
+                      data-column-index={c.columnIndex}
                       colSpan={c.colspan}
-                      className={'drag-item ' + c.headerClassName}
+                      className={'drag-item ' + (c.headerClassName ?? '')}
                       style={{
                         textAlign: c.headerAlign ?? 'center',
                       }}
@@ -147,7 +155,7 @@ function TableHead({ container }: Props) {
                     style={{
                       textAlign: c.headerAlign ?? 'center',
                     }}
-                    className={'drag-item ' + c.headerClassName}
+                    className={'drag-item ' + (c.headerClassName ?? '')}
                     hasOnClick={sort && !c.sortDisable}
                     columnResizing={columnResizing}
                     onClick={evt => {

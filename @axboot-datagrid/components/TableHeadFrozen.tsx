@@ -50,6 +50,7 @@ function TableHeadFrozen({ container }: Props) {
             row.push({
               type: 'column-group',
               cgi: findCgIndex,
+              columnIndex: ci,
               colspan,
               ...columnsGroup[findCgIndex],
             });
@@ -57,13 +58,13 @@ function TableHeadFrozen({ container }: Props) {
 
           secondRow.push({
             type: 'column',
-            columnIndex: index,
+            columnIndex: ci,
             ...column,
           });
         } else {
           row.push({
             type: 'column',
-            columnIndex: index,
+            columnIndex: ci,
             ...column,
             rowspan: 2,
           });
@@ -101,7 +102,13 @@ function TableHeadFrozen({ container }: Props) {
             onSort: evt => {
               if (evt.oldIndex === evt.newIndex) return;
               if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
-              sortColumns(evt.oldIndex, evt.newIndex);
+
+              // console.log(evt.oldIndex, evt.newIndex, row[evt.oldIndex].columnIndex, row[evt.newIndex].columnIndex);
+
+              const oldI = row[evt.oldIndex].columnIndex;
+              const newI = row[evt.newIndex].columnIndex;
+
+              sortColumns(oldI, newI);
               setSorted(true);
             },
           });
@@ -145,6 +152,7 @@ function TableHeadFrozen({ container }: Props) {
                   return (
                     <HeadGroupTd
                       key={index}
+                      data-column-index={c.columnIndex}
                       colSpan={c.colspan}
                       className={'drag-item ' + c.headerClassName}
                       style={{

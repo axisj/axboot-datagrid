@@ -235,9 +235,17 @@ export function AppStoreProvider({ children }) {
       setSummary: summary => set({ summary }),
       setColumnSortable: columnSortable => set({ columnSortable }),
       sortColumn: (oldIndex, newIndex) => {
+        console.log('sortColumn', oldIndex, newIndex);
+
+        const columnsGroup = get().columnsGroup;
         const columns = [...get().columns];
         const cc = columns.splice(oldIndex, 1)[0];
         columns.splice(newIndex, 0, cc);
+
+        if (columnsGroup.findIndex(cg => cg.groupStartIndex === oldIndex) > -1) {
+        }
+
+        // TODO: check columnsGroup
 
         if (get().onChangeColumns) {
           get().onChangeColumns?.(null, null, columns);
