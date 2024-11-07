@@ -34,7 +34,7 @@ function Nav(props: Props) {
         animated={false}
         defaultActiveKey={router.asPath}
         items={[
-          { label: `Index`, key: '/' },
+          { label: `Basic`, key: '/' },
           { label: `LineNumber`, key: '/lineNumber' },
           { label: `ColumnGroup`, key: '/columnGroup' },
           { label: `Sort`, key: '/sort' },
@@ -63,7 +63,7 @@ function Nav(props: Props) {
           {
             label: (
               <Space>
-                ColumnSort<Tag>v1.3</Tag>
+                ColumnSort<Tag>v1.4+</Tag>
               </Space>
             ),
             key: '/columnSort',
@@ -79,22 +79,17 @@ function Nav(props: Props) {
 }
 
 const Container = styled.div`
-  ul {
-    padding-left: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
-
-    li {
-      list-style: none;
+  .ant-tabs {
+    margin: 0 -20px;
+    .ant-tabs-nav-list {
+      padding: 10px 20px 0;
+    }
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin: 0 0 0 20px;
     }
 
-    a {
-      &:hover {
-        color: #3b82f6;
-      }
+    .ant-tag {
+      margin: 0;
     }
   }
 `;

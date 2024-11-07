@@ -242,10 +242,18 @@ export function AppStoreProvider({ children }) {
         const cc = columns.splice(oldIndex, 1)[0];
         columns.splice(newIndex, 0, cc);
 
+        // 그룹 앞에 변화가 있거나. 뒤에 변화가 있으면 그룹값 조정해야함.
+        // 그룹안에서 일어나는 일은 상관 없음.
+        // 그룹컬럼이 이동하는 경우도 고려해야함.
+
+        // 1. 그룹 컬럼이 이동하는 경우
         if (columnsGroup.findIndex(cg => cg.groupStartIndex === oldIndex) > -1) {
+          console.log(`group column move oi:${oldIndex}, ni:${newIndex}`);
         }
 
-        // TODO: check columnsGroup
+        // 2. 다른컬럼이 그룹컬럼 앞으로 이동하는 경우
+
+        // 3. 다른컬럼이 그룹컬럼 뒤로 이동하는 경우
 
         if (get().onChangeColumns) {
           get().onChangeColumns?.(null, null, columns);
