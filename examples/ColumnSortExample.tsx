@@ -1,10 +1,18 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXDataGrid, AXDGColumn, AXDGDataItem, AXDGItemRenderProps, AXDGSortParam } from '../@axboot-datagrid';
+import {
+  AXDataGrid,
+  AXDGColumn,
+  AXDGColumnGroup,
+  AXDGDataItem,
+  AXDGItemRenderProps,
+  AXDGSortParam,
+} from '../@axboot-datagrid';
 import { useContainerSize } from '../hooks/useContainerSize';
 import ExampleContainer from '../components/ExampleContainer';
 import { toMoney } from '../@axboot-datagrid/utils/number';
 import { Progress } from 'antd';
+import { useState } from 'react';
 
 interface Props {}
 
@@ -71,8 +79,8 @@ const list = rawData.map((data, index) => {
 const numRender = (item: AXDGItemRenderProps<IListItem>) => <>{toMoney(item.value)}</>;
 
 function SortExample(props: Props) {
-  const [sortParams, setSortParams] = React.useState<AXDGSortParam[]>([]);
-  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
+  const [sortParams, setSortParams] = useState<AXDGSortParam[]>([]);
+  const [columns, setColumns] = useState<AXDGColumn<IListItem>[]>([
     {
       key: 'nation',
       label: 'Nation',
@@ -99,6 +107,9 @@ function SortExample(props: Props) {
     },
     { key: 'ratioMan', label: 'Man', width: 100, align: 'right' },
     { key: 'ratioWoman', label: 'Woman', width: 100, align: 'right' },
+  ]);
+  const [columnsGroup, setColumnsGroup] = useState<AXDGColumnGroup[] | undefined>([
+    { label: 'Group', groupStartIndex: 2, groupEndIndex: 4, align: 'center' },
   ]);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -143,11 +154,12 @@ function SortExample(props: Props) {
         headerHeight={48}
         data={sortedList}
         columns={columns}
-        columnsGroup={[{ label: 'Group', groupStartIndex: 2, groupEndIndex: 4, align: 'center' }]}
+        columnsGroup={columnsGroup}
         columnSortable
-        onChangeColumns={(columnIndex, width, columns) => {
-          console.log('onChangeColumnWidths', columnIndex, width, columns);
+        onChangeColumns={(columnIndex, { columns, columnsGroup }) => {
+          console.log('onChangeColumnWidths', columnIndex, columns, columnsGroup);
           setColumns(columns);
+          setColumnsGroup(columnsGroup);
         }}
         rowChecked={{
           checkedIndexes: [],

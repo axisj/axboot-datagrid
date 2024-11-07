@@ -143,7 +143,10 @@ export function AppStoreProvider({ children }) {
             }
           }
         } else {
-          get().onChangeColumns?.(columnIndex, columns[columnIndex].width, columns);
+          get().onChangeColumns?.(columnIndex, {
+            width: columns[columnIndex].width,
+            columns,
+          });
         }
       },
       setColumnResizing: columnResizing => set({ columnResizing }),
@@ -237,10 +240,8 @@ export function AppStoreProvider({ children }) {
       sortColumn: (oldIndex, newIndex) => {
         console.log('sortColumn', oldIndex, newIndex);
 
-        const columnsGroup = get().columnsGroup;
+        const columnsGroup = structuredClone(get().columnsGroup);
         const columns = [...get().columns];
-        const cc = columns.splice(oldIndex, 1)[0];
-        columns.splice(newIndex, 0, cc);
 
         // 그룹 앞에 변화가 있거나. 뒤에 변화가 있으면 그룹값 조정해야함.
         // 그룹안에서 일어나는 일은 상관 없음.
@@ -248,15 +249,22 @@ export function AppStoreProvider({ children }) {
 
         // 1. 그룹 컬럼이 이동하는 경우
         if (columnsGroup.findIndex(cg => cg.groupStartIndex === oldIndex) > -1) {
+          const fcgi = columnsGroup.findIndex(cg => cg.groupStartIndex === oldIndex);
           console.log(`group column move oi:${oldIndex}, ni:${newIndex}`);
+        } else {
+          const cc = columns.splice(oldIndex, 1)[0];
+          columns.splice(newIndex, 0, cc);
+
+          // 2. 다른컬럼이 그룹컬럼 앞으로 이동하는 경우
+
+          // 3. 다른컬럼이 그룹컬럼 뒤로 이동하는 경우
         }
 
-        // 2. 다른컬럼이 그룹컬럼 앞으로 이동하는 경우
-
-        // 3. 다른컬럼이 그룹컬럼 뒤로 이동하는 경우
-
         if (get().onChangeColumns) {
-          get().onChangeColumns?.(null, null, columns);
+          get().onChangeColumns?.(null, {
+            columns,
+            columnsGroup,
+          });
         } else {
           get().setColumns(columns);
         }

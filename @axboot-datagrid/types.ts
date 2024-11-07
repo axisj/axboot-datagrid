@@ -127,7 +127,14 @@ export interface AXDGProps<T> {
 
   columns: AXDGColumn<T>[];
   columnsGroup?: AXDGColumnGroup[];
-  onChangeColumns?: (columnIndex: number | null, width: number | null, columns: AXDGColumn<T>[]) => void;
+  onChangeColumns?: (
+    columnIndex: number | null,
+    info: {
+      width?: number;
+      columns: AXDGColumn<T>[];
+      columnsGroup?: AXDGColumnGroup[];
+    },
+  ) => void;
   data?: AXDGDataItem<T>[];
   onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXDGColumn<T> | null) => void;
 

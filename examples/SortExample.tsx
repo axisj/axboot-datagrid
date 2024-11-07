@@ -143,7 +143,7 @@ function SortExample(props: Props) {
         headerHeight={35}
         data={sortedList}
         columns={columns}
-        onChangeColumns={(columnIndex, width, columns) => {
+        onChangeColumns={(columnIndex, { width, columns }) => {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}

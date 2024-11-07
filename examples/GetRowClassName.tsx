@@ -72,7 +72,7 @@ export default function GetRowClassName(props: Props) {
           headerHeight={35}
           data={list}
           columns={columns}
-          onChangeColumns={(columnIndex, width, columns) => {
+          onChangeColumns={(columnIndex, { width, columns }) => {
             console.log('onChangeColumnWidths', columnIndex, width, columns);
             setColumns(columns);
           }}

@@ -136,7 +136,7 @@ function PropsChangeExample(props: Props) {
             frozenColumnIndex={frozenColumnIndex}
             data={list}
             columns={columns}
-            onChangeColumns={(columnIndex, width, columns) => {
+            onChangeColumns={(columnIndex, { width, columns }) => {
               console.log('onChangeColumnWidths', columnIndex, width, columns);
               setColumns(columns);
             }}
