@@ -265,7 +265,12 @@ export interface AppActions<T> {
   setVariant: (variant: AXDGProps<T>['variant']) => void;
   setSummary: (summary?: AXDGProps<T>['summary']) => void;
   setColumnSortable: (columnSortable?: boolean) => void;
-  sortColumn: (oldIndex: number, newIndex: number) => void;
+  sortColumn: (trLevel: number, oldColumn: SortedColumn, newColumn: SortedColumn) => void;
+}
+
+export interface SortedColumn {
+  index: number;
+  columnIndex: number;
 }
 
 export interface AppStore<T = any> extends AppModel<T>, AppActions<T> {}

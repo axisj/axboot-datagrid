@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createContext, useContext, useRef } from 'react';
 import { createStore, useStore } from 'zustand';
-import { AppStore, CheckedAll } from '../types';
+import { AppModelColumn, AppStore, AXDGColumn, AXDGColumnGroup, CheckedAll, SortedColumn } from '../types';
 import { getCellValueByRowKey, getFrozenColumnsWidth } from '../utils';
 
 const StoreContext = createContext(null);
@@ -237,36 +237,86 @@ export function AppStoreProvider({ children }) {
       setVariant: variant => set({ variant }),
       setSummary: summary => set({ summary }),
       setColumnSortable: columnSortable => set({ columnSortable }),
-      sortColumn: (oldIndex, newIndex) => {
-        console.log('sortColumn', oldIndex, newIndex);
-
+      sortColumn: (trLevel, oldColumn, newColumn) => {
         const columnsGroup = structuredClone(get().columnsGroup);
         const columns = [...get().columns];
+        const columnMap: (SortedColumn | { group: AXDGColumnGroup; children: SortedColumn[] })[] = [];
 
-        // 그룹 앞에 변화가 있거나. 뒤에 변화가 있으면 그룹값 조정해야함.
-        // 그룹안에서 일어나는 일은 상관 없음.
-        // 그룹컬럼이 이동하는 경우도 고려해야함.
+        if (trLevel === 0) {
+          get().columns.forEach((c, i) => {
+            const cg = columnsGroup.find(cg => {
+              return cg.groupStartIndex <= i && cg.groupEndIndex >= i;
+            });
 
-        // 1. 그룹 컬럼이 이동하는 경우
-        if (columnsGroup.findIndex(cg => cg.groupStartIndex === oldIndex) > -1) {
-          const fcgi = columnsGroup.findIndex(cg => cg.groupStartIndex === oldIndex);
-          console.log(`group column move oi:${oldIndex}, ni:${newIndex}`);
-        } else {
-          const cc = columns.splice(oldIndex, 1)[0];
-          columns.splice(newIndex, 0, cc);
-
-          // 2. 다른컬럼이 그룹컬럼 앞으로 이동하는 경우
-
-          // 3. 다른컬럼이 그룹컬럼 뒤로 이동하는 경우
-        }
-
-        if (get().onChangeColumns) {
-          get().onChangeColumns?.(null, {
-            columns,
-            columnsGroup,
+            if (cg) {
+              const cgm = columnMap[cg.groupStartIndex];
+              if (cgm && 'group' in cgm) {
+                cgm.children.push({
+                  index: i,
+                  columnIndex: i,
+                });
+              } else {
+                columnMap[cg.groupStartIndex] = {
+                  group: cg,
+                  children: [
+                    {
+                      index: i,
+                      columnIndex: i,
+                    },
+                  ],
+                };
+              }
+            } else {
+              columnMap.push({
+                index: i,
+                columnIndex: i,
+              });
+            }
           });
+
+          const cc = columnMap.splice(oldColumn.index, 1)[0];
+          columnMap.splice(newColumn.index, 0, cc);
+
+          const newColumnsGroup: AXDGColumnGroup[] = [];
+          const newColumns: AppModelColumn<any>[] = [];
+
+          columnMap.forEach((c, i) => {
+            if ('group' in c) {
+              newColumnsGroup.push({
+                ...c.group,
+                groupStartIndex: i,
+                groupEndIndex: i + c.children.length - 1,
+              });
+
+              c.children.forEach(cg => {
+                newColumns.push(columns[cg.index]);
+              });
+            } else {
+              newColumns.push(columns[c.index]);
+            }
+          });
+
+          if (get().onChangeColumns) {
+            get().onChangeColumns?.(null, {
+              columns: newColumns,
+              columnsGroup: newColumnsGroup,
+            });
+          } else {
+            get().setColumns(newColumns);
+            get().setColumnsGroup(newColumnsGroup);
+          }
         } else {
-          get().setColumns(columns);
+          const cc = columns.splice(oldColumn.columnIndex, 1)[0];
+          columns.splice(newColumn.columnIndex, 0, cc);
+
+          if (get().onChangeColumns) {
+            get().onChangeColumns?.(null, {
+              columns,
+              columnsGroup,
+            });
+          } else {
+            get().setColumns(columns);
+          }
         }
       },
     }));

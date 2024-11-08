@@ -100,12 +100,12 @@ function TableHead({ container }: Props) {
               if (evt.oldIndex === evt.newIndex) return;
               if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
 
-              // console.log(evt.oldIndex, evt.newIndex, row[evt.oldIndex].columnIndex, row[evt.newIndex].columnIndex);
+              sortColumns(
+                ri,
+                { index: evt.oldIndex, columnIndex: row[evt.oldIndex].columnIndex },
+                { index: evt.newIndex, columnIndex: row[evt.newIndex].columnIndex },
+              );
 
-              const oldI = row[evt.oldIndex].columnIndex;
-              const newI = row[evt.newIndex].columnIndex;
-
-              sortColumns(oldI, newI);
               setSorted(true);
             },
           });
