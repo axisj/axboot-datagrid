@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createContext, useContext, useRef } from 'react';
 import { createStore, useStore } from 'zustand';
-import { AppStore, CheckedAll } from '../types';
+import { AppModelColumn, AppStore, AXDGColumn, AXDGColumnGroup, CheckedAll, SortedColumn } from '../types';
 import { getCellValueByRowKey, getFrozenColumnsWidth } from '../utils';
 
 const StoreContext = createContext(null);
@@ -143,7 +143,10 @@ export function AppStoreProvider({ children }) {
             }
           }
         } else {
-          get().onChangeColumns?.(columnIndex, columns[columnIndex].width, columns);
+          get().onChangeColumns?.(columnIndex, {
+            width: columns[columnIndex].width,
+            columns,
+          });
         }
       },
       setColumnResizing: columnResizing => set({ columnResizing }),
@@ -234,15 +237,86 @@ export function AppStoreProvider({ children }) {
       setVariant: variant => set({ variant }),
       setSummary: summary => set({ summary }),
       setColumnSortable: columnSortable => set({ columnSortable }),
-      sortColumn: (oldIndex, newIndex) => {
+      sortColumn: (trLevel, oldColumn, newColumn) => {
+        const columnsGroup = structuredClone(get().columnsGroup);
         const columns = [...get().columns];
-        const cc = columns.splice(oldIndex, 1)[0];
-        columns.splice(newIndex, 0, cc);
+        const columnMap: (SortedColumn | { group: AXDGColumnGroup; children: SortedColumn[] })[] = [];
 
-        if (get().onChangeColumns) {
-          get().onChangeColumns?.(null, null, columns);
+        if (trLevel === 0) {
+          get().columns.forEach((c, i) => {
+            const cg = columnsGroup.find(cg => {
+              return cg.groupStartIndex <= i && cg.groupEndIndex >= i;
+            });
+
+            if (cg) {
+              const cgm = columnMap[cg.groupStartIndex];
+              if (cgm && 'group' in cgm) {
+                cgm.children.push({
+                  index: i,
+                  columnIndex: i,
+                });
+              } else {
+                columnMap[cg.groupStartIndex] = {
+                  group: cg,
+                  children: [
+                    {
+                      index: i,
+                      columnIndex: i,
+                    },
+                  ],
+                };
+              }
+            } else {
+              columnMap.push({
+                index: i,
+                columnIndex: i,
+              });
+            }
+          });
+
+          const cc = columnMap.splice(oldColumn.index, 1)[0];
+          columnMap.splice(newColumn.index, 0, cc);
+
+          const newColumnsGroup: AXDGColumnGroup[] = [];
+          const newColumns: AppModelColumn<any>[] = [];
+
+          columnMap.forEach((c, i) => {
+            if ('group' in c) {
+              newColumnsGroup.push({
+                ...c.group,
+                groupStartIndex: i,
+                groupEndIndex: i + c.children.length - 1,
+              });
+
+              c.children.forEach(cg => {
+                newColumns.push(columns[cg.index]);
+              });
+            } else {
+              newColumns.push(columns[c.index]);
+            }
+          });
+
+          if (get().onChangeColumns) {
+            get().onChangeColumns?.(null, {
+              columns: newColumns,
+              columnsGroup: newColumnsGroup,
+            });
+          } else {
+            get().setColumns(newColumns);
+            get().setColumnsGroup(newColumnsGroup);
+          }
         } else {
-          get().setColumns(columns);
+          const cc = columns.splice(oldColumn.columnIndex, 1)[0];
+          columns.splice(newColumn.columnIndex, 0, cc);
+
+          if (get().onChangeColumns) {
+            get().onChangeColumns?.(null, {
+              columns,
+              columnsGroup,
+            });
+          } else {
+            get().setColumns(columns);
+          }
         }
       },
     }));

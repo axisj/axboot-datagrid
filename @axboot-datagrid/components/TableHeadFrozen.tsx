@@ -38,28 +38,33 @@ function TableHeadFrozen({ container }: Props) {
       const row: Record<string, any>[] = [];
       const secondRow: Record<string, any>[] = [];
       columns.slice(0, frozenColumnIndex).forEach((column, index) => {
-        const findCgIndex = columnsGroup.findIndex(cg => cg.columnIndexes.includes(index));
+        const ci = index;
+        const findCgIndex = columnsGroup.findIndex(cg => cg.groupStartIndex <= ci && cg.groupEndIndex >= ci);
         if (findCgIndex > -1) {
           const prevItem = row[row.length - 1];
           if (!prevItem || prevItem.cgi !== findCgIndex) {
-            const cifi = columnsGroup[findCgIndex].columnIndexes.findIndex(n => n === index);
+            const colspan =
+              Math.max(columnsGroup[findCgIndex].groupEndIndex, frozenColumnIndex) -
+              columnsGroup[findCgIndex].groupStartIndex +
+              1;
             row.push({
               type: 'column-group',
               cgi: findCgIndex,
-              colspan: columnsGroup[findCgIndex].columnIndexes.length - cifi,
+              columnIndex: ci,
+              colspan,
               ...columnsGroup[findCgIndex],
             });
           }
 
           secondRow.push({
             type: 'column',
-            columnIndex: index,
+            columnIndex: ci,
             ...column,
           });
         } else {
           row.push({
             type: 'column',
-            columnIndex: index,
+            columnIndex: ci,
             ...column,
             rowspan: 2,
           });
@@ -97,7 +102,13 @@ function TableHeadFrozen({ container }: Props) {
             onSort: evt => {
               if (evt.oldIndex === evt.newIndex) return;
               if (evt.oldIndex === undefined || evt.newIndex === undefined) return;
-              sortColumns(evt.oldIndex, evt.newIndex);
+
+              sortColumns(
+                ri,
+                { index: evt.oldIndex, columnIndex: row[evt.oldIndex].columnIndex },
+                { index: evt.newIndex, columnIndex: row[evt.newIndex].columnIndex },
+              );
+
               setSorted(true);
             },
           });
@@ -141,6 +152,7 @@ function TableHeadFrozen({ container }: Props) {
                   return (
                     <HeadGroupTd
                       key={index}
+                      data-column-index={c.columnIndex}
                       colSpan={c.colspan}
                       className={'drag-item ' + c.headerClassName}
                       style={{

@@ -69,7 +69,7 @@ function LoadingExample(props: Props) {
           headerHeight={35}
           data={list}
           columns={columns}
-          onChangeColumns={(columnIndex, width, columns) => {
+          onChangeColumns={(columnIndex, { width, columns }) => {
             console.log('onChangeColumnWidths', columnIndex, width, columns);
             setColumns(columns);
           }}

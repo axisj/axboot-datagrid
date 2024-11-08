@@ -152,7 +152,7 @@ function BasicExample(props: Props) {
         height={400}
         data={list}
         columns={columns}
-        onChangeColumns={(columnIndex, width, columns) => {
+        onChangeColumns={(columnIndex, { width, columns, columnsGroup }) => {
           console.log('onChangeColumnWidths', columnIndex, width, columns);
           setColumns(columns);
         }}
@@ -174,4 +174,34 @@ const Container = styled.div`
 export default BasicExample;
 ```
 
-TBD Examples
+## Update Note
+
+### V1.4
+- columnsGroup 타입변경
+기존 columnsIndex: []에서 start, end 지정 형태로 변경되었습니다.
+```typescript jsx
+[{ label: '묶음', groupStartIndex: 2, groupEndIndex: 4, align: 'center' }]
+```
+- onChangeColumns 속성 변경
+```typescript jsx
+// onChangeColumns Type 
+onChangeColumns?: (
+  columnIndex: number | null,
+  info: {
+    width?: number;
+    columns: AXDGColumn<T>[];
+    columnsGroup?: AXDGColumnGroup[];
+  },
+) => void;
+
+// onChangeColumns에서 변경된 컬럼과 컬럼 그룹을 받을 수 있습니다
+<AXDataGrid
+  /*...*/
+  onChangeColumns={(columnIndex, { columns, columnsGroup }) => {
+    console.log('onChangeColumnWidths', columnIndex, columns, columnsGroup);
+    setColumns(columns);
+    setColumnsGroup(columnsGroup);
+  }}
+/>
+```
+
