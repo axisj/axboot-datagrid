@@ -487,6 +487,7 @@ const HeaderContainer = styled.div`
   overflow: hidden;
   border-top-left-radius: var(--axdg-border-radius);
   border-top-right-radius: var(--axdg-border-radius);
+  box-sizing: border-box;
 `;
 
 const Header = styled.div`
@@ -499,6 +500,7 @@ const FrozenHeader = styled.div`
   border-right: 1px solid var(--axdg-border-color-base);
   box-shadow: 0 0 2px var(--axdg-border-color-base);
   z-index: 3;
+  box-sizing: border-box;
 `;
 
 const BodyContainer = styled.div<{ isLast: boolean }>`
@@ -509,6 +511,7 @@ const BodyContainer = styled.div<{ isLast: boolean }>`
   align-content: stretch;
   background-color: var(--axdg-scroll-track-bg);
   overflow: hidden;
+  box-sizing: border-box;
 
   ${({ isLast }) => {
     if (isLast) {
@@ -524,6 +527,7 @@ const ScrollContainer = styled.div`
   position: relative;
   overflow: auto;
   flex: 1;
+  box-sizing: border-box;
 
   &::-webkit-scrollbar {
     width: var(--axdg-scroll-size);
@@ -562,6 +566,7 @@ const ScrollContent = styled.div`
   position: absolute;
   min-width: 100%;
   z-index: 1;
+  box-sizing: border-box;
 `;
 
 const FrozenScrollContent = styled.div`
@@ -571,6 +576,7 @@ const FrozenScrollContent = styled.div`
   z-index: 2;
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
 `;
 
 const FooterContainer = styled.div`
@@ -582,6 +588,7 @@ const FooterContainer = styled.div`
 
   border-bottom-left-radius: var(--axdg-border-radius);
   border-bottom-right-radius: var(--axdg-border-radius);
+  box-sizing: border-box;
 `;
 
 const SummaryContainer = styled.div<{ position: string }>`
@@ -589,6 +596,7 @@ const SummaryContainer = styled.div<{ position: string }>`
   position: relative;
   min-width: 100%;
   overflow: hidden;
+  box-sizing: border-box;
 
   ${({ position }) => {
     if (position === 'top') {
@@ -610,6 +618,7 @@ const SummaryContainer = styled.div<{ position: string }>`
 
 const Summary = styled.div`
   z-index: 1;
+  box-sizing: border-box;
 `;
 const FrozenSummary = styled.div`
   position: absolute;
@@ -617,6 +626,7 @@ const FrozenSummary = styled.div`
   border-right: 1px solid var(--axdg-border-color-base);
   box-shadow: 0 0 2px var(--axdg-border-color-base);
   z-index: 3;
+  box-sizing: border-box;
 `;
 
 export default Table;
