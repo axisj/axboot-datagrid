@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { AXDGColumn, AXDGDataItem, AXDGDataItemStatus } from '../@axboot-datagrid';
+import { AXDGColumn, AXDGColumnGroup, AXDGDataItem, AXDGDataItemStatus, AXDGProps } from '../@axboot-datagrid';
 import { DateEditor, InputEditor, SelectEditor } from './editors';
 
 export interface Item {
@@ -48,9 +48,21 @@ export default function useEditorGrid() {
   const [checkedKeys, setCheckedKeys] = React.useState<React.Key[]>([]);
   const [selectedRowKey, setSelectedRowKey] = React.useState('');
 
-  const handleColumnsChange = React.useCallback((columnIndex: number | null, info: any) => {
-    setColWidths(columns.map(column => column.width));
-  }, []);
+  const handleColumnsChange = React.useCallback(
+    (
+      columnIndex: number | null,
+      {
+        columns,
+      }: {
+        width?: number;
+        columns: AXDGColumn<any>[];
+        columnsGroup?: AXDGColumnGroup[];
+      },
+    ) => {
+      setColWidths(columns.map(column => column.width));
+    },
+    [],
+  );
 
   const handleAddList = React.useCallback(() => {
     setList([
