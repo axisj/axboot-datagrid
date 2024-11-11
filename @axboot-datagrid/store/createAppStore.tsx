@@ -107,6 +107,7 @@ export function AppStoreProvider({ children }) {
       },
       setColumnWidth: (columnIndex, width) => {
         const columns = get().columns;
+        const columnsGroup = get().columnsGroup;
         const frozenColumnIndex = get().frozenColumnIndex;
 
         if (width !== undefined) {
@@ -146,6 +147,7 @@ export function AppStoreProvider({ children }) {
           get().onChangeColumns?.(columnIndex, {
             width: columns[columnIndex].width,
             columns,
+            columnsGroup,
           });
         }
       },
