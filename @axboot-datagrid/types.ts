@@ -222,7 +222,13 @@ export interface AppActions<T> {
   setData: (data: AXDGDataItem<T>[]) => void;
   setCheckedIndexes: (ids: number[]) => void;
   setCheckedAll: (checkedAll: CheckedAll) => void;
-  setColumnWidth: (columnIndex: number, width?: number) => void;
+  setColumnWidth: (
+    columnIndex: number,
+    options?: {
+      width?: number;
+      updateColumns?: boolean;
+    },
+  ) => void;
   setColumnResizing: (columnResizing: boolean) => void;
   toggleColumnSort: (columnIndex: number) => void;
   setPage: (page: AXDGPage) => void;

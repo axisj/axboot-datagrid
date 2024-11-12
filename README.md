@@ -68,6 +68,8 @@ Add the code below to your project.
 
 ## USE
 
+- codesandbox DEMO : https://codesandbox.io/p/devbox/basic-example-5ch6kt?embed=1&file=%2Fsrc%2FApp.tsx
+
 ```typescript jsx
 import * as React from 'react';
 import styled from '@emotion/styled';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createContext, useContext, useRef } from 'react';
 import { createStore, useStore } from 'zustand';
-import { AppModelColumn, AppStore, AXDGColumn, AXDGColumnGroup, CheckedAll, SortedColumn } from '../types';
+import { AppModelColumn, AppStore, AXDGColumnGroup, CheckedAll, SortedColumn } from '../types';
 import { getCellValueByRowKey, getFrozenColumnsWidth } from '../utils';
 
 const StoreContext = createContext(null);
@@ -105,10 +105,13 @@ export function AppStoreProvider({ children }) {
 
         set({ checkedIndexesMap, checkedAll });
       },
-      setColumnWidth: (columnIndex, width) => {
+      setColumnWidth: (columnIndex, options) => {
         const columns = get().columns;
         const columnsGroup = get().columnsGroup;
+        const columnResizing = get().columnResizing;
         const frozenColumnIndex = get().frozenColumnIndex;
+
+        const { width, updateColumns } = options ?? {};
 
         if (width !== undefined) {
           if (columns[columnIndex]) {
@@ -144,11 +147,13 @@ export function AppStoreProvider({ children }) {
             }
           }
         } else {
-          get().onChangeColumns?.(columnIndex, {
-            width: columns[columnIndex].width,
-            columns,
-            columnsGroup,
-          });
+          if (updateColumns || columnResizing) {
+            get().onChangeColumns?.(columnIndex, {
+              width: columns[columnIndex].width,
+              columns,
+              columnsGroup,
+            });
+          }
         }
       },
       setColumnResizing: columnResizing => set({ columnResizing }),

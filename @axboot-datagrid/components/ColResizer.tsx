@@ -29,14 +29,14 @@ function ColResizer({ container, columnIndex, hideHandle, bordered }: Props) {
 
       mouseEventSubscribe(
         mousePosition => {
-          const mX = mousePosition.clientX + 4;
+          const mX = mousePosition.clientX + 1;
           const width = columnSX + 50 < mX ? mX - columnSX : 50;
           setColumnResizing(true);
-          setColumnWidth(columnIndex, width);
+          setColumnWidth(columnIndex, { width });
         },
         () => {
-          setColumnResizing(false);
           setColumnWidth(columnIndex);
+          setColumnResizing(false);
         },
       );
     },
@@ -64,11 +64,11 @@ function ColResizer({ container, columnIndex, hideHandle, bordered }: Props) {
 
         await delay(30);
 
-        const targetTd = targetDiv.querySelector(`tr:last-of-type td[data-column-index="${columnIndex}"]`);
+        const targetTd = targetDiv.querySelector(`tr td[data-column-index="${columnIndex}"]`);
 
         if (targetTd) {
-          setColumnWidth(columnIndex, targetTd.getBoundingClientRect().width);
-          setColumnWidth(columnIndex);
+          setColumnWidth(columnIndex, { width: targetTd.getBoundingClientRect().width });
+          setColumnWidth(columnIndex, { updateColumns: true });
         }
         targetDiv.remove();
       }
