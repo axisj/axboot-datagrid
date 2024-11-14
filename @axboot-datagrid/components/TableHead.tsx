@@ -230,7 +230,7 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
       `;
     }
   }}
-  &.rfdg-tr-line-number {
+  &.rfdg-tr-line-number, &.bordered {
     border-right: 1px solid var(--axdg-border-color-base);
   }
 `;
