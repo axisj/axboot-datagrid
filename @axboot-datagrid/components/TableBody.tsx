@@ -241,6 +241,10 @@ export const TableBodyTr = styled.tr<{
           line-height: ${itemHeight}px;
           padding: 0 6.5px;
           height: ${itemHeight + itemPadding * 2}px;
+
+          &.bordered {
+            border-right: 1px solid var(--axdg-border-color-base);
+          }
         }
       `;
     }
@@ -251,6 +255,10 @@ export const TableBodyTr = styled.tr<{
         line-height: ${itemHeight}px; // - border
         padding: 0 6.5px;
         height: ${itemHeight + itemPadding * 2}px;
+
+        &.bordered {
+          border-right: 1px solid var(--axdg-border-color-base);
+        }
       }
     `;
   }}

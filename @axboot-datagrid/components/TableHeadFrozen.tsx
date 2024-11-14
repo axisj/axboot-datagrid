@@ -136,7 +136,7 @@ function TableHeadFrozen({ container }: Props) {
             <tr key={ri} data-columns-tr={ri}>
               {ri === 0 && showLineNumber && <LineNumberTd rowSpan={columnsTable.length}>&nbsp;</LineNumberTd>}
               {ri === 0 && hasRowSelection && (
-                <HeadTd rowSpan={columnsTable.length}>
+                <HeadTd rowSpan={columnsTable.length} className={frozenColumnIndex > 0 ? 'bordered' : ''}>
                   <RowSelector
                     checked={selectedAll === true}
                     indeterminate={selectedAll === 'indeterminate'}

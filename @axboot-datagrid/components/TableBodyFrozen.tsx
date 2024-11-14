@@ -74,7 +74,7 @@ function TableBodyFrozen(props: Props) {
             >
               {showLineNumber && <LineNumberTd>{ri + 1}</LineNumberTd>}
               {hasRowChecked && (
-                <td>
+                <td className={frozenColumnIndex > 0 ? 'bordered' : ''}>
                   <RowSelector
                     checked={selectedAll === true || selectedKeyMap.get(ri)}
                     handleChange={checked => handleChangeChecked(ri, checked)}
