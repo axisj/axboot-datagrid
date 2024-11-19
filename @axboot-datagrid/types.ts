@@ -115,6 +115,12 @@ export interface AXDGClickParams<T> {
   column: AXDGColumn<T>;
 }
 
+export interface AXDGChangeColumnsInfo<T> {
+  width?: number;
+  columns: AXDGColumn<T>[];
+  columnsGroup?: AXDGColumnGroup[];
+}
+
 export interface AXDGProps<T> {
   width: number;
   height: number;
@@ -127,14 +133,7 @@ export interface AXDGProps<T> {
 
   columns: AXDGColumn<T>[];
   columnsGroup?: AXDGColumnGroup[];
-  onChangeColumns?: (
-    columnIndex: number | null,
-    info: {
-      width?: number;
-      columns: AXDGColumn<T>[];
-      columnsGroup?: AXDGColumnGroup[];
-    },
-  ) => void;
+  onChangeColumns?: (columnIndex: number | null, info: AXDGChangeColumnsInfo<T>) => void;
   data?: AXDGDataItem<T>[];
   onChangeData?: (index: number, columnIndex: number | null, item: T, column: AXDGColumn<T> | null) => void;
 
