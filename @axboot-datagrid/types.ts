@@ -90,9 +90,10 @@ export interface AXDGPage {
   paginationRender?: () => void;
 }
 
-export interface AXDGRowChecked {
+export interface AXDGRowChecked<T> {
   checkedIndexes?: number[];
   checkedRowKeys?: React.Key[];
+  disabled?: (index: number, item: AXDGDataItem<T>) => boolean;
   onChange: (checkedIndexes: number[], checkedRowKeys: React.Key[], checkedAll?: CheckedAll) => void;
 }
 
@@ -150,7 +151,7 @@ export interface AXDGProps<T> {
   scrollTop?: number;
   scrollLeft?: number;
 
-  rowChecked?: AXDGRowChecked;
+  rowChecked?: AXDGRowChecked<T>;
   sort?: AXDGSortInfo;
   onClick?: (params: AXDGClickParams<T>) => void;
 
@@ -247,7 +248,7 @@ export interface AppActions<T> {
   setFrozenColumnIndex: (frozenColumnIndex: number) => void;
   setCheckedIndexesMap: (checkedIndexesMap: Map<number, any>) => void;
 
-  setRowChecked: (rowChecked?: AXDGRowChecked) => void;
+  setRowChecked: (rowChecked?: AXDGRowChecked<T>) => void;
   setSort: (sort?: AXDGSortInfo) => void;
   setSortParams: (sortParams?: Record<string, AXDGSortParam>) => void;
   setFrozenColumnsWidth: (frozenColumnsWidth: number) => void;

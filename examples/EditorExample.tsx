@@ -63,6 +63,7 @@ function EditorExample(props: Props) {
             console.log('onChangeData', ri, ci, item);
           }}
           rowChecked={{
+            disabled: (ri, item) => ri === 0,
             // checkedIndexes: [],
             checkedRowKeys: checkedKeys,
             onChange: (ids, keys, selectedAll) => {

@@ -22,7 +22,7 @@ function TableBodyFrozen(props: Props) {
   const columns = useAppStore(s => s.columns);
   const selectedKeyMap = useAppStore(s => s.checkedIndexesMap);
   const selectedAll = useAppStore(s => s.checkedAll);
-  const hasRowChecked = useAppStore(s => !!s.rowChecked);
+  const rowChecked = useAppStore(s => s.rowChecked);
   const showLineNumber = useAppStore(s => s.showLineNumber);
   const hoverItemIndexes = useAppStore(s => s.hoverItemIndexes);
   const setHoverItemIndexes = useAppStore(s => s.setHoverItemIndexes);
@@ -42,6 +42,7 @@ function TableBodyFrozen(props: Props) {
   const startIdx = Math.max(Math.floor(scrollTop / trHeight), 0);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
   const mergeColumns = cellMergeOptions?.columnsMap;
+  const hasRowChecked = !!rowChecked;
 
   const { dataSet, setItemValue, handleMoveEditFocus, handleChangeChecked } = useBodyData(startIdx, endNumber);
 
@@ -76,6 +77,7 @@ function TableBodyFrozen(props: Props) {
               {hasRowChecked && (
                 <td className={frozenColumnIndex > 0 ? 'bordered' : ''}>
                   <RowSelector
+                    disabled={rowChecked.disabled?.(ri, item)}
                     checked={selectedAll === true || selectedKeyMap.get(ri)}
                     handleChange={checked => handleChangeChecked(ri, checked)}
                   />

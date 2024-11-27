@@ -15,13 +15,20 @@ interface Props extends StylesProps {
   handleChange?: (checked: boolean) => void;
 }
 
-function RowSelector({ checked = false, indeterminate, handleChange }: Props) {
+function RowSelector({ checked = false, indeterminate, handleChange, disabled }: Props) {
   const itemHeight = useAppStore(s => s.itemHeight);
   const checkboxHeight = Math.min(15, itemHeight);
 
   return (
-    <Container itemHeight={itemHeight} onClick={() => handleChange?.(!checked)}>
-      <CheckBoxControl size={checkboxHeight} checked={checked} indeterminate={indeterminate} />
+    <Container
+      disabled={disabled}
+      itemHeight={itemHeight}
+      onClick={() => {
+        if (disabled) return;
+        handleChange?.(!checked);
+      }}
+    >
+      <CheckBoxControl disabled={disabled} size={checkboxHeight} checked={checked} indeterminate={indeterminate} />
     </Container>
   );
 }
@@ -72,7 +79,14 @@ const CheckBoxControl = styled.div<StylesProps>`
     `;
   }};
 
-  ${({ checked, indeterminate, size = 0 }) => {
+  ${({ disabled, checked, indeterminate, size = 0 }) => {
+    if (disabled) {
+      return css`
+        background-color: var(--axdg-border-color-base);
+        border-color: var(--axdg-border-color-light);
+        cursor: not-allowed;
+      `;
+    }
     if (indeterminate) {
       return css`
         &:after {
