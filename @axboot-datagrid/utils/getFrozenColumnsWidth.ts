@@ -3,7 +3,7 @@ import { getLineNumberWidth } from './getLineNumber';
 
 interface Props<T> {
   showLineNumber?: boolean;
-  rowChecked?: AXDGRowChecked;
+  rowChecked?: AXDGRowChecked<T>;
   itemHeight: number;
   frozenColumnIndex: number;
   columns: AXDGColumn<T>[];

@@ -47,7 +47,7 @@ interface Props<T> {
   scrollTop?: number;
   scrollLeft?: number;
 
-  rowChecked?: AXDGRowChecked;
+  rowChecked?: AXDGRowChecked<T>;
   checkedIndexesMap: Map<number, any>;
   sort?: AXDGSortInfo;
   sortParams?: Record<string, AXDGSortParam>;
