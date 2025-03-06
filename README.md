@@ -178,6 +178,40 @@ export default BasicExample;
 
 ## Update Note
 
+### v1.5
+- rowChecked 속성 추가 (rowChecked > isRadio, rowChecked > disabled) 
+```typescript
+<AXDataGrid<IListItem>
+  width={containerWidth}
+  height={containerHeight}
+  headerHeight={35}
+  data={sortedList}
+  columns={columns}
+  onChangeColumns={(columnIndex, { width, columns }) => {
+    console.log('onChangeColumnWidths', columnIndex, width, columns);
+    setColumns(columns);
+  }}
+  rowChecked={{
+    disabled: (ri, item) => ri === 0,
+    isRadio: true,
+    checkedRowKeys: checkedKeys,
+    onChange: (ids, keys, selectedAll) => {
+      console.log('onChange rowSelection', ids, keys, selectedAll);
+      setCheckedKeys(keys);
+    },
+  }}
+  sort={{
+    sortParams,
+    onChange: sortParams => {
+      console.log('onChange: sortParams', sortParams);
+      setSortParams(sortParams);
+    },
+  }}
+  showLineNumber
+  rowKey={'nation'}
+/>
+```
+
 ### V1.4
 - columnsGroup 타입변경
 기존 columnsIndex: []에서 start, end 지정 형태로 변경되었습니다.
