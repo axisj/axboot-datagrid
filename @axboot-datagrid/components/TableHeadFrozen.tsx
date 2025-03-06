@@ -16,6 +16,7 @@ interface Props {
 function TableHeadFrozen({ container }: Props) {
   const sort = useAppStore(s => s.sort);
   const hasRowSelection = useAppStore(s => !!s.rowChecked);
+  const isRadio = useAppStore(s => s.rowChecked?.isRadio);
   const showLineNumber = useAppStore(s => s.showLineNumber);
   const headerHeight = useAppStore(s => s.headerHeight);
   const columns = useAppStore(s => s.columns);
@@ -137,13 +138,15 @@ function TableHeadFrozen({ container }: Props) {
               {ri === 0 && showLineNumber && <LineNumberTd rowSpan={columnsTable.length}>&nbsp;</LineNumberTd>}
               {ri === 0 && hasRowSelection && (
                 <HeadTd rowSpan={columnsTable.length} className={frozenColumnIndex > 0 ? 'bordered' : ''}>
-                  <RowSelector
-                    checked={selectedAll === true}
-                    indeterminate={selectedAll === 'indeterminate'}
-                    handleChange={checked => {
-                      setSelectedAll(checked);
-                    }}
-                  />
+                  {!isRadio && (
+                    <RowSelector
+                      checked={selectedAll === true}
+                      indeterminate={selectedAll === 'indeterminate'}
+                      handleChange={checked => {
+                        setSelectedAll(checked);
+                      }}
+                    />
+                  )}
                 </HeadTd>
               )}
 

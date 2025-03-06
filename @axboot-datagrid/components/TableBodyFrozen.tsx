@@ -43,8 +43,12 @@ function TableBodyFrozen(props: Props) {
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
   const mergeColumns = cellMergeOptions?.columnsMap;
   const hasRowChecked = !!rowChecked;
+  const isRadio = rowChecked?.isRadio;
 
-  const { dataSet, setItemValue, handleMoveEditFocus, handleChangeChecked } = useBodyData(startIdx, endNumber);
+  const { dataSet, setItemValue, handleMoveEditFocus, handleChangeChecked, handleChangeCheckedRadio } = useBodyData(
+    startIdx,
+    endNumber,
+  );
 
   return (
     <BodyTable variant={variant} style={props.style}>
@@ -79,7 +83,14 @@ function TableBodyFrozen(props: Props) {
                   <RowSelector
                     disabled={rowChecked.disabled?.(ri, item)}
                     checked={selectedAll === true || selectedKeyMap.get(ri)}
-                    handleChange={checked => handleChangeChecked(ri, checked)}
+                    handleChange={async checked => {
+                      if (isRadio) {
+                        await handleChangeCheckedRadio(ri);
+                      } else {
+                        await handleChangeChecked(ri, checked);
+                      }
+                    }}
+                    isRadio={isRadio}
                   />
                 </td>
               )}

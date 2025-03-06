@@ -91,6 +91,7 @@ export interface AXDGPage {
 }
 
 export interface AXDGRowChecked<T> {
+  isRadio?: boolean;
   checkedIndexes?: number[];
   checkedRowKeys?: React.Key[];
   disabled?: (index: number, item: AXDGDataItem<T>) => boolean;

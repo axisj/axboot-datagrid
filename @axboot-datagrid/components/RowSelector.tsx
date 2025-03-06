@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 
 interface StylesProps {
   checked?: boolean;
+  isRadio?: boolean;
   indeterminate?: boolean;
   disabled?: boolean;
   size?: number;
@@ -15,7 +16,7 @@ interface Props extends StylesProps {
   handleChange?: (checked: boolean) => void;
 }
 
-function RowSelector({ checked = false, indeterminate, handleChange, disabled }: Props) {
+function RowSelector({ checked = false, isRadio, indeterminate, handleChange, disabled }: Props) {
   const itemHeight = useAppStore(s => s.itemHeight);
   const checkboxHeight = Math.min(15, itemHeight);
 
@@ -28,7 +29,13 @@ function RowSelector({ checked = false, indeterminate, handleChange, disabled }:
         handleChange?.(!checked);
       }}
     >
-      <CheckBoxControl disabled={disabled} size={checkboxHeight} checked={checked} indeterminate={indeterminate} />
+      <CheckBoxControl
+        isRadio={isRadio}
+        disabled={disabled}
+        size={checkboxHeight}
+        checked={checked}
+        indeterminate={indeterminate}
+      />
     </Container>
   );
 }
@@ -61,6 +68,14 @@ const CheckBoxControl = styled.div<StylesProps>`
     border-color: var(--axdg-primary-color);
   }
 
+  ${({ isRadio }) => {
+    if (isRadio) {
+      return css`
+        border-radius: 50%;
+      `;
+    }
+  }};
+
   ${({ size = 0 }) => {
     return css`
       width: ${size}px;
@@ -79,7 +94,7 @@ const CheckBoxControl = styled.div<StylesProps>`
     `;
   }};
 
-  ${({ disabled, checked, indeterminate, size = 0 }) => {
+  ${({ disabled, checked, indeterminate, size = 0, isRadio }) => {
     if (disabled) {
       return css`
         background-color: var(--axdg-border-color-base);
@@ -98,7 +113,7 @@ const CheckBoxControl = styled.div<StylesProps>`
         }
       `;
     }
-    if (checked) {
+    if (checked && !isRadio) {
       return css`
         background-color: var(--axdg-primary-color);
         border-color: var(--axdg-primary-color);
@@ -108,6 +123,22 @@ const CheckBoxControl = styled.div<StylesProps>`
           border-top: 0;
           border-left: 0;
           transform: rotate(45deg) scale(1) translate(-50%, -50%);
+        }
+      `;
+    }
+    if (checked && isRadio) {
+      return css`
+        background-color: var(--axdg-primary-color);
+        border-color: var(--axdg-primary-color);
+
+        &:after {
+          background: #ffffff;
+          border: 0 none;
+          width: ${size - 8}px;
+          height: ${size - 8}px;
+          left: 3px;
+          top: 3px;
+          border-radius: 50%;
         }
       `;
     }

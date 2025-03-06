@@ -71,7 +71,7 @@ const list = rawData.map((data, index) => {
 
 const numRender = (item: AXDGItemRenderProps<IListItem>) => <>{toMoney(item.value)}</>;
 
-function SortExample(props: Props) {
+function CheckedExample(props: Props) {
   const [checkedKeys, setCheckedKeys] = useState<Key[]>();
   const [sortParams, setSortParams] = React.useState<AXDGSortParam[]>([]);
   const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
@@ -150,9 +150,10 @@ function SortExample(props: Props) {
           setColumns(columns);
         }}
         rowChecked={{
+          isRadio: true,
           checkedRowKeys: checkedKeys,
           onChange: (ids, keys, selectedAll) => {
-            console.log('onChange rowSelection', ids, selectedAll);
+            console.log('onChange rowSelection', ids, keys, selectedAll);
             setCheckedKeys(keys);
           },
         }}
@@ -172,4 +173,4 @@ function SortExample(props: Props) {
 
 const Container = styled(ExampleContainer)``;
 
-export default SortExample;
+export default CheckedExample;

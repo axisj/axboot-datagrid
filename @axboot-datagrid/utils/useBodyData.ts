@@ -133,10 +133,24 @@ export function useBodyData(startIdx: number, endNumber: number) {
     [data, selectedKeyMap, setData, setSelectedKeys],
   );
 
+  const handleChangeCheckedRadio = React.useCallback(
+    async (index: number) => {
+      selectedKeyMap.clear();
+      selectedKeyMap.set(index, true);
+      setSelectedKeys([index]);
+      data.forEach((n, idx) => {
+        n.checked = idx === index;
+      });
+      setData([...data]);
+    },
+    [data, selectedKeyMap, setData, setSelectedKeys],
+  );
+
   return {
     dataSet,
     setItemValue,
     handleMoveEditFocus,
     handleChangeChecked,
+    handleChangeCheckedRadio,
   };
 }
