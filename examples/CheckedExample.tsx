@@ -82,7 +82,7 @@ function CheckedExample(props: Props) {
     },
     {
       key: 'awpc',
-      label: 'active population',
+      label: <>{'active population'}</>,
       width: 150,
       align: 'right',
       itemRender: numRender,
