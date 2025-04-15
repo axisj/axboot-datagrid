@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 export type AlignDirection = 'left' | 'center' | 'right';
 export type MoveDirection = 'prev' | 'next' | 'current';
@@ -24,7 +24,7 @@ export interface AXDGItemRenderProps<T> {
 
 export interface AXDGColumn<T> {
   key: string | string[];
-  label: string;
+  label: ReactNode;
   width: number;
   align?: AlignDirection;
   headerAlign?: AlignDirection;
@@ -37,7 +37,7 @@ export interface AXDGColumn<T> {
 }
 
 export interface AXDGColumnGroup {
-  label: string;
+  label: ReactNode;
   groupStartIndex: number;
   groupEndIndex: number;
   align?: AlignDirection;
