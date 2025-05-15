@@ -33,7 +33,7 @@ function ColumnsGroupExample(props: Props) {
         height={containerHeight}
         data={list}
         frozenColumnIndex={3}
-        headerHeight={48}
+        // headerHeight={48}
         itemHeight={50}
         itemPadding={5}
         columns={[
