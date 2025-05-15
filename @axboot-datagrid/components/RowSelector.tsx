@@ -23,7 +23,6 @@ function RowSelector({ checked = false, isRadio, indeterminate, handleChange, di
   return (
     <Container
       disabled={disabled}
-      itemHeight={itemHeight}
       onClick={() => {
         if (disabled) return;
         handleChange?.(!checked);
@@ -42,13 +41,10 @@ function RowSelector({ checked = false, isRadio, indeterminate, handleChange, di
 
 const Container = styled.div<StylesProps>`
   position: relative;
-
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: center;
-
-  height: ${p => p.itemHeight}px;
 `;
 
 const CheckBoxControl = styled.div<StylesProps>`

@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useAppStore } from '../store';
 import RowSelector from './RowSelector';
 import TableColGroupFrozen from './TableColGroupFrozen';
 import { HeadGroupTd, HeadTable, HeadTd } from './TableHead';
 import ColResizer from './ColResizer';
 import TableHeadColumn from './TableHeadColumn';
-import { useEffect, useState } from 'react';
 import Sortable from 'sortablejs';
 
 interface Props {
