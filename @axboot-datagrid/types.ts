@@ -25,7 +25,7 @@ export interface AXDGItemRenderProps<T> {
 export interface AXDGColumn<T> {
   key: string | string[];
   label: ReactNode;
-  width?: number;
+  width: number;
   align?: AlignDirection;
   headerAlign?: AlignDirection;
   sortDisable?: boolean;
@@ -123,6 +123,8 @@ export interface AXDGChangeColumnsInfo<T> {
   columnsGroup?: AXDGColumnGroup[];
 }
 
+type AXDGColumnWithOptionalWidth<T> = Partial<Pick<AXDGColumn<T>, 'width'>> & Omit<AXDGColumn<T>, 'width'>;
+
 export interface AXDGProps<T> {
   width: number;
   height: number;
@@ -133,7 +135,7 @@ export interface AXDGProps<T> {
   itemPadding?: number;
   frozenColumnIndex?: number;
 
-  columns: AXDGColumn<T>[];
+  columns: AXDGColumnWithOptionalWidth<T>[];
   columnsGroup?: AXDGColumnGroup[];
   onChangeColumns?: (columnIndex: number | null, info: AXDGChangeColumnsInfo<T>) => void;
   data?: AXDGDataItem<T>[];

@@ -79,6 +79,7 @@ export function AXDataGrid<T = Record<string, any>>({
         return {
           ...column,
           left: -1,
+          width: column.width ?? 100,
         };
       }),
       ...columns.slice(frozenColumnIndex).map(column => {
@@ -87,6 +88,7 @@ export function AXDataGrid<T = Record<string, any>>({
         return {
           ...column,
           left,
+          width: column.width ?? 100,
         };
       }),
     ];
