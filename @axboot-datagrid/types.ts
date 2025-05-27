@@ -25,7 +25,7 @@ export interface AXDGItemRenderProps<T> {
 export interface AXDGColumn<T> {
   key: string | string[];
   label: ReactNode;
-  width: number;
+  width?: number;
   align?: AlignDirection;
   headerAlign?: AlignDirection;
   sortDisable?: boolean;

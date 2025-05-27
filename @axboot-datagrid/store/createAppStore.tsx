@@ -121,7 +121,7 @@ export function AppStoreProvider({ children }) {
             let left = columns[columnIndex].left;
 
             for (let i = columnIndex + 1; i < columns.length; i++) {
-              left += columns[i - 1].width;
+              left += columns[i - 1].width ?? 100;
               if (i > frozenColumnIndex) {
                 columns[i].left = left;
               }

@@ -21,7 +21,7 @@ function TableColGroupFrozen(props: Props) {
       {showLineNumber && <col width={lineNumberWidth} />}
       {hasRowChecked && <col width={rowCheckboxWidth} />}
       {columns.slice(0, frozenColumnIndex).map((column, index) => (
-        <col key={index} width={column.width} />
+        <col key={index} width={column.width ?? 100} />
       ))}
     </colgroup>
   );

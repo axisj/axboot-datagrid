@@ -52,7 +52,6 @@ function LineNumberExample(props: Props) {
     {
       key: 'createAt',
       label: '작성일A',
-      width: 100,
     },
     {
       key: 'createAt',

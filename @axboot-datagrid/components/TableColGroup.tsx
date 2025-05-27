@@ -8,7 +8,7 @@ function TableColGroup() {
   return (
     <colgroup>
       {columns.slice(frozenColumnIndex).map((column, index) => (
-        <col key={index} width={column.width} />
+        <col key={index} width={column.width ?? 100} />
       ))}
       <col />
     </colgroup>
