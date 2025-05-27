@@ -55,7 +55,7 @@ function TableBody({ scrollContainerRef }: Props) {
     let startCIdx, endCIdx;
     // columns.
     for (let i = frozenColumnIndex; i < columns.length; i++) {
-      const { left, width } = columns[i];
+      const { left, width = 100 } = columns[i];
       if (left + width >= start && left < end) {
         if (startCIdx === undefined) {
           startCIdx = i;
