@@ -38,6 +38,7 @@ function TableBodyFrozen(props: Props) {
   const getRowClassName = useAppStore(s => s.getRowClassName);
   const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
   const variant = useAppStore(s => s.variant);
+  const onClick = useAppStore(s => s.onClick);
 
   const startIdx = Math.max(Math.floor(scrollTop / trHeight), 0);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -49,6 +50,7 @@ function TableBodyFrozen(props: Props) {
     startIdx,
     endNumber,
   );
+  const hasOnClick = !!onClick;
 
   return (
     <BodyTable variant={variant} style={props.style}>
@@ -75,6 +77,7 @@ function TableBodyFrozen(props: Props) {
               itemPadding={itemPadding}
               active={active}
               className={className + (active ? ' active' : '')}
+              hasOnClick={hasOnClick}
               {...trProps}
             >
               {showLineNumber && <LineNumberTd>{ri + 1}</LineNumberTd>}

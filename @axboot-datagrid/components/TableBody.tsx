@@ -36,6 +36,7 @@ function TableBody({ scrollContainerRef }: Props) {
   const getRowClassName = useAppStore(s => s.getRowClassName);
   const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
   const variant = useAppStore(s => s.variant);
+  const onClick = useAppStore(s => s.onClick);
 
   const startIdx = Math.max(Math.floor(scrollTop / trHeight), 0);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -82,6 +83,7 @@ function TableBody({ scrollContainerRef }: Props) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollContainerRef.current?.scrollLeft, width, frozenColumnsWidth, columns, frozenColumnIndex]);
+  const hasOnClick = !!onClick;
 
   return (
     <BodyTable variant={variant}>
@@ -107,6 +109,7 @@ function TableBody({ scrollContainerRef }: Props) {
               itemHeight={itemHeight}
               itemPadding={itemPadding}
               active={active}
+              hasOnClick={hasOnClick}
               className={className + (active ? ' active' : '')}
               {...trProps}
             >
@@ -231,8 +234,9 @@ export const TableBodyTr = styled.tr<{
   active?: boolean;
   editable?: boolean;
   odd?: boolean;
+  hasOnClick?: boolean;
 }>`
-  ${({ editable, itemHeight, itemPadding }) => {
+  ${({ editable, itemHeight, itemPadding, hasOnClick }) => {
     if (editable) {
       return css`
         cursor: default;
@@ -249,7 +253,7 @@ export const TableBodyTr = styled.tr<{
       `;
     }
     return css`
-      cursor: pointer;
+      cursor: ${hasOnClick ? 'pointer' : 'default'};
 
       > td {
         line-height: ${itemHeight}px; // - border
