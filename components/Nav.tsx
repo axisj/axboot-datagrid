@@ -69,6 +69,22 @@ function Nav(props: Props) {
             ),
             key: '/columnSort',
           },
+          {
+            label: (
+              <Space>
+                ColumnResize<Tag>v1.5+</Tag>
+              </Space>
+            ),
+            key: '/columnResize',
+          },
+          {
+            label: (
+              <Space>
+                Drag&Drop Sort<Tag>v1.6+</Tag>
+              </Space>
+            ),
+            key: '/dndSort',
+          },
           { label: `Props Change`, key: '/propsChange' },
         ]}
         onTabClick={async activeKey => {

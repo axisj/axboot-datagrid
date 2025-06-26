@@ -6,6 +6,9 @@ import { useAppStore } from '../store';
 import TableColGroupFrozen from './TableColGroupFrozen';
 import styled from '@emotion/styled';
 import { TableBodyCell } from './TableBodyCell';
+import { useEffect, useState } from 'react';
+import Sortable, { Swap } from 'sortablejs';
+Sortable.mount(new Swap());
 
 interface Props {
   scrollContainerRef: React.RefObject<HTMLDivElement>;
@@ -39,6 +42,11 @@ function TableBodyFrozen(props: Props) {
   const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
   const variant = useAppStore(s => s.variant);
   const onClick = useAppStore(s => s.onClick);
+  const reorder = useAppStore(s => s.reorder);
+
+  const [sorted, setSorted] = useState(false);
+  const tbodyRef = React.useRef<HTMLTableSectionElement>(null);
+  const sortableRef = React.useRef<Sortable | null>(null);
 
   const startIdx = Math.max(Math.floor(scrollTop / trHeight), 0);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
@@ -52,10 +60,45 @@ function TableBodyFrozen(props: Props) {
   );
   const hasOnClick = !!onClick;
 
+  useEffect(() => {
+    if (!reorder?.enabled || sorted) return;
+    const tbody = tbodyRef.current;
+    if (!tbody) return;
+
+    sortableRef.current?.destroy();
+    sortableRef.current = Sortable.create(tbody, {
+      // swap: true,
+      animation: 150,
+      handle: '.drag-handle',
+      swapClass: 'drag-swap-hover',
+      direction: 'vertical',
+
+      onEnd: e => {
+        const fromIndex = e.oldIndex;
+        const toIndex = e.newIndex;
+        if (fromIndex !== toIndex) {
+          // reorder.onReorder?.(fromIndex, toIndex);
+        }
+      },
+      onMove: (evt, originalEvent) => {
+        const draggedEl = evt.dragged; // 현재 드래그되고 있는 요소 (TR)
+        const overEl = evt.related; // 현재 hover 중인 요소 (TR)
+
+        const dragRi = draggedEl.getAttribute('data-ri');
+        const overRi = overEl.getAttribute('data-ri');
+
+        console.log(`드래그 중인 항목: ${dragRi}, hover 중인 항목: ${overRi}`);
+
+        // 조건부로 드래그 허용 여부를 제어할 수도 있음
+        return true; // 또는 false
+      },
+    });
+  }, [reorder?.enabled, sorted]);
+
   return (
     <BodyTable variant={variant} style={props.style}>
       <TableColGroupFrozen />
-      <tbody role={'rfdg-body-frozen'}>
+      <tbody role={'rfdg-body-frozen'} ref={tbodyRef}>
         {dataSet.map((item, i) => {
           const ri = startIdx + i;
           const trProps: Record<string, any> = {
@@ -78,9 +121,10 @@ function TableBodyFrozen(props: Props) {
               active={active}
               className={className + (active ? ' active' : '')}
               hasOnClick={hasOnClick}
+              data-ri={ri}
               {...trProps}
             >
-              {showLineNumber && <LineNumberTd>{ri + 1}</LineNumberTd>}
+              {showLineNumber && <LineNumberTd className={'drag-handle'}>{ri + 1}</LineNumberTd>}
               {hasRowChecked && (
                 <td className={frozenColumnIndex > 0 ? 'bordered' : ''}>
                   <RowSelector
@@ -171,6 +215,9 @@ const LineNumberTd = styled.td`
   text-align: center;
   &:not(:last-child) {
     border-right: 1px solid var(--axdg-border-color-base);
+  }
+  &.drag-handle {
+    cursor: move;
   }
 `;
 

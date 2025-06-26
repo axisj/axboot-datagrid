@@ -135,6 +135,7 @@ export function AppStoreProvider({ children }) {
                 frozenColumnIndex: get().frozenColumnIndex,
                 columns,
                 dataLength: get().data.length,
+                reorderable: get().reorder?.enabled,
               });
 
               if (frozenColumnsWidth + 20 > get().width) {
@@ -326,6 +327,7 @@ export function AppStoreProvider({ children }) {
           }
         }
       },
+      setReorder: reorder => set({ reorder }),
     }));
   }
   return <StoreContext.Provider value={storeRef.current}>{children}</StoreContext.Provider>;
