@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 export type AlignDirection = 'left' | 'center' | 'right';
 export type MoveDirection = 'prev' | 'next' | 'current';
@@ -32,7 +32,7 @@ export interface AXDGColumn<T> {
   className?: string;
   getClassName?: (item: AXDGDataItem<T>) => string;
   headerClassName?: string;
-  itemRender?: (p: AXDGItemRenderProps<T>) => ReactNode;
+  itemRender?: React.FC<AXDGItemRenderProps<T>>;
   editable?: boolean;
 }
 
@@ -61,7 +61,7 @@ export interface AXDGSummaryColumn<T> {
   colSpan?: number;
   className?: string;
   getClassName?: (key: string | string[]) => string;
-  itemRender?: (p: AXDGSummaryItemRenderProps<T>) => ReactNode;
+  itemRender?: React.FC<AXDGSummaryItemRenderProps<T>>;
 }
 
 export enum AXDGDataItemStatus {

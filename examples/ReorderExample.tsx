@@ -31,7 +31,7 @@ export default function ReorderExample(props: Props) {
       width: 50,
       align: 'center',
       itemRender: ({ item }) => {
-        return item.status !== undefined ? AXDGDataItemStatus[item.status] : '';
+        return <>{item.status !== undefined ? AXDGDataItemStatus[item.status] : ''}</>;
       },
       getClassName: item => {
         return item.status ? 'editable' : '';
