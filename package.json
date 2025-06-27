@@ -1,6 +1,6 @@
 {
   "name": "@axboot/datagrid",
-  "version": "1.5.5",
+  "version": "1.6.0",
   "jsnext:main": "dist/es6/index.js",
   "module": "dist/es6/index.js",
   "main": "dist/commonjs/index.js",
