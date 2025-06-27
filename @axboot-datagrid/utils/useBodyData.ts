@@ -1,6 +1,6 @@
 import { useAppStore } from '../store';
 import * as React from 'react';
-import { AXDGColumn, AXDGDataItemStatus, DIRC_MAP, MoveDirection } from '../types';
+import { AXDGColumn, AXDGDataItem, AXDGDataItemStatus, DIRC_MAP, MoveDirection } from '../types';
 import { getCellValueByRowKey } from './getCellValue';
 
 interface CellMergeColumn<T> {
@@ -8,15 +8,15 @@ interface CellMergeColumn<T> {
   column: AXDGColumn<T>;
 }
 
-export function useBodyData(startIdx: number, endNumber: number) {
+export function useBodyData(startIdx: number, endNumber: number, data: AXDGDataItem<any>[]) {
   const columns = useAppStore(s => s.columns);
   const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
-  const data = useAppStore(s => s.data);
   const setData = useAppStore(s => s.setData);
   const setEditItem = useAppStore(s => s.setEditItem);
   const selectedKeyMap = useAppStore(s => s.checkedIndexesMap);
   const setSelectedKeys = useAppStore(s => s.setCheckedIndexes);
   const onChangeData = useAppStore(s => s.onChangeData);
+  const reorder = useAppStore(s => s.reorder);
 
   const dataSet = React.useMemo(() => {
     const items = data.slice(startIdx, endNumber);
@@ -146,11 +146,43 @@ export function useBodyData(startIdx: number, endNumber: number) {
     [data, selectedKeyMap, setData, setSelectedKeys],
   );
 
+  const handleReorderData = React.useCallback(
+    (fromIndex: number, toIndex: number) => {
+      // fromIndex에 있는 datad의 item을 toIndex로 이동
+      const item = data[fromIndex];
+
+      data[fromIndex].status = AXDGDataItemStatus.edit;
+      // data[fromIndex].meta = {
+      //   ...data[fromIndex].meta,
+      //
+      //   reorder: {
+      //     originalIndex: data[fromIndex].meta?.reorder ? data[fromIndex].meta?.reorder.originalIndex : fromIndex,
+      //     fromIndex,
+      //     toIndex,
+      //   },
+      // };
+
+      const newData = [...data];
+      newData.splice(fromIndex, 1); // Remove item from original position
+      newData.splice(toIndex, 0, item); // Insert item at new position
+      setData(newData);
+
+      return reorder?.onReorder?.(newData);
+    },
+    [data, reorder, setData],
+  );
+
+  const rollbackData = React.useCallback(() => {
+    setData([...data]);
+  }, [data, setData]);
+
   return {
     dataSet,
     setItemValue,
     handleMoveEditFocus,
     handleChangeChecked,
     handleChangeCheckedRadio,
+    handleReorderData,
+    rollbackData,
   };
 }

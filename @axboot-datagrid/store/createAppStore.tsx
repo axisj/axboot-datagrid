@@ -37,6 +37,7 @@ export function AppStoreProvider({ children }) {
       cellMergeOptions: undefined,
       variant: 'default',
       columnSortable: false,
+      reordering: false,
       setInitialized: initialized => set({ initialized }),
       setScrollTop: scrollTop => set({ scrollTop }),
       setScrollLeft: scrollLeft => set({ scrollLeft }),
@@ -135,6 +136,7 @@ export function AppStoreProvider({ children }) {
                 frozenColumnIndex: get().frozenColumnIndex,
                 columns,
                 dataLength: get().data.length,
+                reorderable: get().reorder?.enabled,
               });
 
               if (frozenColumnsWidth + 20 > get().width) {
@@ -326,6 +328,8 @@ export function AppStoreProvider({ children }) {
           }
         }
       },
+      setReorder: reorder => set({ reorder }),
+      setReorderingInfo: reorderingInfo => set({ reorderingInfo }),
     }));
   }
   return <StoreContext.Provider value={storeRef.current}>{children}</StoreContext.Provider>;

@@ -1,4 +1,4 @@
-import { AXDGColumn, AXDGRowChecked } from '../types';
+import { AXDGColumn, AXDGReorderInfo, AXDGRowChecked } from '../types';
 import { getLineNumberWidth } from './getLineNumber';
 
 interface Props<T> {
@@ -8,6 +8,7 @@ interface Props<T> {
   frozenColumnIndex: number;
   columns: AXDGColumn<T>[];
   dataLength: number;
+  reorderable?: boolean;
 }
 
 export function getFrozenColumnsWidth<T>({
@@ -17,10 +18,11 @@ export function getFrozenColumnsWidth<T>({
   frozenColumnIndex,
   columns,
   dataLength,
+  reorderable,
 }: Props<T>) {
   let frozenColumnsWidth: number = 0;
   if (showLineNumber) {
-    frozenColumnsWidth += getLineNumberWidth({ dataLength });
+    frozenColumnsWidth += getLineNumberWidth({ dataLength, reorderable });
   }
   if (!!rowChecked) {
     frozenColumnsWidth += Math.min(itemHeight, 15) + 7 * 2;

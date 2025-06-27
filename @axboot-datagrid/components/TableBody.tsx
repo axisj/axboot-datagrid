@@ -37,12 +37,13 @@ function TableBody({ scrollContainerRef }: Props) {
   const cellMergeOptions = useAppStore(s => s.cellMergeOptions);
   const variant = useAppStore(s => s.variant);
   const onClick = useAppStore(s => s.onClick);
+  const reorderingInfo = useAppStore(s => s.reorderingInfo);
 
   const startIdx = Math.max(Math.floor(scrollTop / trHeight), 0);
   const endNumber = Math.min(startIdx + displayItemCount, data.length);
   const mergeColumns = cellMergeOptions?.columnsMap;
 
-  const { dataSet, setItemValue, handleMoveEditFocus } = useBodyData(startIdx, endNumber);
+  const { dataSet, setItemValue, handleMoveEditFocus } = useBodyData(startIdx, endNumber, data);
 
   const { startCIdx, endCIdx } = React.useMemo(() => {
     if (!scrollContainerRef.current)
@@ -111,6 +112,8 @@ function TableBody({ scrollContainerRef }: Props) {
               active={active}
               hasOnClick={hasOnClick}
               className={className + (active ? ' active' : '')}
+              data-ri={ri}
+              dragHover={reorderingInfo?.toIndex === ri}
               {...trProps}
             >
               {startCIdx > frozenColumnIndex && <td colSpan={startCIdx - frozenColumnIndex} />}
@@ -235,6 +238,7 @@ export const TableBodyTr = styled.tr<{
   editable?: boolean;
   odd?: boolean;
   hasOnClick?: boolean;
+  dragHover?: boolean;
 }>`
   ${({ editable, itemHeight, itemPadding, hasOnClick }) => {
     if (editable) {
@@ -292,6 +296,17 @@ export const TableBodyTr = styled.tr<{
       return css`
         background-color: var(--axdg-body-active-bg) !important;
         color: var(--axdg-primary-color) !important;
+      `;
+    }
+  }}
+
+  ${({ dragHover }) => {
+    if (dragHover) {
+      return css`
+        background-color: var(--axdg-body-active-bg) !important;
+        td {
+          //border-bottom: 1px solid var(--axdg-primary-color) !important;
+        }
       `;
     }
   }}

@@ -69,6 +69,14 @@ function Nav(props: Props) {
             ),
             key: '/columnSort',
           },
+          {
+            label: (
+              <Space>
+                Reorder data<Tag>v1.6+</Tag>
+              </Space>
+            ),
+            key: '/reorder',
+          },
           { label: `Props Change`, key: '/propsChange' },
         ]}
         onTabClick={async activeKey => {

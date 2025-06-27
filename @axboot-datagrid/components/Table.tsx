@@ -66,6 +66,7 @@ interface Props<T> {
   variant?: AXDGProps<T>['variant'];
   summary?: AXDGProps<T>['summary'];
   columnSortable?: AXDGProps<T>['columnSortable'];
+  reorder?: AXDGProps<T>['reorder'];
 }
 
 function Table<T>(props: Props<T>) {
@@ -95,6 +96,7 @@ function Table<T>(props: Props<T>) {
   const spinning = useAppStore(s => s.spinning);
   const showLineNumber = useAppStore(s => s.showLineNumber);
   const summary = useAppStore(s => s.summary);
+  const reorder = useAppStore(s => s.reorder);
 
   const setHeight = useAppStore(s => s.setHeight);
   const setContentBodyHeight = useAppStore(s => s.setContentBodyHeight);
@@ -136,6 +138,7 @@ function Table<T>(props: Props<T>) {
   const setVariant = useAppStore(s => s.setVariant);
   const setSummary = useAppStore(s => s.setSummary);
   const setColumnSortable = useAppStore(s => s.setColumnSortable);
+  const setReorder = useAppStore(s => s.setReorder);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -244,7 +247,9 @@ function Table<T>(props: Props<T>) {
       frozenColumnIndex: props.frozenColumnIndex ?? 0,
       columns,
       dataLength: data.length,
+      reorderable: props.reorder?.enabled ?? false,
     });
+
     setFrozenColumnsWidth(frozenColumnsWidth);
     setFrozenColumnIndex(props.frozenColumnIndex ?? 0);
   }, [
@@ -256,6 +261,7 @@ function Table<T>(props: Props<T>) {
     columns,
     setFrozenColumnsWidth,
     data.length,
+    props.reorder?.enabled,
   ]);
   useEffect(() => {
     if (props.checkedIndexesMap !== undefined) setCheckedIndexesMap(props.checkedIndexesMap);
@@ -343,6 +349,9 @@ function Table<T>(props: Props<T>) {
   useEffect(() => {
     setColumnSortable(props.columnSortable);
   }, [setColumnSortable, props.columnSortable]);
+  useEffect(() => {
+    setReorder(props.reorder);
+  }, [setReorder, props.reorder]);
 
   //setInitialized
   useEffect(() => {
