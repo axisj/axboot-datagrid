@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 
 export type AlignDirection = 'left' | 'center' | 'right';
 export type MoveDirection = 'prev' | 'next' | 'current';
@@ -32,7 +32,7 @@ export interface AXDGColumn<T> {
   className?: string;
   getClassName?: (item: AXDGDataItem<T>) => string;
   headerClassName?: string;
-  itemRender?: React.FC<AXDGItemRenderProps<T>>;
+  itemRender?: (p: AXDGItemRenderProps<T>) => ReactNode;
   editable?: boolean;
 }
 
@@ -61,7 +61,7 @@ export interface AXDGSummaryColumn<T> {
   colSpan?: number;
   className?: string;
   getClassName?: (key: string | string[]) => string;
-  itemRender?: React.FC<AXDGSummaryItemRenderProps<T>>;
+  itemRender?: (p: AXDGSummaryItemRenderProps<T>) => ReactNode;
 }
 
 export enum AXDGDataItemStatus {
@@ -123,10 +123,14 @@ export interface AXDGChangeColumnsInfo<T> {
   columnsGroup?: AXDGColumnGroup[];
 }
 
-export interface AXDGReorderInfo {
+export interface AXDGReorderInfo<T> {
   enabled?: boolean;
   handleIcon?: React.ReactNode;
-  onReorder?: () => void;
+  onReorder?: (data: AXDGDataItem<T>[]) => void;
+}
+export interface AXDGReorderingInfo {
+  fromIndex?: number;
+  toIndex?: number;
 }
 
 type AXDGColumnWithOptionalWidth<T> = Partial<Pick<AXDGColumn<T>, 'width'>> & Omit<AXDGColumn<T>, 'width'>;
@@ -184,7 +188,8 @@ export interface AXDGProps<T> {
     position: 'top' | 'bottom';
   };
   columnSortable?: boolean;
-  reorder?: AXDGReorderInfo;
+  reorder?: AXDGReorderInfo<T>;
+  reorderingInfo?: AXDGReorderingInfo;
 }
 
 export type CheckedAll = true | false | 'indeterminate';
@@ -220,7 +225,8 @@ export interface AppModel<T> extends AXDGProps<T> {
   editItemIndex?: number;
   editItemColIndex?: number;
   editTrigger?: 'dblclick' | 'click';
-  reorder?: AXDGReorderInfo;
+  reorder?: AXDGReorderInfo<T>;
+  reorderingInfo?: AXDGReorderingInfo;
 }
 
 export interface AppActions<T> {
@@ -283,7 +289,8 @@ export interface AppActions<T> {
   setSummary: (summary?: AXDGProps<T>['summary']) => void;
   setColumnSortable: (columnSortable?: boolean) => void;
   sortColumn: (trLevel: number, oldColumn: SortedColumn, newColumn: SortedColumn) => void;
-  setReorder: (reorder?: AXDGReorderInfo) => void;
+  setReorder: (reorder?: AXDGReorderInfo<T>) => void;
+  setReorderingInfo: (reorderingInfo?: AXDGReorderingInfo) => void;
 }
 
 export interface SortedColumn {

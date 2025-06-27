@@ -72,18 +72,10 @@ function Nav(props: Props) {
           {
             label: (
               <Space>
-                ColumnResize<Tag>v1.5+</Tag>
+                Reorder data<Tag>v1.6+</Tag>
               </Space>
             ),
-            key: '/columnResize',
-          },
-          {
-            label: (
-              <Space>
-                Drag&Drop Sort<Tag>v1.6+</Tag>
-              </Space>
-            ),
-            key: '/dndSort',
+            key: '/reorder',
           },
           { label: `Props Change`, key: '/propsChange' },
         ]}

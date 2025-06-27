@@ -1,8 +1,9 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { AXDataGrid, AXDGColumn } from '../@axboot-datagrid';
+import { AXDataGrid, AXDGColumn, AXDGDataItemStatus } from '../@axboot-datagrid';
 import { useContainerSize } from '../hooks/useContainerSize';
 import ExampleContainer from '../components/ExampleContainer';
+import { useState } from 'react';
 
 interface Props {}
 
@@ -13,7 +14,7 @@ interface IListItem {
   createAt: string;
 }
 
-const list = Array.from(Array(5)).map((v, i) => ({
+const _list = Array.from(Array(100)).map((v, i) => ({
   values: {
     id: `ID_${i}`,
     title: `title_${i}`,
@@ -22,8 +23,20 @@ const list = Array.from(Array(5)).map((v, i) => ({
   },
 }));
 
-export default function DnDExample(props: Props) {
-  const [columns, setColumns] = React.useState<AXDGColumn<IListItem>[]>([
+export default function ReorderExample(props: Props) {
+  const [columns, setColumns] = useState<AXDGColumn<IListItem>[]>([
+    {
+      key: '_',
+      label: '상태',
+      width: 50,
+      align: 'center',
+      itemRender: ({ item }) => {
+        return item.status !== undefined ? AXDGDataItemStatus[item.status] : '';
+      },
+      getClassName: item => {
+        return item.status ? 'editable' : '';
+      },
+    },
     {
       key: 'id',
       label: 'No',
@@ -75,6 +88,7 @@ export default function DnDExample(props: Props) {
       width: 100,
     },
   ]);
+  const [list, setList] = useState(_list);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { width: containerWidth, height: containerHeight } = useContainerSize(containerRef);
@@ -86,19 +100,29 @@ export default function DnDExample(props: Props) {
         height={containerHeight}
         data={list}
         columns={columns}
-        onChangeColumns={(columnIndex, { width, columns }) => {
-          console.log('onChangeColumnWidths', columnIndex, width, columns);
-          setColumns(columns);
-        }}
         onClick={item => console.log(item)}
-        columnSortable
+        columnSortable={false}
         showLineNumber
         reorder={{
           enabled: true, // Set to true to enable drag-and-drop reordering
+          onReorder: data => {
+            // console.log('Reordered data:', data);
+            setList(data);
+            return true;
+          },
         }}
       />
     </Container>
   );
 }
 
-const Container = styled(ExampleContainer)``;
+const Container = styled(ExampleContainer)`
+  .editable {
+    background: rgba(255, 253, 158, 0.5);
+    user-select: none;
+    input,
+    select {
+      user-select: all;
+    }
+  }
+`;
