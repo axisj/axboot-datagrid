@@ -180,7 +180,7 @@ function TableBody({ scrollContainerRef }: Props) {
                 );
               })}
 
-              <td onClick={() => handleClick(ri, -1)} />
+              <td data-none onClick={() => handleClick(ri, -1)} />
             </TableBodyTr>
           );
         })}
@@ -190,7 +190,7 @@ function TableBody({ scrollContainerRef }: Props) {
             {msg?.emptyList && (
               <>
                 <td colSpan={columns.slice(frozenColumnIndex).length}>{msg?.emptyList}</td>
-                <td />
+                <td data-none />
               </>
             )}
           </NoDataTr>
@@ -224,7 +224,9 @@ export const BodyTable = styled.table<{ variant: AXDGProps<any>['variant'] }>`
       }}
 
       &:last-child {
-        //border-right: none;
+      }
+      &[data-none] {
+        border-right: none;
       }
     }
   }

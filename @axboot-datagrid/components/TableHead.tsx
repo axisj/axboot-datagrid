@@ -168,7 +168,7 @@ function TableHead({ container }: Props) {
                   </HeadTd>
                 );
               })}
-              {ri === 0 && <HeadTd rowSpan={2} />}
+              {ri === 0 && <HeadTd data-none rowSpan={columnsTable.length} />}
             </tr>
           );
         })}
@@ -232,6 +232,9 @@ export const HeadTd = styled.td<{ hasOnClick?: boolean; columnResizing?: boolean
   }}
   &.rfdg-tr-line-number, &.bordered {
     border-right: 1px solid var(--axdg-border-color-base);
+  }
+  &[data-none] {
+    border-right: none;
   }
 `;
 
